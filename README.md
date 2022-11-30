@@ -59,12 +59,12 @@ The host as well as the guest system must be running macOS 13 or newer and, as t
 ### ✨ Creating a VM Bundle
 To create VM Bundles, Cilicon comes with its own standalone App called "Cilicon Installer".
 
-With it you can either install a previously downloaded IPSW file or have Cilicon Installer download the latest available restore image directly from Apple.
+With it you can either install a previously downloaded IPSW file or download the latest available restore image directly from Apple.
 
 The resulting `.bundle` file can be opened by right-clicking it in Finder and pressing "Show Package Contents".
 
-<p align="center">
-<img width="512" alt="Cilicon Installer Window" src="https://user-images.githubusercontent.com/1622982/203594513-b93d58a2-f525-49d0-ab57-3c81165061d8.png">
+<p align="left">
+<img width="300" alt="Cilicon Installer Window" src="https://user-images.githubusercontent.com/1622982/204774660-3583a889-562b-4dfd-a2c0-89c90cc0873b.gif">
 </p>
 
 ### ⚙️ Configuration
