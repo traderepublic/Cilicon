@@ -181,7 +181,7 @@ In the future Cilicon could automatically fetch new images from a defined server
 A logging or monitoring concept would greatly improve identifying and troubleshooting any potential issues and provide the ability to notify the team in real time.
 
 ### Setup Scripts
-A lot of the setup of both Host and Guest OS can be scripted. Providing scripts for common setups would greatly increate the time to get started with Cilicon.
+A lot of the setup of both Host and Guest OS can be scripted. Providing scripts for common setups would greatly increase the time to get started with Cilicon.
 
 ## 👩‍💻 Join Us!
 
