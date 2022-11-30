@@ -90,4 +90,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 # Mac System Files
-.DS_Store
+*.DS_Store

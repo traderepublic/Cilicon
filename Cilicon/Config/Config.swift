@@ -20,6 +20,8 @@ struct Config: Decodable {
     /// Start and End of the copying phase are signaled with system sounds.
     /// Must be the full path including `/Volumes/`.
     let autoTransferImageVolume: String?
+    /// Delay in seconds before retrying to provision the image a failed cycle
+    let retryDelay: Int
     
     enum CodingKeys: CodingKey {
         case provisioner
@@ -30,6 +32,7 @@ struct Config: Decodable {
         case runnerName
         case editorMode
         case autoTransferImageVolume
+        case retryDelay
     }
     
     init(from decoder: Decoder) throws {
@@ -42,5 +45,6 @@ struct Config: Decodable {
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
         self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
+        self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
     }
 }

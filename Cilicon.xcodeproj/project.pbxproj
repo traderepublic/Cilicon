@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9492E5D2922376B005616CE /* ImageCopier.swift */; };
+		A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ProcessProvisioner.swift */; };
+		A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */; };
 		A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */; };
 		A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD42918F79000342A77 /* CiliconApp.swift */; };
 		A9728DD72918F79000342A77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD62918F79000342A77 /* ContentView.swift */; };
@@ -15,9 +17,8 @@
 		A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE32918F7C500342A77 /* VirtualMachineView.swift */; };
 		A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
 		A9728DE82918F7D000342A77 /* VMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE72918F7D000342A77 /* VMManager.swift */; };
-		A9728DEA2918F7D500342A77 /* Task+Retrying.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE92918F7D500342A77 /* Task+Retrying.swift */; };
 		A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
-		A9728DFD2918F9A000342A77 /* GithubConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GithubConfig.swift */; };
+		A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */; };
 		A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF82918F9A000342A77 /* HardwareConfig.swift */; };
 		A9728DFF2918F9A000342A77 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF92918F9A000342A77 /* Config.swift */; };
 		A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */; };
@@ -46,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		A9492E5D2922376B005616CE /* ImageCopier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCopier.swift; sourceTree = "<group>"; };
+		A9517C482937ACB500785136 /* ProcessProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisioner.swift; sourceTree = "<group>"; };
+		A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisionerConfig.swift; sourceTree = "<group>"; };
 		A951BCD6292B93D000FFDACC /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VMConfigHelper+RunConfig.swift"; sourceTree = "<group>"; };
 		A951BCDB292BB9B400FFDACC /* Installer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installer.swift; sourceTree = "<group>"; };
@@ -57,9 +60,8 @@
 		A9728DE32918F7C500342A77 /* VirtualMachineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachineView.swift; sourceTree = "<group>"; };
 		A9728DE52918F7CB00342A77 /* VMBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMBundle.swift; sourceTree = "<group>"; };
 		A9728DE72918F7D000342A77 /* VMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMManager.swift; sourceTree = "<group>"; };
-		A9728DE92918F7D500342A77 /* Task+Retrying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Retrying.swift"; sourceTree = "<group>"; };
 		A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMConfigurationHelper.swift; sourceTree = "<group>"; };
-		A9728DF72918F9A000342A77 /* GithubConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubConfig.swift; sourceTree = "<group>"; };
+		A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubProvisionerConfig.swift; sourceTree = "<group>"; };
 		A9728DF82918F9A000342A77 /* HardwareConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwareConfig.swift; sourceTree = "<group>"; };
 		A9728DF92918F9A000342A77 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvisionerConfig.swift; sourceTree = "<group>"; };
@@ -103,6 +105,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A9517C472937ACA800785136 /* Process */ = {
+			isa = PBXGroup;
+			children = (
+				A9517C482937ACB500785136 /* ProcessProvisioner.swift */,
+			);
+			path = Process;
+			sourceTree = "<group>";
+		};
 		A951BCCD292B922D00FFDACC /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,7 +162,6 @@
 				A9728E022918F9A800342A77 /* Provisioner */,
 				A9728E0C2918F9CF00342A77 /* AppleEvents */,
 				A9728DF52918F98500342A77 /* Config */,
-				A9728DE92918F7D500342A77 /* Task+Retrying.swift */,
 				A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */,
 				A9728DD82918F79100342A77 /* Assets.xcassets */,
 				A9728DDD2918F79100342A77 /* Cilicon.entitlements */,
@@ -166,7 +175,8 @@
 				A9728DF92918F9A000342A77 /* Config.swift */,
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
-				A9728DF72918F9A000342A77 /* GithubConfig.swift */,
+				A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */,
+				A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */,
 				A9728DF82918F9A000342A77 /* HardwareConfig.swift */,
 				A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */,
 			);
@@ -177,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				A9728E042918F9BF00342A77 /* Provisioner.swift */,
+				A9517C472937ACA800785136 /* Process */,
 				A9728E032918F9B000342A77 /* Github Actions */,
 			);
 			path = Provisioner;
@@ -326,14 +337,15 @@
 				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
 				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
-				A9728DEA2918F7D500342A77 /* Task+Retrying.swift in Sources */,
 				A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */,
+				A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */,
 				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
 				A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */,
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
 				A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */,
-				A9728DFD2918F9A000342A77 /* GithubConfig.swift in Sources */,
+				A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */,
+				A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
@@ -499,7 +511,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -530,7 +542,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -562,7 +574,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -593,7 +605,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -21,6 +21,8 @@ class VMManager: NSObject, ObservableObject {
         switch config.provisioner {
         case .github(let githubConfig):
             self.provisioner = GithubActionsProvisioner(config: config, ghConfig: githubConfig)
+        case .process(let processConfig):
+            self.provisioner = ProcessProvisioner(path: processConfig.executablePath, arguments: processConfig.arguments)
         case .none:
             self.provisioner = nil
         }
@@ -31,13 +33,15 @@ class VMManager: NSObject, ObservableObject {
     }
     
     @MainActor
-    func onAppear() async {
+    func setupAndRunVM() async throws {
         do {
             vmState = .initializing
             try await setupAndRunVirtualMachine()
         }
         catch {
             vmState = .failed(error.localizedDescription)
+            try await Task.sleep(for: .seconds(config.retryDelay))
+            try await setupAndRunVM()
         }
     }
     

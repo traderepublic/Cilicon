@@ -28,7 +28,9 @@ Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clone
 
 Depending on the provisioner you choose, Cilicon places files required by your Guest OS in your bundle's `Resources` folder.
 
-The [Github Actions provisioner](/Cilicon/Provisioner/Github%20Actions/GithubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
+The [Github Actions Provisioner](/Cilicon/Provisioner/Github%20Actions/GithubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
+
+The Process Provisioner runs an executable of your choice when provisioning and deprovisioning a bundle. It passes the bundle path, the action as well as any extra arguments of your choice to the executable.
 
 You may also opt out of using a provisioner by setting the provisioner type to `none`. This may work fine with services like Buildkite which use non-expiring registration tokens.
 

@@ -22,7 +22,7 @@ struct ContentView: View {
             switch vmManager.vmState {
             case .running(let vm):
                 VirtualMachineView(virtualMachine: vm).onAppear {
-                    Task.retrying(maxRetryCount: 5, retryDelay: 5) {
+                    Task.detached {
                         try await vmManager.start(vm: vm)
                     }
                 }
@@ -39,10 +39,12 @@ struct ContentView: View {
             }
         }
         .navigationTitle(title)
-        .onAppear {
-            Task.retrying(maxRetryCount: 5, retryDelay: 5) {
-                await vmManager.onAppear()
-            }
+        .onAppear(perform: onAppear)
+    }
+    
+    func onAppear() {
+        Task.detached {
+            try await vmManager.setupAndRunVM()
         }
     }
 }

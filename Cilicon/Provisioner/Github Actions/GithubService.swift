@@ -13,10 +13,10 @@ class GithubService {
         return jsonDecoder
     }()
     
-    let config: GithubConfig
+    let config: GithubProvisionerConfig
     let baseURL: URL
     
-    init(config: GithubConfig) {
+    init(config: GithubProvisionerConfig) {
         self.config = config
         self.baseURL = config.apiURL ?? URL(string: "https://api.github.com/")!
         let config = URLSessionConfiguration.default

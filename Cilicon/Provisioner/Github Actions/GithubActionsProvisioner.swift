@@ -2,11 +2,11 @@ import Foundation
 
 class GithubActionsProvisioner: Provisioner {
     let config: Config
-    let ghConfig: GithubConfig
+    let ghConfig: GithubProvisionerConfig
     let service: GithubService
     let fileManager: FileManager
     
-    init(config: Config, ghConfig: GithubConfig, fileManager: FileManager = .default) {
+    init(config: Config, ghConfig: GithubProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
         self.ghConfig = ghConfig
         self.service = GithubService(config: ghConfig)
