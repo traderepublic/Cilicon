@@ -48,6 +48,8 @@ Cilicon listens for a shutdown of the Guest OS and removes the used image before
 Currently Cilicon only supports Github Actions, as well as a provisioner-less mode.
 The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
+To get started download Cilicon and Cilicon Installer from the [latest release](https://github.com/traderepublic/Cilicon/releases/latest).
+
 <details>
   <summary>📖 Terminology</summary> 
   <ul>
