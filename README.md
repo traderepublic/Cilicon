@@ -22,7 +22,7 @@ Cilicon is based on the following simple cycle.
 
 ### Duplicate Image
 
-Cilicon creates a fresh clone of your Virtual Machine bundle for each run. [APFS clones](https://developer.apple.com/documentation/foundation/file_system/about_apple_file_system) make this task extremely fast, even with large bundles.
+Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clones](https://developer.apple.com/documentation/foundation/file_system/about_apple_file_system) make this task extremely fast, even with large bundles.
 
 ### Provision Shared Folder
 
