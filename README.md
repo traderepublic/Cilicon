@@ -13,7 +13,7 @@
 
 Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral virtual machines with minimal setup or maintenance effort. You should be able to get up and running with your self-hosted CI in less than an hour.
 
-The Core concept behind Cilicon is based on the following simple cycle.
+Cilicon is based on the following simple cycle.
 
 <p align="center">
 <img width="500" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204543272-b83a4f71-f1da-46cc-9484-a89759e39b5c.png">
@@ -26,7 +26,7 @@ Cilicon creates a fresh clone of your Virtual Machine bundle for each run. [APFS
 
 ### Provision Shared Folder
 
-Depending on the provisioner you choose, Cilicon can place files required by your Guest OS in your bundle's `Resources` folder.
+Depending on the provisioner you choose, Cilicon places files required by your Guest OS in your bundle's `Resources` folder.
 
 The [Github Actions provisioner](/Cilicon/Provisioner/Github%20Actions/GithubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
 
@@ -45,7 +45,7 @@ Cilicon listens for a shutdown of the Guest OS and removes the used image before
 </p>
 
 ## 🚀 Getting Started
-Currently Cilicon only supports Github Actions, as well as a provisioner-less mode which simply starts the image after duplication.
+Currently Cilicon only supports Github Actions, as well as a provisioner-less mode.
 The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
 <details>
@@ -104,7 +104,7 @@ After clicking through the macOS setup screens you can set up your Guest OS:
 - Enable automatic login
 - Disable Automatic Software updates
 - Disable any concept of screen locking or power saving
-- Select the dummy `start.command` file as a launch item which starts the CI agent/runner when mounted to the actual `Resources` folder.
+- Select the dummy `start.command` file as a launch item which will start the CI agent/runner when mounted to the actual `Resources` folder.
 - Install any dependencies you may need, such as Xcode, Command line tools, brew, etc.
 
 <details>
@@ -135,7 +135,7 @@ Once you have configured your Guest OS, you will need provision your `Resources`
 You can find examples in [VM Resources](/VM%20Resources).
 
 ### 🔨 Setting Up the Host OS
-It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally a freshly restored one.
+It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally one that is [freshly restored](https://support.apple.com/en-gb/guide/apple-configurator-mac/apdd5f3c75ad/mac).
 
 - Transfer `Cilicon.app`, `VM.bundle`, `cilicon.yml` as well as any other files referenced by your config (e.g. Github private key) to your Host OS.
 - Add `Cilicon.app` as a launch item
@@ -163,7 +163,7 @@ The new image will be be used after the next run.
 
 If the Guest VM is shut down while Cilicon is copying a bundle, it will wait for it to complete copying before restarting the image.
 
-Due to the new Accessory Security features in Ventura, macOS will require explicit consent for USB drives to be mounted and for Cilicon to access the drive. Once you have accepted these prompts once, you should be able to run the process without touching the GuestOS mouse or keyboard.
+Due to the new Accessory Security features in Ventura, macOS will require explicit consent for USB drives to be mounted and for Cilicon to access the drive. Once you have accepted these prompts for the first time, you should be able to run the process without any interaction on the device.
 
 ## 🔮 Ideas for the Future
 
