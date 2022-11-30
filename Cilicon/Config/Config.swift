@@ -1,0 +1,46 @@
+import Foundation
+
+struct Config: Decodable {
+    /// Provisioner Configuration.
+    let provisioner: ProvisionerConfig
+    /// Hardware Configuration.
+    let hardware: HardwareConfig
+    /// Directories to mount on the Guest OS.
+    let directoryMounts: [DirectoryMountConfig]
+    /// The path where the VM bundle is located.
+    let vmBundlePath: String
+    /// Number of runs until the Host machine reboots.
+    let numberOfRunsUntilHostReboot: Int?
+    /// Overrides the runner name chosen by the provisioner.
+    let runnerName: String?
+    /// Does not copy the VM bundle and mounts the `Editor Resources` folder contained in the bundle on the guest machine.
+    let editorMode: Bool
+    /// A volume from which's root directory to transfer a `VM.bundle` to the `vmBundlePath` automatically.
+    /// The volume is automatically unmounted after the copying process is complete.
+    /// Start and End of the copying phase are signaled with system sounds.
+    /// Must be the full path including `/Volumes/`.
+    let autoTransferImageVolume: String?
+    
+    enum CodingKeys: CodingKey {
+        case provisioner
+        case hardware
+        case directoryMounts
+        case vmBundlePath
+        case numberOfRunsUntilHostReboot
+        case runnerName
+        case editorMode
+        case autoTransferImageVolume
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provisioner = try container.decode(ProvisionerConfig.self, forKey: .provisioner)
+        self.hardware = try container.decode(HardwareConfig.self, forKey: .hardware)
+        self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
+        self.vmBundlePath = (try container.decode(String.self, forKey: .vmBundlePath) as NSString).standardizingPath
+        self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
+        self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
+        self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
+        self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
+    }
+}

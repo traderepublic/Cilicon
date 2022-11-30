@@ -1,0 +1,670 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9492E5D2922376B005616CE /* ImageCopier.swift */; };
+		A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */; };
+		A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD42918F79000342A77 /* CiliconApp.swift */; };
+		A9728DD72918F79000342A77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD62918F79000342A77 /* ContentView.swift */; };
+		A9728DD92918F79100342A77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9728DD82918F79100342A77 /* Assets.xcassets */; };
+		A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE32918F7C500342A77 /* VirtualMachineView.swift */; };
+		A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
+		A9728DE82918F7D000342A77 /* VMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE72918F7D000342A77 /* VMManager.swift */; };
+		A9728DEA2918F7D500342A77 /* Task+Retrying.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE92918F7D500342A77 /* Task+Retrying.swift */; };
+		A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
+		A9728DFD2918F9A000342A77 /* GithubConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GithubConfig.swift */; };
+		A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF82918F9A000342A77 /* HardwareConfig.swift */; };
+		A9728DFF2918F9A000342A77 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF92918F9A000342A77 /* Config.swift */; };
+		A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */; };
+		A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DFB2918F9A000342A77 /* ConfigManager.swift */; };
+		A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E042918F9BF00342A77 /* Provisioner.swift */; };
+		A9728E092918F9C600342A77 /* GithubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E062918F9C600342A77 /* GithubService.swift */; };
+		A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */; };
+		A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */; };
+		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
+		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
+		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
+		A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */; };
+		A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB08292E33F700B8CA1F /* ContentView.swift */; };
+		A9FDAB0B292E33F800B8CA1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */; };
+		A9FDAB15292E34B500B8CA1F /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
+		A9FDAB16292E34B500B8CA1F /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
+		A9FDAB17292E34BB00B8CA1F /* Installer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCDB292BB9B400FFDACC /* Installer.swift */; };
+		A9FDAB18292E34BB00B8CA1F /* InstallMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D45141292D1A00008CE4BB /* InstallMode.swift */; };
+		A9FDAB1B292E497A00B8CA1F /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A951BCD6292B93D000FFDACC /* Virtualization.framework */; };
+		A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */; };
+		A9FDAB1E292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */; };
+		A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = A9FDAB2029375D0200B8CA1F /* Yams */; };
+		A9FDAB2329375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */; };
+		A9FDAB2429375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A9492E5D2922376B005616CE /* ImageCopier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCopier.swift; sourceTree = "<group>"; };
+		A951BCD6292B93D000FFDACC /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
+		A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VMConfigHelper+RunConfig.swift"; sourceTree = "<group>"; };
+		A951BCDB292BB9B400FFDACC /* Installer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installer.swift; sourceTree = "<group>"; };
+		A9728DD12918F79000342A77 /* Cilicon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cilicon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9728DD42918F79000342A77 /* CiliconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CiliconApp.swift; sourceTree = "<group>"; };
+		A9728DD62918F79000342A77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A9728DD82918F79100342A77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9728DDD2918F79100342A77 /* Cilicon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cilicon.entitlements; sourceTree = "<group>"; };
+		A9728DE32918F7C500342A77 /* VirtualMachineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachineView.swift; sourceTree = "<group>"; };
+		A9728DE52918F7CB00342A77 /* VMBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMBundle.swift; sourceTree = "<group>"; };
+		A9728DE72918F7D000342A77 /* VMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMManager.swift; sourceTree = "<group>"; };
+		A9728DE92918F7D500342A77 /* Task+Retrying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Retrying.swift"; sourceTree = "<group>"; };
+		A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMConfigurationHelper.swift; sourceTree = "<group>"; };
+		A9728DF72918F9A000342A77 /* GithubConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubConfig.swift; sourceTree = "<group>"; };
+		A9728DF82918F9A000342A77 /* HardwareConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwareConfig.swift; sourceTree = "<group>"; };
+		A9728DF92918F9A000342A77 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvisionerConfig.swift; sourceTree = "<group>"; };
+		A9728DFB2918F9A000342A77 /* ConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
+		A9728E042918F9BF00342A77 /* Provisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Provisioner.swift; sourceTree = "<group>"; };
+		A9728E062918F9C600342A77 /* GithubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubService.swift; sourceTree = "<group>"; };
+		A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubActionsProvisioner.swift; sourceTree = "<group>"; };
+		A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GHAppAuthHelper.swift; sourceTree = "<group>"; };
+		A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SendAppleEventToSystemProcess.c; sourceTree = "<group>"; };
+		A9728E112918FA4700342A77 /* SendAppleEventToSystemProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAppleEventToSystemProcess.h; sourceTree = "<group>"; };
+		A9728E122918FA4700342A77 /* AppleEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleEvents.swift; sourceTree = "<group>"; };
+		A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cilicon-Bridging-Header.h"; sourceTree = "<group>"; };
+		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
+		A9FDAB04292E33F600B8CA1F /* Cilicon Installer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cilicon Installer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerApp.swift; sourceTree = "<group>"; };
+		A9FDAB08292E33F700B8CA1F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9FDAB0F292E33F800B8CA1F /* Installer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Installer.entitlements; sourceTree = "<group>"; };
+		A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSound+SystemSounds.swift"; sourceTree = "<group>"; };
+		A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryMountConfig.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A9728DCE2918F79000342A77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */,
+				A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9FDAB01292E33F600B8CA1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9FDAB1B292E497A00B8CA1F /* Virtualization.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A951BCCD292B922D00FFDACC /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */,
+				A9728DE52918F7CB00342A77 /* VMBundle.swift */,
+				A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		A951BCD3292B93C900FFDACC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A951BCD6292B93D000FFDACC /* Virtualization.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A9728DC82918F79000342A77 = {
+			isa = PBXGroup;
+			children = (
+				A9728DD32918F79000342A77 /* Cilicon */,
+				A9FDAB05292E33F700B8CA1F /* Installer */,
+				A951BCCD292B922D00FFDACC /* Common */,
+				A9728DD22918F79000342A77 /* Products */,
+				A951BCD3292B93C900FFDACC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A9728DD22918F79000342A77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9728DD12918F79000342A77 /* Cilicon.app */,
+				A9FDAB04292E33F600B8CA1F /* Cilicon Installer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A9728DD32918F79000342A77 /* Cilicon */ = {
+			isa = PBXGroup;
+			children = (
+				A9728DD42918F79000342A77 /* CiliconApp.swift */,
+				A9728DD62918F79000342A77 /* ContentView.swift */,
+				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
+				A9728DE72918F7D000342A77 /* VMManager.swift */,
+				A9492E5D2922376B005616CE /* ImageCopier.swift */,
+				A9728E022918F9A800342A77 /* Provisioner */,
+				A9728E0C2918F9CF00342A77 /* AppleEvents */,
+				A9728DF52918F98500342A77 /* Config */,
+				A9728DE92918F7D500342A77 /* Task+Retrying.swift */,
+				A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */,
+				A9728DD82918F79100342A77 /* Assets.xcassets */,
+				A9728DDD2918F79100342A77 /* Cilicon.entitlements */,
+			);
+			path = Cilicon;
+			sourceTree = "<group>";
+		};
+		A9728DF52918F98500342A77 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A9728DF92918F9A000342A77 /* Config.swift */,
+				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
+				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
+				A9728DF72918F9A000342A77 /* GithubConfig.swift */,
+				A9728DF82918F9A000342A77 /* HardwareConfig.swift */,
+				A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		A9728E022918F9A800342A77 /* Provisioner */ = {
+			isa = PBXGroup;
+			children = (
+				A9728E042918F9BF00342A77 /* Provisioner.swift */,
+				A9728E032918F9B000342A77 /* Github Actions */,
+			);
+			path = Provisioner;
+			sourceTree = "<group>";
+		};
+		A9728E032918F9B000342A77 /* Github Actions */ = {
+			isa = PBXGroup;
+			children = (
+				A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */,
+				A9728E062918F9C600342A77 /* GithubService.swift */,
+				A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */,
+			);
+			path = "Github Actions";
+			sourceTree = "<group>";
+		};
+		A9728E0C2918F9CF00342A77 /* AppleEvents */ = {
+			isa = PBXGroup;
+			children = (
+				A9728E122918FA4700342A77 /* AppleEvents.swift */,
+				A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */,
+				A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */,
+				A9728E112918FA4700342A77 /* SendAppleEventToSystemProcess.h */,
+			);
+			path = AppleEvents;
+			sourceTree = "<group>";
+		};
+		A9FDAB05292E33F700B8CA1F /* Installer */ = {
+			isa = PBXGroup;
+			children = (
+				A951BCDB292BB9B400FFDACC /* Installer.swift */,
+				A9D45141292D1A00008CE4BB /* InstallMode.swift */,
+				A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */,
+				A9FDAB08292E33F700B8CA1F /* ContentView.swift */,
+				A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */,
+				A9FDAB0F292E33F800B8CA1F /* Installer.entitlements */,
+			);
+			path = Installer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A9728DD02918F79000342A77 /* Cilicon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9728DE02918F79100342A77 /* Build configuration list for PBXNativeTarget "Cilicon" */;
+			buildPhases = (
+				A9728DCD2918F79000342A77 /* Sources */,
+				A9728DCE2918F79000342A77 /* Frameworks */,
+				A9728DCF2918F79000342A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cilicon;
+			packageProductDependencies = (
+				A9728E0E2918FA2300342A77 /* SwiftJWT */,
+				A9FDAB2029375D0200B8CA1F /* Yams */,
+			);
+			productName = Cilicon;
+			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A9FDAB03292E33F600B8CA1F /* Cilicon Installer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9FDAB12292E33F800B8CA1F /* Build configuration list for PBXNativeTarget "Cilicon Installer" */;
+			buildPhases = (
+				A9FDAB00292E33F600B8CA1F /* Sources */,
+				A9FDAB01292E33F600B8CA1F /* Frameworks */,
+				A9FDAB02292E33F600B8CA1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Cilicon Installer";
+			productName = Installer;
+			productReference = A9FDAB04292E33F600B8CA1F /* Cilicon Installer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A9728DC92918F79000342A77 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					A9728DD02918F79000342A77 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					A9FDAB03292E33F600B8CA1F = {
+						CreatedOnToolsVersion = 14.1;
+					};
+				};
+			};
+			buildConfigurationList = A9728DCC2918F79000342A77 /* Build configuration list for PBXProject "Cilicon" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A9728DC82918F79000342A77;
+			packageReferences = (
+				A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
+				A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */,
+			);
+			productRefGroup = A9728DD22918F79000342A77 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A9728DD02918F79000342A77 /* Cilicon */,
+				A9FDAB03292E33F600B8CA1F /* Cilicon Installer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A9728DCF2918F79000342A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9728DD92918F79100342A77 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9FDAB02292E33F600B8CA1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9FDAB0B292E33F800B8CA1F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A9728DCD2918F79000342A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */,
+				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
+				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
+				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
+				A9728DEA2918F7D500342A77 /* Task+Retrying.swift in Sources */,
+				A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */,
+				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
+				A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */,
+				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
+				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
+				A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */,
+				A9728DFD2918F9A000342A77 /* GithubConfig.swift in Sources */,
+				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
+				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
+				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
+				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
+				A9728E092918F9C600342A77 /* GithubService.swift in Sources */,
+				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
+				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,
+				A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */,
+				A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */,
+				A9FDAB2329375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9FDAB00292E33F600B8CA1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9FDAB17292E34BB00B8CA1F /* Installer.swift in Sources */,
+				A9FDAB1E292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
+				A9FDAB18292E34BB00B8CA1F /* InstallMode.swift in Sources */,
+				A9FDAB2429375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */,
+				A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */,
+				A9FDAB15292E34B500B8CA1F /* VMConfigurationHelper.swift in Sources */,
+				A9FDAB16292E34B500B8CA1F /* VMBundle.swift in Sources */,
+				A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A9728DDE2918F79100342A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A9728DDF2918F79100342A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A9728DE12918F79100342A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cilicon/Cilicon.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cilicon/AppleEvents/Cilicon-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A9728DE22918F79100342A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cilicon/Cilicon.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cilicon/AppleEvents/Cilicon-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A9FDAB10292E33F800B8CA1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Installer/Installer.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Cilicon Installer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A9FDAB11292E33F800B8CA1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Installer/Installer.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Cilicon Installer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A9728DCC2918F79000342A77 /* Build configuration list for PBXProject "Cilicon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9728DDE2918F79100342A77 /* Debug */,
+				A9728DDF2918F79100342A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9728DE02918F79100342A77 /* Build configuration list for PBXNativeTarget "Cilicon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9728DE12918F79100342A77 /* Debug */,
+				A9728DE22918F79100342A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9FDAB12292E33F800B8CA1F /* Build configuration list for PBXNativeTarget "Cilicon Installer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9FDAB10292E33F800B8CA1F /* Debug */,
+				A9FDAB11292E33F800B8CA1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/Swift-JWT";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jpsim/Yams";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A9728E0E2918FA2300342A77 /* SwiftJWT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
+			productName = SwiftJWT;
+		};
+		A9FDAB2029375D0200B8CA1F /* Yams */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */;
+			productName = Yams;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A9728DC92918F79000342A77 /* Project object */;
+}
