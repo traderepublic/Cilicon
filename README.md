@@ -183,4 +183,4 @@ A lot of the setup of both Host and Guest OS can be scripted. Providing scripts 
 
 ## 👩‍💻 Join Us!
 
-At <a href="https://traderepublic.com/careers" target="_blank">Trade Republic</a>, we are on a mission to democratize wealth. We set up millions of Europeans for wealth with fast, easy, and free access to capital markets. With over one million customers we are one of the largest savings platforms in Europe, with users holding over €6 billion on our platform.
+At [Trade Republic](https://traderepublic.com/), we are on a mission to democratize wealth. We set up millions of Europeans for wealth with fast, easy, and free access to capital markets. With over one million customers we are one of the largest savings platforms in Europe, with users holding over €6 billion on our platform. [Join us](https://traderepublic.com/careers?department=4026464003) to build the FinTech of the future.
