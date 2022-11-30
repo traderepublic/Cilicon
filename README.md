@@ -16,7 +16,7 @@ Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https:/
 Cilicon is based on the following simple cycle.
 
 <p align="center">
-<img width="500" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204543272-b83a4f71-f1da-46cc-9484-a89759e39b5c.png">
+<img width="500" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204821334-d71a567a-6bc7-4a93-b87e-40a14195097c.png">
 </br><i>The Cilicon Cycle</i>
 </p>
 
@@ -34,7 +34,7 @@ You may also opt out of using a provisioner by setting the provisioner type to `
 
 ### Start Virtual Machine
 
-Cilicon Starts the Virtual Machine and automatically mounts the bundle's `Resources` folder on the Guest OS.
+Cilicon starts the Virtual Machine and automatically mounts the bundle's `Resources` folder on the Guest OS.
 
 ### Listen for Shutdown
 Cilicon listens for a shutdown of the Guest OS and removes the used image before starting over.
