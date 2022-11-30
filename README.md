@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://github.com/traderepublic/Cilicon/"><img src="Logo/Cilicon Banner.png" alt="Cilicon" /></a><br /><br />
+	<a href="https://github.com/traderepublic/Cilicon/"><img width="350" src="https://user-images.githubusercontent.com/1622982/204773431-050cc008-029c-4ab1-98a6-9d4fc30d272d.png" alt="Cilicon" /></a><br /><br />
 	Self-Hosted macOS CI on Apple Silicon<br /><br />
     <a href="#-about-cilicon">About</a>
   • <a href="#-getting-started">Getting Started</a>
@@ -7,6 +7,7 @@
   • <a href="#-ideas-for-the-future">Ideas for the Future</a>
   • <a href="#-join-us">Join Us</a>
 </p>
+
 
 ## 🔁 About Cilicon
 
