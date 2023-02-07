@@ -2,16 +2,16 @@ import Foundation
 
 class GitLabRunnerProvisioner: Provisioner {
     let config: Config
-    let runnerConfig: GitLabRunnerProvisionerConfig
+    let runnerConfig: GitLabProvisionerConfig
     let service: GitLabService
     let fileManager: FileManager
     
     private var runnerToken: String?
     
-    init(config: Config, gitLabRunnerConfig: GitLabRunnerProvisionerConfig, fileManager: FileManager = .default) {
+    init(config: Config, gitLabConfig: GitLabProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
-        self.runnerConfig = gitLabRunnerConfig
-        self.service = GitLabService(config: gitLabRunnerConfig)
+        self.runnerConfig = gitLabConfig
+        self.service = GitLabService(config: gitLabConfig)
         self.fileManager = fileManager
     }
     

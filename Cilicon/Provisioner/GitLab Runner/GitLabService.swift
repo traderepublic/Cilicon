@@ -9,10 +9,10 @@ import Foundation
 
 class GitLabService {
     private let urlSession: URLSession
-    let config: GitLabRunnerProvisionerConfig
+    let config: GitLabProvisionerConfig
     let baseURL: URL
     
-    init(config: GitLabRunnerProvisionerConfig) {
+    init(config: GitLabProvisionerConfig) {
         self.config = config
         self.baseURL = config.url
         let config = URLSessionConfiguration.default
