@@ -2,6 +2,7 @@ import Foundation
 
 enum ProvisionerConfig: Decodable {
     case github(GithubProvisionerConfig)
+    case gitlab(GitLabRunnerProvisionerConfig)
     case process(ProcessProvisionerConfig)
     case none
     
@@ -17,6 +18,9 @@ enum ProvisionerConfig: Decodable {
         case .github:
             let config = try container.decode(GithubProvisionerConfig.self, forKey: .config)
             self = .github(config)
+        case .gitlab:
+            let config = try container.decode(GitLabRunnerProvisionerConfig.self, forKey: .config)
+            self = .gitlab(config)
         case .process:
             let config = try container.decode(ProcessProvisionerConfig.self, forKey: .config)
             self = .process(config)
@@ -27,6 +31,7 @@ enum ProvisionerConfig: Decodable {
     
     enum ProvisionerType: String, Decodable {
         case github
+        case gitlab
         case process
         case none
     }
