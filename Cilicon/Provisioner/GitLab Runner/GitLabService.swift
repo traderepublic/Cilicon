@@ -1,10 +1,3 @@
-//
-//  GitlabService.swift
-//  Cilicon
-//
-//  Created by Alain Stulz on 07.02.23.
-//
-
 import Foundation
 
 class GitlabService {
