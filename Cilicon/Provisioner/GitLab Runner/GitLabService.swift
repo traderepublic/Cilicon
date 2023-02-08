@@ -1,5 +1,5 @@
 //
-//  GitLabService.swift
+//  GitlabService.swift
 //  Cilicon
 //
 //  Created by Alain Stulz on 07.02.23.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-class GitLabService {
+class GitlabService {
     private let urlSession: URLSession
-    let config: GitLabProvisionerConfig
+    let config: GitlabProvisionerConfig
     let baseURL: URL
     
-    init(config: GitLabProvisionerConfig) {
+    init(config: GitlabProvisionerConfig) {
         self.config = config
         self.baseURL = config.url
         let config = URLSessionConfiguration.default
@@ -34,7 +34,7 @@ class GitLabService {
 
 // MARK: Methods
 
-extension GitLabService {
+extension GitlabService {
     func registerRunner() async throws -> RunnerRegistrationResponse {
         let registration = RunnerRegistration(registrationToken: config.registrationToken,
                                               description: config.name,
@@ -75,7 +75,7 @@ extension GitLabService {
 
 // MARK: Requests
 
-private extension GitLabService {
+private extension GitlabService {
     private func postRequest(to url: URL, jsonData: Data) async throws -> (Data, URLResponse) {
         return try await makeRequest(to: url, method: "POST", jsonData: jsonData)
     }
@@ -96,7 +96,7 @@ private extension GitLabService {
 
 // MARK: Codable
 
-private extension GitLabService {
+private extension GitlabService {
     private func encode(_ encodable: Encodable) throws -> Data {
         let encoder = JSONEncoder()
         return try encoder.encode(encodable)
@@ -111,7 +111,7 @@ private extension GitLabService {
 
 // MARK: Models
 
-extension GitLabService {
+extension GitlabService {
     private struct RunnerRegistration: Codable {
         let registrationToken: String
         let description: String
@@ -138,14 +138,14 @@ extension GitLabService {
     }
 }
 
-extension GitLabService {
+extension GitlabService {
     enum Error: Swift.Error {
         case couldNotRegisterRunner(reason: String)
         case couldNotDeleteRunner(reason: String)
     }
 }
 
-extension GitLabService.Error: LocalizedError {
+extension GitlabService.Error: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .couldNotRegisterRunner(let reason):

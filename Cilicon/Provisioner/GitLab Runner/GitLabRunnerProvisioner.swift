@@ -1,17 +1,17 @@
 import Foundation
 
-class GitLabRunnerProvisioner: Provisioner {
+class GitlabRunnerProvisioner: Provisioner {
     let config: Config
-    let runnerConfig: GitLabProvisionerConfig
-    let service: GitLabService
+    let runnerConfig: GitlabProvisionerConfig
+    let service: GitlabService
     let fileManager: FileManager
     
     private var runnerToken: String?
     
-    init(config: Config, gitLabConfig: GitLabProvisionerConfig, fileManager: FileManager = .default) {
+    init(config: Config, gitlabConfig: GitlabProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
-        self.runnerConfig = gitLabConfig
-        self.service = GitLabService(config: gitLabConfig)
+        self.runnerConfig = gitlabConfig
+        self.service = GitlabService(config: gitlabConfig)
         self.fileManager = fileManager
     }
     
@@ -34,19 +34,19 @@ class GitLabRunnerProvisioner: Provisioner {
     private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
         let tokenPath = bundle.runnerEndpointURL.relativePath
         guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+            throw GitlabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
         }
     }
 
     private func setRunnerToken(bundle: VMBundle, token: String) throws {
         let tokenPath = bundle.runnerTokenURL.relativePath
         guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+            throw GitlabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
         }
     }
 }
 
-extension GitLabRunnerProvisioner {
+extension GitlabRunnerProvisioner {
     enum Error: Swift.Error {
         case couldNotCreateRunnerTokenFile(path: String)
         case couldNotCreateRunnerEndpointFile(path: String)
@@ -54,7 +54,7 @@ extension GitLabRunnerProvisioner {
     }
 }
 
-extension GitLabRunnerProvisioner.Error: LocalizedError {
+extension GitlabRunnerProvisioner.Error: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .couldNotCreateRunnerTokenFile(path):

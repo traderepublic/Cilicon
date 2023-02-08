@@ -1,6 +1,6 @@
 import Foundation
 
-struct GitLabProvisionerConfig: Decodable {
+struct GitlabProvisionerConfig: Decodable {
     /// The name by which the runner can be identified
     let name: String
     /// The url to register the runner at. In a self-hosted environment, this is probably your main GitLab URL, e.g. https://gitlab.yourdomain.net/
