@@ -111,13 +111,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0EBACEC4299287BF00A041C4 /* GitLab Runner */ = {
+		0EBACEC4299287BF00A041C4 /* Gitlab Runner */ = {
 			isa = PBXGroup;
 			children = (
 				0EBACEC5299287BF00A041C4 /* GitlabRunnerProvisioner.swift */,
 				0EA6AF5E2992BFB2007094CD /* GitlabService.swift */,
 			);
-			path = "GitLab Runner";
+			path = "Gitlab Runner";
 			sourceTree = "<group>";
 		};
 		A9517C472937ACA800785136 /* Process */ = {
@@ -205,7 +205,7 @@
 				A9728E042918F9BF00342A77 /* Provisioner.swift */,
 				A9517C472937ACA800785136 /* Process */,
 				A9728E032918F9B000342A77 /* Github Actions */,
-				0EBACEC4299287BF00A041C4 /* GitLab Runner */,
+				0EBACEC4299287BF00A041C4 /* Gitlab Runner */,
 			);
 			path = Provisioner;
 			sourceTree = "<group>";
