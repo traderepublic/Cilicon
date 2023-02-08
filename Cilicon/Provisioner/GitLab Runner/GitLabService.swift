@@ -120,10 +120,6 @@ extension GitlabService {
     public struct RunnerRegistrationResponse: Decodable {
         let id: Int
         let token: String
-        
-        enum CodingKeys: String, CodingKey {
-            case id, token
-        }
     }
     
     private struct RunnerDeletion: Codable {
