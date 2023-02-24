@@ -29,7 +29,7 @@ class VMManager: NSObject, ObservableObject {
         self.config = config
         self.copier = ImageCopier(config: config)
         self.masterBundle = VMBundle(url: URL(filePath: config.vmBundlePath))
-        self.clonedBundle = VMBundle(url: URL(filePath: NSHomeDirectory()).appending(component: "EphemeralVM.bundle"))
+        self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
     }
     
     @MainActor
