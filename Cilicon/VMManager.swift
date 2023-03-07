@@ -57,9 +57,7 @@ class VMManager: NSObject, ObservableObject {
     private func cloneBundle() async throws {
         vmState = .copying
         try await Task {
-            if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
-                try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
-            }
+            try removeBundleIfExists()
             try fileManager.copyItem(at: masterBundle.url, to: clonedBundle.url)
         }.value
     }
@@ -103,6 +101,12 @@ class VMManager: NSObject, ObservableObject {
         vmState = .provisioning
         Task {
             try await setupAndRunVirtualMachine()
+        }
+    }
+    
+    func removeBundleIfExists() throws {
+        if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
+            try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
         }
     }
 }

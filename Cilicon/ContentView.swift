@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import Virtualization
 
 struct ContentView: View {
@@ -40,6 +41,9 @@ struct ContentView: View {
         }
         .navigationTitle(title)
         .onAppear(perform: onAppear)
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification), perform: { [vmManager] _ in
+            try? vmManager.removeBundleIfExists()
+        })
     }
     
     func onAppear() {
