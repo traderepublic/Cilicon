@@ -30,6 +30,8 @@ Depending on the provisioner you choose, Cilicon places files required by your G
 
 The [Github Actions Provisioner](/Cilicon/Provisioner/Github%20Actions/GithubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
 
+The [Gitlab Runner Provisioner](/Cilicon/Provisioner/Gitlab%20Runner/GitlabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
+
 The [Process Provisioner](Cilicon/Provisioner/Process/ProcessProvisioner.swift) runs an executable of your choice when provisioning and deprovisioning a bundle. It passes the bundle path, the action (either `provision` or `deprovision`) as well as any extra arguments of your choice to the executable.
 
 You may also opt out of using a provisioner by setting the provisioner type to `none`. This may work fine with services like Buildkite which use non-expiring registration tokens.
@@ -47,7 +49,7 @@ Cilicon listens for a shutdown of the Guest OS and removes the used image before
 </p>
 
 ## 🚀 Getting Started
-Currently Cilicon offers native support for Github Actions. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
+Currently Cilicon offers native support for Github Actions and Gitlab Runner on self-hosted instances. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
 The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
 To get started download Cilicon and Cilicon Installer from the [latest release](https://github.com/traderepublic/Cilicon/releases/latest).
@@ -75,6 +77,8 @@ The resulting `.bundle` file can be opened by right-clicking it in Finder and pr
 
 Cilicon expects a valid `cilicon.yml` file to be present in the Host OS's home directory.
 
+#### GitHub Actions
+
 To use the Github Actions provisioner you will need to create and install a new Github App with `Self-hosted runners` `Read & Write` permissions on the organization level and provide your config with the respective information.
 
 
@@ -98,6 +102,22 @@ editorMode: false
 ```
 
 For more information on available optional and required properties, see [Config.swift](/Cilicon/Config/Config.swift).
+
+#### Gitlab Runner
+
+To use the GitLab Runner provisioner, download the GitLab Runner binary `gitlab-runner-darwin-arm64` from the GitLab Runner Releases page and place it in the VM Bundle's `Resources` folder so that it can be accessed by the VM.
+
+Configure the `cilicon.yml` file with the correct values:
+
+``` yml
+provisioner:
+  type: gitlab
+  config:
+     name: "my-runner"
+     url: "https://gitlab.yourcompany.net/"
+     registrationToken: "your-runner-registration-token"
+     tagList: "some-tags,comma-separated"
+```
 
 ### 🔧 Setting up the Guest OS
 Once you have created a new VM Bundle you will need to set it up. To do so, enable the `editorMode` in the `cilicon.yml` file.

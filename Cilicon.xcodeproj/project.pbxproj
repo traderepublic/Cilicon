@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0EA6AF5F2992BFB2007094CD /* GitlabService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA6AF5E2992BFB2007094CD /* GitlabService.swift */; };
+		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
+		0EBACEC6299287BF00A041C4 /* GitlabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitlabRunnerProvisioner.swift */; };
 		A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9492E5D2922376B005616CE /* ImageCopier.swift */; };
 		A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ProcessProvisioner.swift */; };
 		A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */; };
@@ -46,6 +49,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0EA6AF5E2992BFB2007094CD /* GitlabService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitlabService.swift; sourceTree = "<group>"; };
+		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
+		0EBACEC5299287BF00A041C4 /* GitlabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabRunnerProvisioner.swift; sourceTree = "<group>"; };
 		A9492E5D2922376B005616CE /* ImageCopier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCopier.swift; sourceTree = "<group>"; };
 		A9517C482937ACB500785136 /* ProcessProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisioner.swift; sourceTree = "<group>"; };
 		A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisionerConfig.swift; sourceTree = "<group>"; };
@@ -105,6 +111,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0EBACEC4299287BF00A041C4 /* Gitlab Runner */ = {
+			isa = PBXGroup;
+			children = (
+				0EBACEC5299287BF00A041C4 /* GitlabRunnerProvisioner.swift */,
+				0EA6AF5E2992BFB2007094CD /* GitlabService.swift */,
+			);
+			path = "Gitlab Runner";
+			sourceTree = "<group>";
+		};
 		A9517C472937ACA800785136 /* Process */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +191,7 @@
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
 				A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */,
+				0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */,
 				A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */,
 				A9728DF82918F9A000342A77 /* HardwareConfig.swift */,
 				A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */,
@@ -189,6 +205,7 @@
 				A9728E042918F9BF00342A77 /* Provisioner.swift */,
 				A9517C472937ACA800785136 /* Process */,
 				A9728E032918F9B000342A77 /* Github Actions */,
+				0EBACEC4299287BF00A041C4 /* Gitlab Runner */,
 			);
 			path = Provisioner;
 			sourceTree = "<group>";
@@ -342,15 +359,18 @@
 				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
 				A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */,
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
+				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
 				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
 				A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */,
 				A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */,
 				A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
+				0EA6AF5F2992BFB2007094CD /* GitlabService.swift in Sources */,
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
 				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
 				A9728E092918F9C600342A77 /* GithubService.swift in Sources */,
+				0EBACEC6299287BF00A041C4 /* GitlabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,
 				A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */,
