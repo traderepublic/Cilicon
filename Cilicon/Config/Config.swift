@@ -9,6 +9,10 @@ struct Config: Decodable {
     let directoryMounts: [DirectoryMountConfig]
     /// The path where the VM bundle is located.
     let vmBundlePath: String
+    /// The path where the cloned VM bundle for each run is located.
+    /// This should be on the same APFS volume as `vmBundlePath`.
+    /// Can be omitted, in which case it defaults to `~/EphemeralVM.bundle`.
+    let vmClonePath: String
     /// Number of runs until the Host machine reboots.
     let numberOfRunsUntilHostReboot: Int?
     /// Overrides the runner name chosen by the provisioner.
@@ -28,6 +32,7 @@ struct Config: Decodable {
         case hardware
         case directoryMounts
         case vmBundlePath
+        case vmClonePath
         case numberOfRunsUntilHostReboot
         case runnerName
         case editorMode
@@ -41,6 +46,7 @@ struct Config: Decodable {
         self.hardware = try container.decode(HardwareConfig.self, forKey: .hardware)
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
         self.vmBundlePath = (try container.decode(String.self, forKey: .vmBundlePath) as NSString).standardizingPath
+        self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "EphemeralVM.bundle").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
