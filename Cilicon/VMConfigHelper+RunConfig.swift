@@ -34,7 +34,8 @@ extension VMConfigHelper {
             if !FileManager.default.fileExists(atPath: mountConfig.hostPath) {
                 try FileManager.default.createDirectory(atPath: mountConfig.hostPath, withIntermediateDirectories: true)
             }
-            let mountDirectory = VZSharedDirectory(url: URL(fileURLWithPath: mountConfig.hostPath), readOnly: false)
+            let mountDirectory = VZSharedDirectory(url: URL(fileURLWithPath: mountConfig.hostPath),
+                                                   readOnly: mountConfig.readOnly)
             directoriesToShare[mountConfig.guestFolder] = mountDirectory
         }
         
