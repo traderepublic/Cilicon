@@ -12,7 +12,7 @@ struct DirectoryMountConfig: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hostPath = (try container.decode(String.self, forKey: .hostPath) as NSString).standardizingPath
         self.guestFolder = try container.decode(String.self, forKey: .guestFolder)
-        self.readOnly = try container.decodeIfPresent(Bool.self, forKey: .readOnly) ?? .init()
+        self.readOnly = try container.decodeIfPresent(Bool.self, forKey: .readOnly) ?? false
     }
     
     enum CodingKeys: CodingKey {
