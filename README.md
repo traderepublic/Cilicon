@@ -96,6 +96,7 @@ hardware:
 directoryMounts:
   - hostPath: ~/CI/VM Cache
     guestFolder: Cache
+    readOnly: false
 autoTransferImageVolume: /Volumes/Cilicon Drive
 numberOfRunsUntilHostReboot: 20
 editorMode: false
