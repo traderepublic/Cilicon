@@ -14,7 +14,7 @@ class GithubActionsProvisioner: Provisioner {
     }
     
     var runnerName: String {
-        Host.current().localizedName ?? "no-name"
+        config.runnerName ?? Host.current().localizedName ?? "no-name"
     }
     
     func provision(bundle: VMBundle) async throws {
