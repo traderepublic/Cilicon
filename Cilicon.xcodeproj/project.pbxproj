@@ -21,14 +21,14 @@
 		A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
 		A9728DE82918F7D000342A77 /* VMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE72918F7D000342A77 /* VMManager.swift */; };
 		A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
-		A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */; };
+		A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */; };
 		A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF82918F9A000342A77 /* HardwareConfig.swift */; };
 		A9728DFF2918F9A000342A77 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF92918F9A000342A77 /* Config.swift */; };
 		A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */; };
 		A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DFB2918F9A000342A77 /* ConfigManager.swift */; };
 		A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E042918F9BF00342A77 /* Provisioner.swift */; };
-		A9728E092918F9C600342A77 /* GithubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E062918F9C600342A77 /* GithubService.swift */; };
-		A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */; };
+		A9728E092918F9C600342A77 /* GitHubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E062918F9C600342A77 /* GitHubService.swift */; };
+		A9728E0A2918F9C600342A77 /* GitHubActionsProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E072918F9C600342A77 /* GitHubActionsProvisioner.swift */; };
 		A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */; };
 		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
@@ -67,14 +67,14 @@
 		A9728DE52918F7CB00342A77 /* VMBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMBundle.swift; sourceTree = "<group>"; };
 		A9728DE72918F7D000342A77 /* VMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMManager.swift; sourceTree = "<group>"; };
 		A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMConfigurationHelper.swift; sourceTree = "<group>"; };
-		A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubProvisionerConfig.swift; sourceTree = "<group>"; };
+		A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubProvisionerConfig.swift; sourceTree = "<group>"; };
 		A9728DF82918F9A000342A77 /* HardwareConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwareConfig.swift; sourceTree = "<group>"; };
 		A9728DF92918F9A000342A77 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvisionerConfig.swift; sourceTree = "<group>"; };
 		A9728DFB2918F9A000342A77 /* ConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		A9728E042918F9BF00342A77 /* Provisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Provisioner.swift; sourceTree = "<group>"; };
-		A9728E062918F9C600342A77 /* GithubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubService.swift; sourceTree = "<group>"; };
-		A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubActionsProvisioner.swift; sourceTree = "<group>"; };
+		A9728E062918F9C600342A77 /* GitHubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubService.swift; sourceTree = "<group>"; };
+		A9728E072918F9C600342A77 /* GitHubActionsProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubActionsProvisioner.swift; sourceTree = "<group>"; };
 		A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GHAppAuthHelper.swift; sourceTree = "<group>"; };
 		A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SendAppleEventToSystemProcess.c; sourceTree = "<group>"; };
 		A9728E112918FA4700342A77 /* SendAppleEventToSystemProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAppleEventToSystemProcess.h; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 				A9728DF92918F9A000342A77 /* Config.swift */,
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
-				A9728DF72918F9A000342A77 /* GithubProvisionerConfig.swift */,
+				A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */,
 				0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */,
 				A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */,
 				A9728DF82918F9A000342A77 /* HardwareConfig.swift */,
@@ -214,8 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				A9728E082918F9C600342A77 /* GHAppAuthHelper.swift */,
-				A9728E062918F9C600342A77 /* GithubService.swift */,
-				A9728E072918F9C600342A77 /* GithubActionsProvisioner.swift */,
+				A9728E062918F9C600342A77 /* GitHubService.swift */,
+				A9728E072918F9C600342A77 /* GitHubActionsProvisioner.swift */,
 			);
 			path = "Github Actions";
 			sourceTree = "<group>";
@@ -361,15 +361,15 @@
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
 				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
-				A9728E0A2918F9C600342A77 /* GithubActionsProvisioner.swift in Sources */,
-				A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */,
+				A9728E0A2918F9C600342A77 /* GitHubActionsProvisioner.swift in Sources */,
+				A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */,
 				A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
 				0EA6AF5F2992BFB2007094CD /* GitlabService.swift in Sources */,
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
 				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
-				A9728E092918F9C600342A77 /* GithubService.swift in Sources */,
+				A9728E092918F9C600342A77 /* GitHubService.swift in Sources */,
 				0EBACEC6299287BF00A041C4 /* GitlabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,

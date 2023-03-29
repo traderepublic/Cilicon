@@ -20,7 +20,7 @@ class VMManager: NSObject, ObservableObject {
     init(config: Config) {
         switch config.provisioner {
         case .github(let githubConfig):
-            self.provisioner = GithubActionsProvisioner(config: config, ghConfig: githubConfig)
+            self.provisioner = GitHubActionsProvisioner(config: config, gitHubConfig: githubConfig)
         case .gitlab(let gitlabConfig):
             self.provisioner = GitlabRunnerProvisioner(config: config, gitlabConfig: gitlabConfig)
         case .process(let processConfig):

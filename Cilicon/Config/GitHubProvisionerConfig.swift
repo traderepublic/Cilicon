@@ -1,7 +1,7 @@
 import Foundation
 
-struct GithubProvisionerConfig: Decodable {
-    /// The Github API URL. Will be `https://api.github.com/` in most cases
+struct GitHubProvisionerConfig: Decodable {
+    /// The GitHub API URL. Will be `https://api.github.com/` in most cases
     let apiURL: URL?
     /// The App Id of the installed application with Organization "Self-hosted runners" Read & Write access.
     let appId: Int

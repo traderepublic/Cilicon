@@ -1,15 +1,15 @@
 import Foundation
 
-class GithubActionsProvisioner: Provisioner {
+class GitHubActionsProvisioner: Provisioner {
     let config: Config
-    let ghConfig: GithubProvisionerConfig
-    let service: GithubService
+    let gitHubConfig: GitHubProvisionerConfig
+    let service: GitHubService
     let fileManager: FileManager
     
-    init(config: Config, ghConfig: GithubProvisionerConfig, fileManager: FileManager = .default) {
+    init(config: Config, gitHubConfig: GitHubProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
-        self.ghConfig = ghConfig
-        self.service = GithubService(config: ghConfig)
+        self.gitHubConfig = gitHubConfig
+        self.service = GitHubService(config: gitHubConfig)
         self.fileManager = fileManager
     }
     
@@ -18,10 +18,10 @@ class GithubActionsProvisioner: Provisioner {
     }
     
     func provision(bundle: VMBundle) async throws {
-        let org = ghConfig.organization
-        let appId = ghConfig.appId
-        guard let installation = try await service.getInstallations().first(where: { $0.account.login == ghConfig.organization }) else {
-            throw GithubActionsProvisionerError.githubAppNotInstalled(appID: appId, org: org)
+        let org = gitHubConfig.organization
+        let appId = gitHubConfig.appId
+        guard let installation = try await service.getInstallations().first(where: { $0.account.login == gitHubConfig.organization }) else {
+            throw GitHubActionsProvisionerError.githubAppNotInstalled(appID: appId, org: org)
         }
         let authToken = try await service.getInstallationToken(installation: installation)
         
@@ -43,14 +43,14 @@ class GithubActionsProvisioner: Provisioner {
         let runnerToken = actionsToken.token.data(using: .utf8)
         let tokenPath = bundle.runnerTokenURL.relativePath
         guard fileManager.createFile(atPath: tokenPath, contents: runnerToken) else {
-            throw GithubActionsProvisionerError.couldNotCreateRunnerTokenFile(path: tokenPath)
+            throw GitHubActionsProvisionerError.couldNotCreateRunnerTokenFile(path: tokenPath)
         }
     }
     
     private func setRunnerName(bundle: VMBundle) throws {
         let namePath = bundle.runnerNameURL.relativePath
         guard fileManager.createFile(atPath: namePath, contents: runnerName.data(using: .utf8)!) else {
-            throw GithubActionsProvisionerError.couldNotCreateRunnerNameFile(path: namePath)
+            throw GitHubActionsProvisionerError.couldNotCreateRunnerNameFile(path: namePath)
         }
     }
     
@@ -59,27 +59,27 @@ class GithubActionsProvisioner: Provisioner {
             runnerName,
             "\(config.hardware.ramGigabytes)-gb-ram",
             "\(config.hardware.cpuCores ?? ProcessInfo.processInfo.processorCount)-cores"
-        ] + (ghConfig.extraLabels ?? [])
+        ] + (gitHubConfig.extraLabels ?? [])
         let labelsPath = bundle.runnerLabelsURL.relativePath
         let joinedLabels = labels.joined(separator: ",")
         guard fileManager.createFile(atPath: labelsPath, contents: joinedLabels.data(using: .utf8)!) else {
-            throw GithubActionsProvisionerError.couldNotCreateLabelsFile(path: labelsPath)
+            throw GitHubActionsProvisionerError.couldNotCreateLabelsFile(path: labelsPath)
         }
     }
     
     private func setRunnerDownloadURL(bundle: VMBundle, authToken: AccessToken) async throws {
         let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
         guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
-            throw GithubActionsProvisionerError.couldNotFindRunnerDownloadURL
+            throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
         }
         let downloadURLPath = bundle.runnerDownloadURL.relativePath
         guard fileManager.createFile(atPath: downloadURLPath, contents: macURL.downloadUrl.absoluteString.data(using: .utf8)!) else {
-            throw GithubActionsProvisionerError.couldNotCreateRunnerURLFile(path: downloadURLPath)
+            throw GitHubActionsProvisionerError.couldNotCreateRunnerURLFile(path: downloadURLPath)
         }
     }
 }
 
-enum GithubActionsProvisionerError: Error {
+enum GitHubActionsProvisionerError: Error {
     case githubAppNotInstalled(appID: Int, org: String)
     case couldNotCreateRunnerTokenFile(path: String)
     case couldNotCreateRunnerNameFile(path: String)
@@ -88,7 +88,7 @@ enum GithubActionsProvisionerError: Error {
     case couldNotFindRunnerDownloadURL
 }
 
-extension GithubActionsProvisionerError: LocalizedError {
+extension GitHubActionsProvisionerError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .githubAppNotInstalled(appId, org):
