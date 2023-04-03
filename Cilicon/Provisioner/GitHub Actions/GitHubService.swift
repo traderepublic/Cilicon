@@ -1,6 +1,6 @@
 import Foundation
 
-class GithubService {
+class GitHubService {
     /// The id of the installation within the Trade Republic Organization
     private let accessToken: AccessToken? = nil
     
@@ -13,10 +13,10 @@ class GithubService {
         return jsonDecoder
     }()
     
-    let config: GithubProvisionerConfig
+    let config: GitHubProvisionerConfig
     let baseURL: URL
     
-    init(config: GithubProvisionerConfig) {
+    init(config: GitHubProvisionerConfig) {
         self.config = config
         self.baseURL = config.apiURL ?? URL(string: "https://api.github.com/")!
         let config = URLSessionConfiguration.default
@@ -55,7 +55,7 @@ class GithubService {
     }
     
     func getInstallations() async throws -> [Installation] {
-        let jwtToken = try GithubAppAuthHelper.generateJWTToken(pemPath: config.privateKeyPath, appId: config.appId)
+        let jwtToken = try GitHubAppAuthHelper.generateJWTToken(pemPath: config.privateKeyPath, appId: config.appId)
         let (data, _) = try await authenticatedRequest(url: installationsURL(),
                                                        method: "GET",
                                                        token: jwtToken)
@@ -66,7 +66,7 @@ class GithubService {
     
     func getInstallationToken(installation: Installation) async throws -> AccessToken {
         let url = installationFetchURL(installationId: installation.id)
-        let jwtToken = try GithubAppAuthHelper.generateJWTToken(pemPath: config.privateKeyPath, appId: installation.appId)
+        let jwtToken = try GitHubAppAuthHelper.generateJWTToken(pemPath: config.privateKeyPath, appId: installation.appId)
         return try await postTokenRequest(url: url, token: jwtToken)
     }
     

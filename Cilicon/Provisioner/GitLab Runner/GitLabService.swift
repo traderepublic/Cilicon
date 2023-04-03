@@ -1,11 +1,11 @@
 import Foundation
 
-class GitlabService {
+class GitLabService {
     private let urlSession: URLSession
-    let config: GitlabProvisionerConfig
+    let config: GitLabProvisionerConfig
     let baseURL: URL
     
-    init(config: GitlabProvisionerConfig) {
+    init(config: GitLabProvisionerConfig) {
         self.config = config
         self.baseURL = config.url
         let config = URLSessionConfiguration.default
@@ -27,7 +27,7 @@ class GitlabService {
 
 // MARK: Methods
 
-extension GitlabService {
+extension GitLabService {
     func registerRunner() async throws -> RunnerRegistrationResponse {
         let registration = RunnerRegistration(registrationToken: config.registrationToken,
                                               description: config.name,
@@ -68,7 +68,7 @@ extension GitlabService {
 
 // MARK: Requests
 
-private extension GitlabService {
+private extension GitLabService {
     private func postRequest(to url: URL, jsonData: Data) async throws -> (Data, URLResponse) {
         return try await makeRequest(to: url, method: "POST", jsonData: jsonData)
     }
@@ -89,7 +89,7 @@ private extension GitlabService {
 
 // MARK: Codable
 
-private extension GitlabService {
+private extension GitLabService {
     private func encode(_ encodable: Encodable) throws -> Data {
         let encoder = JSONEncoder()
         return try encoder.encode(encodable)
@@ -104,7 +104,7 @@ private extension GitlabService {
 
 // MARK: Models
 
-extension GitlabService {
+extension GitLabService {
     private struct RunnerRegistration: Codable {
         let registrationToken: String
         let description: String
@@ -127,14 +127,14 @@ extension GitlabService {
     }
 }
 
-extension GitlabService {
+extension GitLabService {
     enum Error: Swift.Error {
         case couldNotRegisterRunner(reason: String)
         case couldNotDeleteRunner(reason: String)
     }
 }
 
-extension GitlabService.Error: LocalizedError {
+extension GitLabService.Error: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .couldNotRegisterRunner(let reason):
