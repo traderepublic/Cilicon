@@ -28,9 +28,9 @@ Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clone
 
 Depending on the provisioner you choose, Cilicon places files required by your Guest OS in your bundle's `Resources` folder.
 
-The [Github Actions Provisioner](/Cilicon/Provisioner/Github%20Actions/GithubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
+The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
 
-The [Gitlab Runner Provisioner](/Cilicon/Provisioner/Gitlab%20Runner/GitlabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
+The [GitLab Runner Provisioner](/Cilicon/Provisioner/GitLab%20Runner/GitLabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
 
 The [Process Provisioner](Cilicon/Provisioner/Process/ProcessProvisioner.swift) runs an executable of your choice when provisioning and deprovisioning a bundle. It passes the bundle path, the action (either `provision` or `deprovision`) as well as any extra arguments of your choice to the executable.
 
@@ -45,11 +45,11 @@ Cilicon listens for a shutdown of the Guest OS and removes the used image before
 
 <p align="center">
 <img width="600" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204568479-d17aae2e-a02f-4e3b-bed7-a6fe66860dab.gif">
-</br><i>Cilicon Cycle: Running a sample job via Github Actions (2x playback)</i>
+</br><i>Cilicon Cycle: Running a sample job via GitHub Actions (2x playback)</i>
 </p>
 
 ## 🚀 Getting Started
-Currently Cilicon offers native support for Github Actions and Gitlab Runner on self-hosted instances. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
+Currently Cilicon offers native support for GitHub Actions and Gitlab Runner on self-hosted instances. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
 The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
 To get started download Cilicon and Cilicon Installer from the [latest release](https://github.com/traderepublic/Cilicon/releases/latest).
@@ -79,7 +79,7 @@ Cilicon expects a valid `cilicon.yml` file to be present in the Host OS's home d
 
 #### GitHub Actions
 
-To use the Github Actions provisioner you will need to create and install a new Github App with `Self-hosted runners` `Read & Write` permissions on the organization level and provide your config with the respective information.
+To use the GitHub Actions provisioner you will need to create and install a new GitHub App with `Self-hosted runners` `Read & Write` permissions on the organization level and provide your config with the respective information.
 
 
 ``` yml
@@ -104,7 +104,7 @@ editorMode: false
 
 For more information on available optional and required properties, see [Config.swift](/Cilicon/Config/Config.swift).
 
-#### Gitlab Runner
+#### GitLab Runner
 
 To use the GitLab Runner provisioner, download the GitLab Runner binary `gitlab-runner-darwin-arm64` from the GitLab Runner Releases page and place it in the VM Bundle's `Resources` folder so that it can be accessed by the VM.
 
@@ -193,7 +193,7 @@ Due to the new Accessory Security features in Ventura, macOS will require explic
 ## 🔮 Ideas for the Future
 
 ### Support for more Provisioners
-We use Github Actions for our iOS builds at [Trade Republic](https://traderepublic.com) but would love to see Cilicon being used for other CI services as well.
+We use GitHub Actions for our iOS builds at [Trade Republic](https://traderepublic.com) but would love to see Cilicon being used for other CI services as well.
 Implementing support for more services should be easy by building on top of the `Provisioner` protocol.
 
 ### Automated Bundle provisioning over the network
