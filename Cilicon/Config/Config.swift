@@ -8,6 +8,7 @@ struct Config: Decodable {
     /// Directories to mount on the Guest OS.
     let directoryMounts: [DirectoryMountConfig]
     /// The path where the VM bundle is located.
+    let vmBundleType: VMBundleType
     let vmBundlePath: String
     /// The path where the cloned VM bundle for each run is located.
     /// This should be on the same APFS volume as `vmBundlePath`.
@@ -31,6 +32,7 @@ struct Config: Decodable {
         case provisioner
         case hardware
         case directoryMounts
+        case vmBundleType
         case vmBundlePath
         case vmClonePath
         case numberOfRunsUntilHostReboot
@@ -45,6 +47,7 @@ struct Config: Decodable {
         self.provisioner = try container.decode(ProvisionerConfig.self, forKey: .provisioner)
         self.hardware = try container.decode(HardwareConfig.self, forKey: .hardware)
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
+        self.vmBundleType = try container.decodeIfPresent(VMBundleType.self, forKey: .vmBundleType) ?? .cilicon
         self.vmBundlePath = (try container.decode(String.self, forKey: .vmBundlePath) as NSString).standardizingPath
         self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "EphemeralVM.bundle").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
@@ -53,4 +56,10 @@ struct Config: Decodable {
         self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
     }
+}
+
+
+enum VMBundleType: String, Decodable {
+    case cilicon
+    case tart
 }

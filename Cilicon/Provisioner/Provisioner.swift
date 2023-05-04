@@ -1,6 +1,6 @@
 import Foundation
 
 protocol Provisioner {
-    func provision(bundle: VMBundle) async throws
-    func deprovision(bundle: VMBundle) async throws
+    func provision(bundle: BundleType) async throws
+    func deprovision(bundle: BundleType) async throws
 }

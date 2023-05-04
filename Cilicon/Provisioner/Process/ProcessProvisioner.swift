@@ -16,15 +16,15 @@ class ProcessProvisioner: Provisioner {
         self.arguments = arguments
     }
     
-    func provision(bundle: VMBundle) async throws {
+    func provision(bundle: BundleType) async throws {
         try runProcess(bundle: bundle, action: "provision")
     }
     
-    func deprovision(bundle: VMBundle) async throws {
+    func deprovision(bundle: BundleType) async throws {
         try runProcess(bundle: bundle, action: "deprovision")
     }
     
-    func runProcess(bundle: VMBundle, action: String) throws {
+    func runProcess(bundle: BundleType, action: String) throws {
         let executableURL = URL(filePath: (path as NSString).standardizingPath)
         let args = [bundle.url.relativePath, action] + arguments
         let proc = try Process.run(executableURL, arguments: args)

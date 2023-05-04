@@ -14,6 +14,8 @@
 		A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ProcessProvisioner.swift */; };
 		A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */; };
 		A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */; };
+		A961960729DC3A0B0095CAEC /* TartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* TartConfig.swift */; };
+		A961960929DC3DA80095CAEC /* TartBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960829DC3DA80095CAEC /* TartBundle.swift */; };
 		A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD42918F79000342A77 /* CiliconApp.swift */; };
 		A9728DD72918F79000342A77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD62918F79000342A77 /* ContentView.swift */; };
 		A9728DD92918F79100342A77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9728DD82918F79100342A77 /* Assets.xcassets */; };
@@ -58,6 +60,8 @@
 		A951BCD6292B93D000FFDACC /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VMConfigHelper+RunConfig.swift"; sourceTree = "<group>"; };
 		A951BCDB292BB9B400FFDACC /* Installer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installer.swift; sourceTree = "<group>"; };
+		A961960629DC3A0B0095CAEC /* TartConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TartConfig.swift; sourceTree = "<group>"; };
+		A961960829DC3DA80095CAEC /* TartBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TartBundle.swift; sourceTree = "<group>"; };
 		A9728DD12918F79000342A77 /* Cilicon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cilicon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9728DD42918F79000342A77 /* CiliconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CiliconApp.swift; sourceTree = "<group>"; };
 		A9728DD62918F79000342A77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -188,6 +192,8 @@
 			isa = PBXGroup;
 			children = (
 				A9728DF92918F9A000342A77 /* Config.swift */,
+				A961960629DC3A0B0095CAEC /* TartConfig.swift */,
+				A961960829DC3DA80095CAEC /* TartBundle.swift */,
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
 				A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */,
@@ -352,6 +358,7 @@
 			files = (
 				A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */,
 				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
+				A961960729DC3A0B0095CAEC /* TartConfig.swift in Sources */,
 				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
 				A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */,
@@ -361,6 +368,7 @@
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
 				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
+				A961960929DC3DA80095CAEC /* TartBundle.swift in Sources */,
 				A9728E0A2918F9C600342A77 /* GitHubActionsProvisioner.swift in Sources */,
 				A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */,
 				A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */,

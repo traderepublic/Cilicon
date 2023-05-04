@@ -15,14 +15,14 @@ class GitLabRunnerProvisioner: Provisioner {
         self.fileManager = fileManager
     }
     
-    func provision(bundle: VMBundle) async throws {
+    func provision(bundle: BundleType) async throws {
         let registration = try await service.registerRunner()
         try setRunnerEndpointURL(bundle: bundle, url: runnerConfig.url)
         try setRunnerToken(bundle: bundle, token: registration.token)
         self.runnerToken = registration.token
     }
     
-    func deprovision(bundle: VMBundle) async throws {
+    func deprovision(bundle: BundleType) async throws {
         if let runnerToken {
             try await service.deregisterRunner(runnerToken: runnerToken)
         } else {
@@ -31,14 +31,14 @@ class GitLabRunnerProvisioner: Provisioner {
         return
     }
     
-    private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
+    private func setRunnerEndpointURL(bundle: BundleType, url: URL) throws {
         let tokenPath = bundle.runnerEndpointURL.relativePath
         guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
             throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
         }
     }
 
-    private func setRunnerToken(bundle: VMBundle, token: String) throws {
+    private func setRunnerToken(bundle: BundleType, token: String) throws {
         let tokenPath = bundle.runnerTokenURL.relativePath
         guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
             throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
@@ -68,7 +68,7 @@ extension GitLabRunnerProvisioner.Error: LocalizedError {
 }
 
 
-fileprivate extension VMBundle {
+fileprivate extension BundleType {
     var runnerTokenURL: URL {
         resourcesURL.appending(component: "RUNNER_TOKEN")
     }

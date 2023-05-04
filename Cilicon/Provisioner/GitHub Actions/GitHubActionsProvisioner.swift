@@ -17,7 +17,7 @@ class GitHubActionsProvisioner: Provisioner {
         config.runnerName ?? Host.current().localizedName ?? "no-name"
     }
     
-    func provision(bundle: VMBundle) async throws {
+    func provision(bundle: BundleType) async throws {
         let org = gitHubConfig.organization
         let appId = gitHubConfig.appId
         guard let installation = try await service.getInstallations().first(where: { $0.account.login == gitHubConfig.organization }) else {
@@ -31,12 +31,12 @@ class GitHubActionsProvisioner: Provisioner {
         try await setRunnerDownloadURL(bundle: bundle, authToken: authToken)
     }
     
-    func deprovision(bundle: VMBundle) async throws {
+    func deprovision(bundle: BundleType) async throws {
         print("No deprovisioning required, runner auto-deregisters")
         return
     }
     
-    private func setRegistrationToken(bundle: VMBundle, authToken: AccessToken) async throws {
+    private func setRegistrationToken(bundle: BundleType, authToken: AccessToken) async throws {
         
         let actionsToken = try await service.createRunnerToken(token: authToken.token)
         
@@ -47,14 +47,14 @@ class GitHubActionsProvisioner: Provisioner {
         }
     }
     
-    private func setRunnerName(bundle: VMBundle) throws {
+    private func setRunnerName(bundle: BundleType) throws {
         let namePath = bundle.runnerNameURL.relativePath
         guard fileManager.createFile(atPath: namePath, contents: runnerName.data(using: .utf8)!) else {
             throw GitHubActionsProvisionerError.couldNotCreateRunnerNameFile(path: namePath)
         }
     }
     
-    private func setRunnerLabels(bundle: VMBundle) throws {
+    private func setRunnerLabels(bundle: BundleType) throws {
         let labels = [
             runnerName,
             "\(config.hardware.ramGigabytes)-gb-ram",
@@ -67,7 +67,7 @@ class GitHubActionsProvisioner: Provisioner {
         }
     }
     
-    private func setRunnerDownloadURL(bundle: VMBundle, authToken: AccessToken) async throws {
+    private func setRunnerDownloadURL(bundle: BundleType, authToken: AccessToken) async throws {
         let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
         guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
             throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
@@ -107,7 +107,7 @@ extension GitHubActionsProvisionerError: LocalizedError {
     }
 }
 
-fileprivate extension VMBundle {
+fileprivate extension BundleType {
     var runnerNameURL: URL {
         resourcesURL.appending(component: "RUNNER_NAME")
     }

@@ -26,7 +26,7 @@ extension VMConfigHelper {
     }
     
     private func createDirectorySharingConfiguration(config: Config) throws -> VZVirtioFileSystemDeviceConfiguration {
-        let resourcesURL = config.editorMode ? vmBundle.editorResourcesURL : vmBundle.resourcesURL
+        let resourcesURL = config.editorMode ? vmBundle.common.editorResourcesURL : vmBundle.common.resourcesURL
         let resourcesDirectory = VZSharedDirectory(url: resourcesURL, readOnly: false)
         
         var directoriesToShare = ["Resources": resourcesDirectory]

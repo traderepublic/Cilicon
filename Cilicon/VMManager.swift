@@ -3,14 +3,14 @@ import Virtualization
 
 class VMManager: NSObject, ObservableObject {
     let config: Config
-    let masterBundle: VMBundle
-    let clonedBundle: VMBundle
+    let masterBundle: Bundle
+    let clonedBundle: Bundle
     let provisioner: Provisioner?
     let fileManager: FileManager = .default
     var runCounter: Int = 0
     let copier: ImageCopier
     
-    var activeBundle: VMBundle {
+    var activeBundle: Bundle {
         config.editorMode ? masterBundle : clonedBundle
     }
     
@@ -30,8 +30,14 @@ class VMManager: NSObject, ObservableObject {
         }
         self.config = config
         self.copier = ImageCopier(config: config)
-        self.masterBundle = VMBundle(url: URL(filePath: config.vmBundlePath))
-        self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
+        switch config.vmBundleType {
+        case .cilicon:
+            self.masterBundle = .cilicon(VMBundle(url: URL(filePath: config.vmBundlePath)))
+            self.clonedBundle = .cilicon(VMBundle(url: URL(filePath: config.vmClonePath)))
+        case .tart:
+            self.masterBundle = .tart(TartBundle(url: URL(filePath: config.vmBundlePath)))
+            self.clonedBundle = .tart(TartBundle(url: URL(filePath: config.vmClonePath)))
+        }
     }
     
     @MainActor
@@ -58,7 +64,7 @@ class VMManager: NSObject, ObservableObject {
         vmState = .copying
         try await Task {
             try removeBundleIfExists()
-            try fileManager.copyItem(at: masterBundle.url, to: clonedBundle.url)
+            try fileManager.copyItem(at: masterBundle.common.url, to: clonedBundle.common.url)
         }.value
     }
     
@@ -74,7 +80,8 @@ class VMManager: NSObject, ObservableObject {
             try await cloneBundle()
             if let provisioner = provisioner {
                 vmState = .provisioning
-                try await provisioner.provision(bundle: activeBundle)
+                try activeBundle.common.resourcesURL.createIfNotExists()
+                try await provisioner.provision(bundle: activeBundle.common)
             }
         }
         let vmHelper = VMConfigHelper(vmBundle: activeBundle)
@@ -87,7 +94,7 @@ class VMManager: NSObject, ObservableObject {
     
     @MainActor
     func handleStop() async throws {
-        try await provisioner?.deprovision(bundle: activeBundle)
+        try await provisioner?.deprovision(bundle: activeBundle.common)
         if config.editorMode {
             // In editor mode we don't want to reboot or restart the VM
             NSApplication.shared.terminate(nil)
@@ -105,8 +112,8 @@ class VMManager: NSObject, ObservableObject {
     }
     
     func removeBundleIfExists() throws {
-        if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
-            try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
+        if fileManager.fileExists(atPath: clonedBundle.common.url.relativePath) {
+            try fileManager.removeItem(atPath: clonedBundle.common.url.relativePath)
         }
     }
 }

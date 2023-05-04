@@ -2,8 +2,8 @@ import Foundation
 import Virtualization
 
 class VMConfigHelper {
-    let vmBundle: VMBundle
-    init(vmBundle: VMBundle) {
+    let vmBundle: Bundle
+    init(vmBundle: Bundle) {
         self.vmBundle = vmBundle
     }
     
@@ -35,9 +35,12 @@ class VMConfigHelper {
     
     
     func createMacPlatform(macOSConfiguration: VZMacOSConfigurationRequirements) throws -> VZMacPlatformConfiguration {
+        guard case .cilicon(let ciliconBundle) = vmBundle else {
+            throw VMConfigHelperError.error("Tried to create a bundle of type other than cilicon")
+        }
         let macPlatformConfiguration = VZMacPlatformConfiguration()
         
-        let auxiliaryStorage = try VZMacAuxiliaryStorage(creatingStorageAt: vmBundle.auxiliaryStorageURL,
+        let auxiliaryStorage = try VZMacAuxiliaryStorage(creatingStorageAt: ciliconBundle.auxiliaryStorageURL,
                                                          hardwareModel: macOSConfiguration.hardwareModel,
                                                          options: [])
         macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
@@ -46,36 +49,24 @@ class VMConfigHelper {
         
         // Store the hardware model and machine identifier to disk so that we
         // can retrieve them for subsequent boots.
-        try! macPlatformConfiguration.hardwareModel.dataRepresentation.write(to: vmBundle.hardwareModelURL)
-        try! macPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: vmBundle.machineIdentifierURL)
+        
+        try! macPlatformConfiguration.hardwareModel.dataRepresentation.write(to: ciliconBundle.hardwareModelURL)
+        try! macPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: ciliconBundle.machineIdentifierURL)
         
         return macPlatformConfiguration
     }
     
     func parseMacPlatform() throws -> VZMacPlatformConfiguration {
         let macPlatform = VZMacPlatformConfiguration()
-        let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: vmBundle.auxiliaryStorageURL)
+        let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: vmBundle.common.auxiliaryStorageURL)
         macPlatform.auxiliaryStorage = auxiliaryStorage
         
-        // Retrieve the hardware model; you should save this value to disk
-        // during installation.
-        let hardwareModelData = try Data(contentsOf: vmBundle.hardwareModelURL)
-        guard let hardwareModel = VZMacHardwareModel(dataRepresentation: hardwareModelData) else {
-            throw VMConfigHelperError.error("Failed to create hardware model.")
-        }
+        let hardwareModel = try vmBundle.hardwareModel()
         if !hardwareModel.isSupported {
             throw VMConfigHelperError.error("The hardware model isn't supported on the current host")
         }
         macPlatform.hardwareModel = hardwareModel
-        
-        // Retrieve the machine identifier; you should save this value to disk
-        // during installation.
-        let machineIdentifierData = try Data(contentsOf: vmBundle.machineIdentifierURL)
-        
-        guard let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
-            throw VMConfigHelperError.error("Failed to create machine identifier.")
-        }
-        macPlatform.machineIdentifier = machineIdentifier
+        macPlatform.machineIdentifier = try vmBundle.machineIdentifier()
         
         return macPlatform
     }
@@ -104,7 +95,7 @@ class VMConfigHelper {
     }
     
     func createBlockDeviceConfiguration() throws -> VZVirtioBlockDeviceConfiguration {
-        let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: vmBundle.diskImageURL, readOnly: false)
+        let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: vmBundle.common.diskImageURL, readOnly: false)
         let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)
         return disk
     }
@@ -138,6 +129,38 @@ enum VMConfigHelperError: LocalizedError {
         switch self {
         case .error(let errorText):
             return errorText
+        }
+    }
+}
+
+fileprivate extension Bundle {
+    func hardwareModel() throws -> VZMacHardwareModel  {
+        switch self {
+        case .cilicon(let bundle):
+            let hardwareModelData = try Data(contentsOf: bundle.hardwareModelURL)
+            guard let hardwareModel = VZMacHardwareModel(dataRepresentation: hardwareModelData) else {
+                throw VMConfigHelperError.error("Failed to create hardware model.")
+            }
+            return hardwareModel
+        case .tart(let bundle):
+            let tartConfigData = try Data(contentsOf: bundle.configURL)
+            let tartConfig = try JSONDecoder().decode(TartConfig.self, from: tartConfigData)
+            return tartConfig.hardwareModel
+        }
+    }
+    
+    func machineIdentifier() throws -> VZMacMachineIdentifier {
+        switch self {
+        case .cilicon(let bundle):
+            let machineIdentifierData = try Data(contentsOf: bundle.machineIdentifierURL)
+            guard let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
+                throw VMConfigHelperError.error("Failed to create machine identifier.")
+            }
+            return machineIdentifier
+        case .tart(let bundle):
+            let tartConfigData = try Data(contentsOf: bundle.configURL)
+            let tartConfig = try JSONDecoder().decode(TartConfig.self, from: tartConfigData)
+            return tartConfig.ecid
         }
     }
 }

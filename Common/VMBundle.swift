@@ -1,6 +1,6 @@
 import Foundation
 
-struct VMBundle {
+struct VMBundle: BundleType {
     let url: URL
     
     var resourcesURL: URL {
