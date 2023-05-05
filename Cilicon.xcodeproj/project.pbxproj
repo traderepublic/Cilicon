@@ -10,6 +10,7 @@
 		0EA6AF5F2992BFB2007094CD /* GitLabService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA6AF5E2992BFB2007094CD /* GitLabService.swift */; };
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
+		629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EA1322A05A6BC00899D73 /* ANSIParser.swift */; };
 		A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9492E5D2922376B005616CE /* ImageCopier.swift */; };
 		A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ScriptProvisioner.swift */; };
 		A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */; };
@@ -57,6 +58,7 @@
 		0EA6AF5E2992BFB2007094CD /* GitLabService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitLabService.swift; sourceTree = "<group>"; };
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
+		629EA1322A05A6BC00899D73 /* ANSIParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANSIParser.swift; sourceTree = "<group>"; };
 		A9492E5D2922376B005616CE /* ImageCopier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCopier.swift; sourceTree = "<group>"; };
 		A9517C482937ACB500785136 /* ScriptProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisioner.swift; sourceTree = "<group>"; };
 		A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisionerConfig.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				A9728DD42918F79000342A77 /* CiliconApp.swift */,
 				A9728DD62918F79000342A77 /* ContentView.swift */,
 				A97080732A03F688006E044D /* SSHLogger.swift */,
+				629EA1322A05A6BC00899D73 /* ANSIParser.swift */,
 				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
 				A9728DE72918F7D000342A77 /* VMManager.swift */,
 				A9492E5D2922376B005616CE /* ImageCopier.swift */,
@@ -379,6 +382,7 @@
 				A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */,
 				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
 				A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */,
+				629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */,
 				A961960729DC3A0B0095CAEC /* VMConfig.swift in Sources */,
 				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
