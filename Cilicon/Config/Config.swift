@@ -27,11 +27,15 @@ struct Config: Decodable {
     /// Delay in seconds before retrying to provision the image a failed cycle
     let retryDelay: Int
     
+    let sshCredentials: SSHCredentials
+    
+    let preRun: String?
+    let postRun: String?
+    
     enum CodingKeys: CodingKey {
         case provisioner
         case hardware
         case directoryMounts
-        case vmBundleType
         case vmBundlePath
         case vmClonePath
         case numberOfRunsUntilHostReboot
@@ -39,6 +43,9 @@ struct Config: Decodable {
         case editorMode
         case autoTransferImageVolume
         case retryDelay
+        case sshCredentials
+        case preRun
+        case postRun
     }
     
     init(from decoder: Decoder) throws {
@@ -53,7 +60,15 @@ struct Config: Decodable {
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
         self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
+        self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .init(username: "admin", password: "admin")
+        self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)
+        self.postRun = try container.decodeIfPresent(String.self, forKey: .postRun)
     }
 }
 
+
+struct SSHCredentials: Decodable {
+    let username: String
+    let password: String
+}
 

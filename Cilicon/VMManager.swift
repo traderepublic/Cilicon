@@ -66,7 +66,7 @@ class VMManager: NSObject, ObservableObject {
         }.value
     }
     
-    @MainActor
+    
     func setupAndRunVirtualMachine() async throws {
         if copier.isCopying {
             vmState = .copyingFromVolume
@@ -81,25 +81,61 @@ class VMManager: NSObject, ObservableObject {
         let vmConfig = try vmHelper.computeRunConfiguration(config: config)
         let virtualMachine = VZVirtualMachine(configuration: vmConfig)
         virtualMachine.delegate = self
-        vmState = .running(virtualMachine)
-        try await virtualMachine.start()
-    
+        
+        Task { @MainActor in
+            vmState = .running(virtualMachine)
+            try await virtualMachine.start()
+        }
+        try await Task.sleep(for: .seconds(5))
         guard let ip = LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string)?.ipAddress else {
             return
         }
+        
         let client = try await SSHClient.connect(
             host: ip,
-            authenticationMethod: .passwordBased(username: "admin", password: "admin"),
+            authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
             hostKeyValidator: .acceptAnything(),
             reconnect: .always
         )
+        
+        if let preRun = config.preRun {
+            let streams = try await client.executeCommandStream(preRun)
+            var asyncStreams = streams.makeAsyncIterator()
+            
+            while let blob = try await asyncStreams.next() {
+                switch blob {
+                case .stdout(let stdout):
+                    await SSHLogger.shared.log(string: String(buffer: stdout))
+                case .stderr(let stderr):
+                    await SSHLogger.shared.log(string: String(buffer: stderr))
+                }
+            }
+        }
         
         if let provisioner = provisioner {
             try await provisioner.provision(bundle: activeBundle, sshClient: client)
         }
         
-        try await virtualMachine.stop()
-        try await handleStop()
+        if let postRun = config.postRun {
+            let streams = try await client.executeCommandStream(postRun)
+            var asyncStreams = streams.makeAsyncIterator()
+            
+            while let blob = try await asyncStreams.next() {
+                switch blob {
+                case .stdout(let stdout):
+                    await SSHLogger.shared.log(string: String(buffer: stdout))
+                case .stderr(let stderr):
+                    await SSHLogger.shared.log(string: String(buffer: stderr))
+                }
+            }
+        }
+        
+        try await client.close()
+
+        Task { @MainActor in
+            try await virtualMachine.stop()
+            try await handleStop()
+        }
     }
     
     @MainActor

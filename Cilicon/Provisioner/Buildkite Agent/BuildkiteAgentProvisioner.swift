@@ -26,9 +26,9 @@ class BuildkiteAgentProvisioner: Provisioner {
         while let blob = try await asyncStreams.next() {
             switch blob {
             case .stdout(let stdout):
-                SSHLogger.shared.log(string: String(buffer: stdout))
+                await SSHLogger.shared.log(string: String(buffer: stdout))
             case .stderr(let stderr):
-                SSHLogger.shared.log(string: String(buffer: stderr))
+                await SSHLogger.shared.log(string: String(buffer: stderr))
             }
         }
         try await sshClient.close()

@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 final class SSHLogger: ObservableObject {
     static let shared = SSHLogger()
     
@@ -19,6 +20,3 @@ final class SSHLogger: ObservableObject {
         let text: String
     }
 }
-
-
-
