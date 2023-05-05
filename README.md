@@ -124,13 +124,13 @@ provisioner:
 Once you have created a new VM Bundle you will need to set it up. To do so, enable the `editorMode` in the `cilicon.yml` file.
 This will disable bundle duplication, provisioning and automatic restarting after shutdown.
 
-It will also mount the bundle's `Editor Resources` folder to `/Volumes/My Shared Files/Resources`, which is the same path that `Resources` will be mounted to outside of editor mode. You can use this to provide any dependencies like installers to your Guest OS during setup.
+It will also mount the bundle's `Editor Resources` folder to `/Volumes/My Shared Files/Resources`, which is the same path that `Resources` will be mounted to outside of editor mode. You can use this to provide any dependencies like installers to your Guest OS during setup. 🤔 You should avoid logging in to your Apple ID.
 After clicking through the macOS setup screens you can set up your Guest OS:
 - Enable automatic login
 - Disable Automatic Software updates
 - Disable any concept of screen locking or power saving
 - Select the dummy `start.command` file as a launch item which will start the CI agent/runner when mounted to the actual `Resources` folder.
-- Install any dependencies you may need, such as Xcode, Command line tools, brew, etc.
+- Install any dependencies you may need, such as Xcode, Command line tools, brew, etc. _You can install [Xcode from a zip](https://developer.apple.com/download/all/?q=xcode) to avoid logging to your Apple ID_
 
 <details>
   <summary>Depending on your setup, you may also want to enable passwordless <code>sudo</code>.</summary> 
