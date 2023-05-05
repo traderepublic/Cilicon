@@ -13,7 +13,7 @@ extension VMConfigHelper {
                                                                                          height: dispConfig.height,
                                                                                          ppi: dispConfig.pixelsPerInch)]
         virtualMachineConfiguration.storageDevices = [try createBlockDeviceConfiguration()]
-        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration()]
+        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: vmBundle.configuration.macAddress)]
         virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [VZUSBKeyboardConfiguration()]
         if config.hardware.connectsToAudioDevice {
@@ -26,10 +26,10 @@ extension VMConfigHelper {
     }
     
     private func createDirectorySharingConfiguration(config: Config) throws -> VZVirtioFileSystemDeviceConfiguration {
-        let resourcesURL = config.editorMode ? vmBundle.common.editorResourcesURL : vmBundle.common.resourcesURL
+        let resourcesURL = config.editorMode ? vmBundle.editorResourcesURL : vmBundle.resourcesURL
         let resourcesDirectory = VZSharedDirectory(url: resourcesURL, readOnly: false)
         
-        var directoriesToShare = ["Resources": resourcesDirectory]
+        var directoriesToShare = Dictionary<String, VZSharedDirectory>()//["Resources": resourcesDirectory]
         for mountConfig in config.directoryMounts {
             if !FileManager.default.fileExists(atPath: mountConfig.hostPath) {
                 try FileManager.default.createDirectory(atPath: mountConfig.hostPath, withIntermediateDirectories: true)

@@ -1,12 +1,13 @@
 import Foundation
 import Virtualization
 
-struct TartConfig: Decodable {
+struct VMConfig: Decodable {
     let memorySize: UInt
     let arch: Arch
     let os: OS
     let hardwareModel: VZMacHardwareModel
     let ecid: VZMacMachineIdentifier
+    let macAddress: VZMACAddress
     
     
     init(from decoder: Decoder) throws {
@@ -39,6 +40,13 @@ struct TartConfig: Decodable {
                                                    debugDescription: "Failed to init VZMacMachineIdentifier from Data")
         }
         self.ecid = ecid
+        let macAddressString = try container.decode(String.self, forKey: .macAddress)
+        guard let macAddress = VZMACAddress(string: macAddressString) else {
+            throw DecodingError.dataCorruptedError(forKey: .macAddress,
+                                                   in: container,
+                                                   debugDescription: "Failed to init VZMACAddress from String")
+        }
+        self.macAddress = macAddress
     }
     
     
@@ -48,6 +56,7 @@ struct TartConfig: Decodable {
         case os
         case hardwareModel
         case ecid
+        case macAddress
     }
     
     enum Arch: String, Codable {

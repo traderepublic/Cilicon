@@ -8,6 +8,9 @@ struct ContentView: View {
     let title: String
     let config: Config
     
+    @ObservedObject
+    var logger = SSHLogger.shared
+    
     init(config: Config) {
         self.vmManager = VMManager(config: config)
         self.config = config
@@ -19,7 +22,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        HStack {
+        VStack {
             switch vmManager.vmState {
             case .running(let vm):
                 VirtualMachineView(virtualMachine: vm).onAppear {
@@ -37,6 +40,20 @@ struct ContentView: View {
                 Text("Provisioning Image")
             case .copyingFromVolume:
                 Text("Copying image from external volume")
+            }
+            ScrollViewReader { scrollViewProxy in
+                ScrollView(.vertical) {
+                    LazyVStack {
+                        ForEach(logger.log) {
+                            Text($0.text)
+                                .frame(width: 800, alignment: .leading)
+                                .font(Font.custom("SF Mono", size: 11))
+                        }
+                    }
+                    .onReceive(logger.log.publisher) { _ in
+                        scrollViewProxy.scrollTo(logger.log.last!.id, anchor: .bottom)
+                    }
+                }
             }
         }
         .navigationTitle(title)

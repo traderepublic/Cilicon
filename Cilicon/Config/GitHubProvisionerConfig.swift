@@ -12,12 +12,18 @@ struct GitHubProvisionerConfig: Decodable {
     /// Extra labels to add to the runner
     let extraLabels: [String]?
     
+    let runnerGroup: String?
+    
+    let organizationURL: URL
+    
     enum CodingKeys: CodingKey {
         case apiURL
         case appId
         case organization
         case privateKeyPath
         case extraLabels
+        case runnerGroup
+        case organizationURL
     }
     
     init(from decoder: Decoder) throws {
@@ -27,5 +33,8 @@ struct GitHubProvisionerConfig: Decodable {
         self.organization = try container.decode(String.self, forKey: .organization)
         self.privateKeyPath = (try container.decode(String.self, forKey: .privateKeyPath) as NSString).standardizingPath
         self.extraLabels = try container.decodeIfPresent([String].self, forKey: .extraLabels)
+        self.runnerGroup = try container.decodeIfPresent(String.self, forKey: .runnerGroup)
+        self.organizationURL = try container.decodeIfPresent(URL.self, forKey: .organizationURL) ?? URL(string: "https://github.com/\(organization)")!
     }
+    
 }

@@ -11,16 +11,20 @@
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
 		A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9492E5D2922376B005616CE /* ImageCopier.swift */; };
-		A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ProcessProvisioner.swift */; };
-		A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */; };
+		A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ScriptProvisioner.swift */; };
+		A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */; };
 		A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */; };
-		A961960729DC3A0B0095CAEC /* TartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* TartConfig.swift */; };
+		A961960729DC3A0B0095CAEC /* VMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* VMConfig.swift */; };
 		A961960929DC3DA80095CAEC /* TartBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960829DC3DA80095CAEC /* TartBundle.swift */; };
+		A970806F2A03B999006E044D /* LeaseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A970806E2A03B999006E044D /* LeaseParser.swift */; };
+		A97080722A03BFCA006E044D /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = A97080712A03BFCA006E044D /* Citadel */; };
+		A97080742A03F688006E044D /* SSHLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080732A03F688006E044D /* SSHLogger.swift */; };
+		A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080762A041553006E044D /* BuildkiteAgentProvisioner.swift */; };
+		A97080792A041628006E044D /* BuildkiteAgentProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080782A041628006E044D /* BuildkiteAgentProvisionerConfig.swift */; };
 		A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD42918F79000342A77 /* CiliconApp.swift */; };
 		A9728DD72918F79000342A77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DD62918F79000342A77 /* ContentView.swift */; };
 		A9728DD92918F79100342A77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9728DD82918F79100342A77 /* Assets.xcassets */; };
 		A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE32918F7C500342A77 /* VirtualMachineView.swift */; };
-		A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
 		A9728DE82918F7D000342A77 /* VMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE72918F7D000342A77 /* VMManager.swift */; };
 		A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
 		A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */; };
@@ -39,7 +43,6 @@
 		A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB08292E33F700B8CA1F /* ContentView.swift */; };
 		A9FDAB0B292E33F800B8CA1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */; };
 		A9FDAB15292E34B500B8CA1F /* VMConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */; };
-		A9FDAB16292E34B500B8CA1F /* VMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728DE52918F7CB00342A77 /* VMBundle.swift */; };
 		A9FDAB17292E34BB00B8CA1F /* Installer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCDB292BB9B400FFDACC /* Installer.swift */; };
 		A9FDAB18292E34BB00B8CA1F /* InstallMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D45141292D1A00008CE4BB /* InstallMode.swift */; };
 		A9FDAB1B292E497A00B8CA1F /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A951BCD6292B93D000FFDACC /* Virtualization.framework */; };
@@ -55,20 +58,23 @@
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
 		A9492E5D2922376B005616CE /* ImageCopier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCopier.swift; sourceTree = "<group>"; };
-		A9517C482937ACB500785136 /* ProcessProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisioner.swift; sourceTree = "<group>"; };
-		A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessProvisionerConfig.swift; sourceTree = "<group>"; };
+		A9517C482937ACB500785136 /* ScriptProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisioner.swift; sourceTree = "<group>"; };
+		A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisionerConfig.swift; sourceTree = "<group>"; };
 		A951BCD6292B93D000FFDACC /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VMConfigHelper+RunConfig.swift"; sourceTree = "<group>"; };
 		A951BCDB292BB9B400FFDACC /* Installer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installer.swift; sourceTree = "<group>"; };
-		A961960629DC3A0B0095CAEC /* TartConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TartConfig.swift; sourceTree = "<group>"; };
+		A961960629DC3A0B0095CAEC /* VMConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMConfig.swift; sourceTree = "<group>"; };
 		A961960829DC3DA80095CAEC /* TartBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TartBundle.swift; sourceTree = "<group>"; };
+		A970806E2A03B999006E044D /* LeaseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaseParser.swift; sourceTree = "<group>"; };
+		A97080732A03F688006E044D /* SSHLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHLogger.swift; sourceTree = "<group>"; };
+		A97080762A041553006E044D /* BuildkiteAgentProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildkiteAgentProvisioner.swift; sourceTree = "<group>"; };
+		A97080782A041628006E044D /* BuildkiteAgentProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildkiteAgentProvisionerConfig.swift; sourceTree = "<group>"; };
 		A9728DD12918F79000342A77 /* Cilicon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cilicon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9728DD42918F79000342A77 /* CiliconApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CiliconApp.swift; sourceTree = "<group>"; };
 		A9728DD62918F79000342A77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A9728DD82918F79100342A77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9728DDD2918F79100342A77 /* Cilicon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cilicon.entitlements; sourceTree = "<group>"; };
 		A9728DE32918F7C500342A77 /* VirtualMachineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachineView.swift; sourceTree = "<group>"; };
-		A9728DE52918F7CB00342A77 /* VMBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMBundle.swift; sourceTree = "<group>"; };
 		A9728DE72918F7D000342A77 /* VMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMManager.swift; sourceTree = "<group>"; };
 		A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMConfigurationHelper.swift; sourceTree = "<group>"; };
 		A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubProvisionerConfig.swift; sourceTree = "<group>"; };
@@ -99,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A97080722A03BFCA006E044D /* Citadel in Frameworks */,
 				A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */,
 				A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */,
 			);
@@ -127,7 +134,7 @@
 		A9517C472937ACA800785136 /* Process */ = {
 			isa = PBXGroup;
 			children = (
-				A9517C482937ACB500785136 /* ProcessProvisioner.swift */,
+				A9517C482937ACB500785136 /* ScriptProvisioner.swift */,
 			);
 			path = Process;
 			sourceTree = "<group>";
@@ -136,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				A9728DF62918F9A000342A77 /* VMConfigurationHelper.swift */,
-				A9728DE52918F7CB00342A77 /* VMBundle.swift */,
 				A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */,
 			);
 			path = Common;
@@ -148,6 +154,14 @@
 				A951BCD6292B93D000FFDACC /* Virtualization.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A97080752A041539006E044D /* Buildkite Agent */ = {
+			isa = PBXGroup;
+			children = (
+				A97080762A041553006E044D /* BuildkiteAgentProvisioner.swift */,
+			);
+			path = "Buildkite Agent";
 			sourceTree = "<group>";
 		};
 		A9728DC82918F79000342A77 = {
@@ -175,6 +189,7 @@
 			children = (
 				A9728DD42918F79000342A77 /* CiliconApp.swift */,
 				A9728DD62918F79000342A77 /* ContentView.swift */,
+				A97080732A03F688006E044D /* SSHLogger.swift */,
 				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
 				A9728DE72918F7D000342A77 /* VMManager.swift */,
 				A9492E5D2922376B005616CE /* ImageCopier.swift */,
@@ -182,6 +197,7 @@
 				A9728E0C2918F9CF00342A77 /* AppleEvents */,
 				A9728DF52918F98500342A77 /* Config */,
 				A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */,
+				A970806E2A03B999006E044D /* LeaseParser.swift */,
 				A9728DD82918F79100342A77 /* Assets.xcassets */,
 				A9728DDD2918F79100342A77 /* Cilicon.entitlements */,
 			);
@@ -192,13 +208,14 @@
 			isa = PBXGroup;
 			children = (
 				A9728DF92918F9A000342A77 /* Config.swift */,
-				A961960629DC3A0B0095CAEC /* TartConfig.swift */,
+				A961960629DC3A0B0095CAEC /* VMConfig.swift */,
 				A961960829DC3DA80095CAEC /* TartBundle.swift */,
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
 				A9728DF72918F9A000342A77 /* GitHubProvisionerConfig.swift */,
 				0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */,
-				A9517C4A2937AFB900785136 /* ProcessProvisionerConfig.swift */,
+				A97080782A041628006E044D /* BuildkiteAgentProvisionerConfig.swift */,
+				A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */,
 				A9728DF82918F9A000342A77 /* HardwareConfig.swift */,
 				A9728DFA2918F9A000342A77 /* ProvisionerConfig.swift */,
 			);
@@ -210,6 +227,7 @@
 			children = (
 				A9728E042918F9BF00342A77 /* Provisioner.swift */,
 				A9517C472937ACA800785136 /* Process */,
+				A97080752A041539006E044D /* Buildkite Agent */,
 				A9728E032918F9B000342A77 /* GitHub Actions */,
 				0EBACEC4299287BF00A041C4 /* GitLab Runner */,
 			);
@@ -269,6 +287,7 @@
 			packageProductDependencies = (
 				A9728E0E2918FA2300342A77 /* SwiftJWT */,
 				A9FDAB2029375D0200B8CA1F /* Yams */,
+				A97080712A03BFCA006E044D /* Citadel */,
 			);
 			productName = Cilicon;
 			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
@@ -321,6 +340,7 @@
 			packageReferences = (
 				A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
 				A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */,
+				A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */,
 			);
 			productRefGroup = A9728DD22918F79000342A77 /* Products */;
 			projectDirPath = "";
@@ -358,20 +378,23 @@
 			files = (
 				A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */,
 				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
-				A961960729DC3A0B0095CAEC /* TartConfig.swift in Sources */,
+				A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */,
+				A961960729DC3A0B0095CAEC /* VMConfig.swift in Sources */,
 				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
-				A9728DE62918F7CB00342A77 /* VMBundle.swift in Sources */,
-				A9517C4B2937AFB900785136 /* ProcessProvisionerConfig.swift in Sources */,
+				A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */,
 				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
 				A9492E5E2922376B005616CE /* ImageCopier.swift in Sources */,
+				A97080792A041628006E044D /* BuildkiteAgentProvisionerConfig.swift in Sources */,
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
 				A9728DE42918F7C500342A77 /* VirtualMachineView.swift in Sources */,
+				A970806F2A03B999006E044D /* LeaseParser.swift in Sources */,
 				A961960929DC3DA80095CAEC /* TartBundle.swift in Sources */,
 				A9728E0A2918F9C600342A77 /* GitHubActionsProvisioner.swift in Sources */,
 				A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */,
-				A9517C492937ACB500785136 /* ProcessProvisioner.swift in Sources */,
+				A97080742A03F688006E044D /* SSHLogger.swift in Sources */,
+				A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
 				0EA6AF5F2992BFB2007094CD /* GitLabService.swift in Sources */,
@@ -397,7 +420,6 @@
 				A9FDAB2429375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */,
 				A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */,
 				A9FDAB15292E34B500B8CA1F /* VMConfigurationHelper.swift in Sources */,
-				A9FDAB16292E34B500B8CA1F /* VMBundle.swift in Sources */,
 				A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -681,6 +703,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orlandos-nl/Citadel";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
+			};
+		};
 		A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Kitura/Swift-JWT";
@@ -700,6 +730,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A97080712A03BFCA006E044D /* Citadel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */;
+			productName = Citadel;
+		};
 		A9728E0E2918FA2300342A77 /* SwiftJWT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */;

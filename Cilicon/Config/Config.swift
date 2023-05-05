@@ -8,7 +8,6 @@ struct Config: Decodable {
     /// Directories to mount on the Guest OS.
     let directoryMounts: [DirectoryMountConfig]
     /// The path where the VM bundle is located.
-    let vmBundleType: VMBundleType
     let vmBundlePath: String
     /// The path where the cloned VM bundle for each run is located.
     /// This should be on the same APFS volume as `vmBundlePath`.
@@ -47,9 +46,8 @@ struct Config: Decodable {
         self.provisioner = try container.decode(ProvisionerConfig.self, forKey: .provisioner)
         self.hardware = try container.decode(HardwareConfig.self, forKey: .hardware)
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
-        self.vmBundleType = try container.decodeIfPresent(VMBundleType.self, forKey: .vmBundleType) ?? .cilicon
         self.vmBundlePath = (try container.decode(String.self, forKey: .vmBundlePath) as NSString).standardizingPath
-        self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "EphemeralVM.bundle").path
+        self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
@@ -59,7 +57,3 @@ struct Config: Decodable {
 }
 
 
-enum VMBundleType: String, Decodable {
-    case cilicon
-    case tart
-}

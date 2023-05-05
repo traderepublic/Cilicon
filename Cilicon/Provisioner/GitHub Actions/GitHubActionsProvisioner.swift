@@ -1,4 +1,5 @@
 import Foundation
+import Citadel
 
 class GitHubActionsProvisioner: Provisioner {
     let config: Config
@@ -17,26 +18,53 @@ class GitHubActionsProvisioner: Provisioner {
         config.runnerName ?? Host.current().localizedName ?? "no-name"
     }
     
-    func provision(bundle: BundleType) async throws {
+    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         let org = gitHubConfig.organization
         let appId = gitHubConfig.appId
         guard let installation = try await service.getInstallations().first(where: { $0.account.login == gitHubConfig.organization }) else {
             throw GitHubActionsProvisionerError.githubAppNotInstalled(appID: appId, org: org)
         }
         let authToken = try await service.getInstallationToken(installation: installation)
+        let token = try await service.createRunnerToken(token: authToken.token)
         
-        try await setRegistrationToken(bundle: bundle, authToken: authToken)
-        try setRunnerName(bundle: bundle)
-        try setRunnerLabels(bundle: bundle)
-        try await setRunnerDownloadURL(bundle: bundle, authToken: authToken)
+        var configCommandComponents = [
+            "~/actions-runner/config.sh",
+            "--url \(gitHubConfig.organizationURL)",
+            "--name \(runnerName)",
+            "--token \(token.token)",
+            "--replace",
+            "--ephemeral",
+            "--work _work",
+            "--unattended",
+        ]
+        
+        if let group = gitHubConfig.runnerGroup {
+            configCommandComponents.append("--runnergroup \(group)")
+        }
+        
+        if let labels = gitHubConfig.extraLabels {
+            configCommandComponents.append("--labels \(labels.joined(separator: ","))")
+        }
+        
+        let configCommand = configCommandComponents.joined(separator: " ")
+        let runCommand = "~/actions-runner/run.sh"
+        let command = [configCommand, runCommand].joined(separator: " && ")
+        
+        let streams = try await sshClient.executeCommandStream(command)
+        var asyncStreams = streams.makeAsyncIterator()
+        
+        while let blob = try await asyncStreams.next() {
+            switch blob {
+            case .stdout(let stdout):
+                SSHLogger.shared.log(string: String(buffer: stdout))
+            case .stderr(let stderr):
+                SSHLogger.shared.log(string: String(buffer: stderr))
+            }
+        }
+        try await sshClient.close()
     }
     
-    func deprovision(bundle: BundleType) async throws {
-        print("No deprovisioning required, runner auto-deregisters")
-        return
-    }
-    
-    private func setRegistrationToken(bundle: BundleType, authToken: AccessToken) async throws {
+    private func setRegistrationToken(bundle: VMBundle, authToken: AccessToken) async throws {
         
         let actionsToken = try await service.createRunnerToken(token: authToken.token)
         
@@ -47,14 +75,14 @@ class GitHubActionsProvisioner: Provisioner {
         }
     }
     
-    private func setRunnerName(bundle: BundleType) throws {
+    private func setRunnerName(bundle: VMBundle) throws {
         let namePath = bundle.runnerNameURL.relativePath
         guard fileManager.createFile(atPath: namePath, contents: runnerName.data(using: .utf8)!) else {
             throw GitHubActionsProvisionerError.couldNotCreateRunnerNameFile(path: namePath)
         }
     }
     
-    private func setRunnerLabels(bundle: BundleType) throws {
+    private func setRunnerLabels(bundle: VMBundle) throws {
         let labels = [
             runnerName,
             "\(config.hardware.ramGigabytes)-gb-ram",
@@ -67,7 +95,7 @@ class GitHubActionsProvisioner: Provisioner {
         }
     }
     
-    private func setRunnerDownloadURL(bundle: BundleType, authToken: AccessToken) async throws {
+    private func setRunnerDownloadURL(bundle: VMBundle, authToken: AccessToken) async throws {
         let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
         guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
             throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
@@ -107,7 +135,7 @@ extension GitHubActionsProvisionerError: LocalizedError {
     }
 }
 
-fileprivate extension BundleType {
+fileprivate extension VMBundle {
     var runnerNameURL: URL {
         resourcesURL.appending(component: "RUNNER_NAME")
     }

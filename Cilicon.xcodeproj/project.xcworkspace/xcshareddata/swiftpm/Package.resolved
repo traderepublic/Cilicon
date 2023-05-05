@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "bigint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/attaswift/BigInt.git",
+      "state" : {
+        "revision" : "0ed110f7555c34ff468e72e1686e59721f2b0da6",
+        "version" : "5.3.0"
+      }
+    },
+    {
       "identity" : "bluecryptor",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Kitura/BlueCryptor.git",
@@ -28,6 +37,15 @@
       }
     },
     {
+      "identity" : "citadel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/orlandos-nl/Citadel",
+      "state" : {
+        "revision" : "bbe2e6570782efa430c35f57dc810f982748b913",
+        "version" : "0.6.0"
+      }
+    },
+    {
       "identity" : "kituracontracts",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Kitura/KituraContracts.git",
@@ -46,6 +64,33 @@
       }
     },
     {
+      "identity" : "swift-atomics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-atomics.git",
+      "state" : {
+        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "067254c79435de759aeef4a6a03e43d087d61312",
+        "version" : "2.0.5"
+      }
+    },
+    {
       "identity" : "swift-jwt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Kitura/Swift-JWT",
@@ -61,6 +106,24 @@
       "state" : {
         "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
         "version" : "1.4.4"
+      }
+    },
+    {
+      "identity" : "swift-nio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-nio.git",
+      "state" : {
+        "revision" : "d1690f85419fdac8d54e350fb6d2ab9fd95afd75",
+        "version" : "2.51.1"
+      }
+    },
+    {
+      "identity" : "swift-nio-ssh",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Joannis/swift-nio-ssh.git",
+      "state" : {
+        "revision" : "70506c0345480a9070ef71b58cff2b3f3e6a7662",
+        "version" : "0.3.1"
       }
     },
     {

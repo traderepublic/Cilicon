@@ -1,16 +1,18 @@
 import Foundation
 import Virtualization
+import Citadel
 
 class VMManager: NSObject, ObservableObject {
     let config: Config
-    let masterBundle: Bundle
-    let clonedBundle: Bundle
+    let masterBundle: VMBundle
+    let clonedBundle: VMBundle
     let provisioner: Provisioner?
     let fileManager: FileManager = .default
     var runCounter: Int = 0
     let copier: ImageCopier
+    var sshOutput: [String] = []
     
-    var activeBundle: Bundle {
+    var activeBundle: VMBundle {
         config.editorMode ? masterBundle : clonedBundle
     }
     
@@ -21,23 +23,19 @@ class VMManager: NSObject, ObservableObject {
         switch config.provisioner {
         case .github(let gitHubConfig):
             self.provisioner = GitHubActionsProvisioner(config: config, gitHubConfig: gitHubConfig)
-        case .gitlab(let gitLabconfig):
-            self.provisioner = GitLabRunnerProvisioner(config: config, gitLabConfig: gitLabconfig)
-        case .process(let processConfig):
-            self.provisioner = ProcessProvisioner(path: processConfig.executablePath, arguments: processConfig.arguments)
+        case .gitlab(let gitLabConfig):
+            self.provisioner = GitLabRunnerProvisioner(config: config, gitLabConfig: gitLabConfig)
+        case .buildkite(let buildkiteConfig):
+            self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
+        case .process(let scriptConfig):
+            self.provisioner = ScriptProvisioner(runBlock: scriptConfig.run)
         case .none:
             self.provisioner = nil
         }
         self.config = config
         self.copier = ImageCopier(config: config)
-        switch config.vmBundleType {
-        case .cilicon:
-            self.masterBundle = .cilicon(VMBundle(url: URL(filePath: config.vmBundlePath)))
-            self.clonedBundle = .cilicon(VMBundle(url: URL(filePath: config.vmClonePath)))
-        case .tart:
-            self.masterBundle = .tart(TartBundle(url: URL(filePath: config.vmBundlePath)))
-            self.clonedBundle = .tart(TartBundle(url: URL(filePath: config.vmClonePath)))
-        }
+        self.masterBundle = VMBundle(url: URL(filePath: config.vmBundlePath))
+        self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
     }
     
     @MainActor
@@ -64,7 +62,7 @@ class VMManager: NSObject, ObservableObject {
         vmState = .copying
         try await Task {
             try removeBundleIfExists()
-            try fileManager.copyItem(at: masterBundle.common.url, to: clonedBundle.common.url)
+            try fileManager.copyItem(at: masterBundle.url.resolvingSymlinksInPath(), to: clonedBundle.url)
         }.value
     }
     
@@ -78,11 +76,6 @@ class VMManager: NSObject, ObservableObject {
         }
         if !config.editorMode {
             try await cloneBundle()
-            if let provisioner = provisioner {
-                vmState = .provisioning
-                try activeBundle.common.resourcesURL.createIfNotExists()
-                try await provisioner.provision(bundle: activeBundle.common)
-            }
         }
         let vmHelper = VMConfigHelper(vmBundle: activeBundle)
         let vmConfig = try vmHelper.computeRunConfiguration(config: config)
@@ -90,11 +83,27 @@ class VMManager: NSObject, ObservableObject {
         virtualMachine.delegate = self
         vmState = .running(virtualMachine)
         try await virtualMachine.start()
+    
+        guard let ip = LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string)?.ipAddress else {
+            return
+        }
+        let client = try await SSHClient.connect(
+            host: ip,
+            authenticationMethod: .passwordBased(username: "admin", password: "admin"),
+            hostKeyValidator: .acceptAnything(),
+            reconnect: .always
+        )
+        
+        if let provisioner = provisioner {
+            try await provisioner.provision(bundle: activeBundle, sshClient: client)
+        }
+        
+        try await virtualMachine.stop()
+        try await handleStop()
     }
     
     @MainActor
     func handleStop() async throws {
-        try await provisioner?.deprovision(bundle: activeBundle.common)
         if config.editorMode {
             // In editor mode we don't want to reboot or restart the VM
             NSApplication.shared.terminate(nil)
@@ -112,8 +121,8 @@ class VMManager: NSObject, ObservableObject {
     }
     
     func removeBundleIfExists() throws {
-        if fileManager.fileExists(atPath: clonedBundle.common.url.relativePath) {
-            try fileManager.removeItem(atPath: clonedBundle.common.url.relativePath)
+        if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
+            try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
         }
     }
 }

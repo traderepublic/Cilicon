@@ -1,6 +1,6 @@
 import Foundation
 
-struct TartBundle: BundleType {
+struct VMBundle {
     let url: URL
     
     var resourcesURL: URL {
@@ -22,6 +22,11 @@ struct TartBundle: BundleType {
     var configURL: URL {
         url.appending(component: "config.json")
     }
+    
+    var configuration: VMConfig {
+        let tartConfigData = try! Data(contentsOf: configURL)
+        return try! JSONDecoder().decode(VMConfig.self, from: tartConfigData)
+    }
 }
 
 protocol BundleType {
@@ -31,22 +36,6 @@ protocol BundleType {
     var diskImageURL: URL { get }
     var auxiliaryStorageURL: URL { get }
     init(url: URL)
-}
-
-enum Bundle {
-    case tart(TartBundle)
-    case cilicon(VMBundle)
-    
-    var common: BundleType {
-        switch self {
-        case .tart(let bundle):
-            return bundle
-        case .cilicon(let bundle):
-            return bundle
-        }
-    }
-    
-    
 }
 
 extension URL {

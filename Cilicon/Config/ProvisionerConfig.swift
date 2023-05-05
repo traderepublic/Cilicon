@@ -3,7 +3,8 @@ import Foundation
 enum ProvisionerConfig: Decodable {
     case github(GitHubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
-    case process(ProcessProvisionerConfig)
+    case buildkite(BuildkiteAgentProvisionerConfig)
+    case process(ScriptProvisionerConfig)
     case none
     
     enum CodingKeys: CodingKey {
@@ -21,9 +22,13 @@ enum ProvisionerConfig: Decodable {
         case .gitlab:
             let config = try container.decode(GitLabProvisionerConfig.self, forKey: .config)
             self = .gitlab(config)
-        case .process:
-            let config = try container.decode(ProcessProvisionerConfig.self, forKey: .config)
+        case .buildkite:
+            let config = try container.decode(BuildkiteAgentProvisionerConfig.self, forKey: .config)
+            self = .buildkite(config)
+        case .script:
+            let config = try container.decode(ScriptProvisionerConfig.self, forKey: .config)
             self = .process(config)
+            
         case .none:
             self = .none
         }
@@ -32,7 +37,8 @@ enum ProvisionerConfig: Decodable {
     enum ProvisionerType: String, Decodable {
         case github
         case gitlab
-        case process
+        case buildkite
+        case script
         case none
     }
 }
