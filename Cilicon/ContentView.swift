@@ -44,14 +44,12 @@ struct ContentView: View {
             ScrollViewReader { scrollViewProxy in
                 ScrollView(.vertical) {
                     LazyVStack {
-                        ForEach(logger.log) {
-                            Text($0.text)
-                                .frame(width: 800, alignment: .leading)
-                                .font(Font.custom("SF Mono", size: 11))
-                        }
+                        Text(logger.combinedLog)
+                            .frame(width: 800, alignment: .leading)
                     }
+                    .textSelection(.enabled)
                     .onReceive(logger.log.publisher) { _ in
-                        scrollViewProxy.scrollTo(logger.log.last!.id, anchor: .bottom)
+                        scrollViewProxy.scrollTo(logger.combinedLog, anchor: .bottom)
                     }
                 }
             }

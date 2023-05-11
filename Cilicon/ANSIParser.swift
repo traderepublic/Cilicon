@@ -3,45 +3,45 @@ import AppKit
 struct ANSIParser {
     typealias Color = NSColor
     typealias Font = NSFont
+    static let fontName = "Andale Mono"
+    
+    static let defaultFont = Font.monospacedSystemFont(ofSize: Font.systemFontSize, weight: .regular)
+    static let defaultAttributes: [NSAttributedString.Key: Any] = [
+        .font: defaultFont as Any
+    ]
 
     static func parse(_ log: String) -> AttributedString {
-        let regex = try? NSRegularExpression(pattern: "\\[[0-9;]+m", options: [])
-        let range = NSMakeRange(0, log.count)
-        let result = NSMutableAttributedString()
-        var ranges: [NSRange] = []
-
-        regex?.enumerateMatches(in: log, options: [], range: range) { match, _, _ in
-            guard let match else { return }
-            ranges.append(match.range)
-        }
-
-        /// Used to have a pair (current, next) of the same array
+        guard let regex = try? Regex(#"\[[0-9;]+m"#) else { return .init(log) }
+        var result = AttributedString()
+        let ranges = log.ranges(of: regex)
+        /// Create copy of ranges offset by 1, playing a role of next
         var nextRanges = ranges.dropFirst()
-        nextRanges.append(NSMakeRange(log.count, 0))
+        nextRanges.append(log.endIndex ..< log.endIndex)
 
-        /// Looping over (current, next), in the middle will be the `text` to attribute
-        for (this, next) in zip(ranges, nextRanges) {
-            let thisStartIndex = log.index(log.startIndex, offsetBy: this.location)
-            let thisEndIndex = log.index(log.startIndex, offsetBy: this.location + this.length)
-            let nextStartIndex = log.index(log.startIndex, offsetBy: next.location)
-            let ansiCode = log[thisStartIndex ..< thisEndIndex]
-            let attributedString = NSMutableAttributedString(
-                string: String(log[thisEndIndex ..< nextStartIndex]),
-                attributes: attributesFor(ansiCode: String(ansiCode))
+        for (range, next) in zip(ranges, nextRanges) {
+            result.append(
+                AttributedString(
+                    /// String to format, is placed between the `range` and `next` ranged
+                    String(log[range.upperBound ..< next.lowerBound]),
+                    /// ANSI Code to parse
+                    attributes: .init(attributesFor(ansiCode: String(log[range])))
+                )
             )
-            result.append(attributedString)
         }
 
         /// Fallback in case failed to parse
-        if result.string.isEmpty {
-            result.append(.init(string: log))
+        if result.characters.isEmpty {
+            result.append(AttributedString(log.replacing(regex, with: { _ in "" }), attributes: .init(Self.defaultAttributes)))
         }
 
-        return AttributedString(result)
+        return result
     }
 
+
     private static func attributesFor(ansiCode: String) -> [NSAttributedString.Key: Any] {
-        var attributes: [NSAttributedString.Key: Any] = [:]
+        
+        var attributes: [NSAttributedString.Key: Any] = Self.defaultAttributes
+        attributes[.font] = defaultFont
         let codes = ansiCode
             .split(separator: ";")
             .map { $0.trimmingCharacters(in: .decimalDigits.inverted) }
@@ -50,9 +50,14 @@ struct ANSIParser {
         /// In case of `38` and `48` -> `break codesLoop` as final part of attribute format
         codesLoop: for (index, code) in codes.enumerated() {
             switch code {
-            case 0: attributes = [:]
-            case 1: attributes[.font] = Font.boldSystemFont(ofSize: Font.systemFontSize)
-            case 3: attributes[.font] = Font.italicSystemFont(ofSize: Font.systemFontSize)
+            case 0:
+                attributes = Self.defaultAttributes
+            case 1:
+                let newDescriptor = defaultFont.fontDescriptor.withSymbolicTraits(.bold)
+                attributes[.font] = Font(descriptor: newDescriptor, size: Font.systemFontSize)
+            case 3:
+                let newDescriptor = defaultFont.fontDescriptor.withSymbolicTraits(.italic)
+                attributes[.font] = Font(descriptor: newDescriptor, size: Font.systemFontSize)
             case 4: attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
             case 9: attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
             case 30 ... 37: attributes[.foregroundColor] = colorFromAnsiCode(code - 30)
@@ -120,7 +125,7 @@ struct ANSIParser {
 
 extension NSFont {
     static func italicSystemFont(ofSize fontSize: CGFloat) -> Self? {
-        let font = Self.systemFont(ofSize: Self.systemFontSize)
+        let font = NSFont(name: ANSIParser.fontName, size: systemFontSize) ?? .systemFont(ofSize: systemFontSize)
         let italicDescriptor = font.fontDescriptor.withSymbolicTraits(.italic)
         return Self(descriptor: italicDescriptor, size: fontSize)
     }

@@ -30,7 +30,7 @@ class GitHubActionsProvisioner: Provisioner {
         var configCommandComponents = [
             "~/actions-runner/config.sh",
             "--url \(gitHubConfig.organizationURL)",
-            "--name \(runnerName)",
+            "--name '\(runnerName)'",
             "--token \(token.token)",
             "--replace",
             "--ephemeral",
@@ -39,7 +39,7 @@ class GitHubActionsProvisioner: Provisioner {
         ]
         
         if let group = gitHubConfig.runnerGroup {
-            configCommandComponents.append("--runnergroup \(group)")
+            configCommandComponents.append("--runnergroup '\(group)'")
         }
         
         if let labels = gitHubConfig.extraLabels {
@@ -49,7 +49,6 @@ class GitHubActionsProvisioner: Provisioner {
         let configCommand = configCommandComponents.joined(separator: " ")
         let runCommand = "~/actions-runner/run.sh"
         let command = [configCommand, runCommand].joined(separator: " && ")
-        
         let streams = try await sshClient.executeCommandStream(command)
         var asyncStreams = streams.makeAsyncIterator()
         

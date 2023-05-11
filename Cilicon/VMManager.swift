@@ -97,7 +97,7 @@ class VMManager: NSObject, ObservableObject {
             hostKeyValidator: .acceptAnything(),
             reconnect: .always
         )
-        
+        print("IP Address: \(ip)")
         if let preRun = config.preRun {
             let streams = try await client.executeCommandStream(preRun)
             var asyncStreams = streams.makeAsyncIterator()
@@ -129,13 +129,13 @@ class VMManager: NSObject, ObservableObject {
                 }
             }
         }
-        
-        try await client.close()
-
-        Task { @MainActor in
-            try await virtualMachine.stop()
-            try await handleStop()
-        }
+//
+//        try await client.close()
+//
+//        Task { @MainActor in
+//            try await virtualMachine.stop()
+//            try await handleStop()
+//        }
     }
     
     @MainActor
