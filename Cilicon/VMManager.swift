@@ -1,6 +1,7 @@
 import Foundation
 import Virtualization
 import Citadel
+import OCI
 
 class VMManager: NSObject, ObservableObject {
     let config: Config
@@ -68,6 +69,7 @@ class VMManager: NSObject, ObservableObject {
     
     
     func setupAndRunVirtualMachine() async throws {
+        try await OCI.fetchManifest()
         if copier.isCopying {
             vmState = .copyingFromVolume
             print("Copying bundle from external Volume. Retrying in 10 seconds.")

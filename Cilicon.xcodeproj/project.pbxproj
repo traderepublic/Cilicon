@@ -40,6 +40,7 @@
 		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
 		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
+		A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */ = {isa = PBXBuildFile; productRef = A9FC3D0D2A0D4FBB00535E9C /* OCI */; };
 		A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */; };
 		A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB08292E33F700B8CA1F /* ContentView.swift */; };
 		A9FDAB0B292E33F800B8CA1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */; };
@@ -92,6 +93,7 @@
 		A9728E112918FA4700342A77 /* SendAppleEventToSystemProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAppleEventToSystemProcess.h; sourceTree = "<group>"; };
 		A9728E122918FA4700342A77 /* AppleEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleEvents.swift; sourceTree = "<group>"; };
 		A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cilicon-Bridging-Header.h"; sourceTree = "<group>"; };
+		A98EEC3D2A0BB17200442399 /* OCI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = OCI; sourceTree = "<group>"; };
 		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
 		A9FDAB04292E33F600B8CA1F /* Cilicon Installer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cilicon Installer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerApp.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			files = (
 				A97080722A03BFCA006E044D /* Citadel in Frameworks */,
 				A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */,
+				A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */,
 				A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +172,7 @@
 		A9728DC82918F79000342A77 = {
 			isa = PBXGroup;
 			children = (
+				A98EEC3C2A0BB17200442399 /* Packages */,
 				A9728DD32918F79000342A77 /* Cilicon */,
 				A9FDAB05292E33F700B8CA1F /* Installer */,
 				A951BCCD292B922D00FFDACC /* Common */,
@@ -258,6 +262,14 @@
 			path = AppleEvents;
 			sourceTree = "<group>";
 		};
+		A98EEC3C2A0BB17200442399 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A98EEC3D2A0BB17200442399 /* OCI */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		A9FDAB05292E33F700B8CA1F /* Installer */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +303,7 @@
 				A9728E0E2918FA2300342A77 /* SwiftJWT */,
 				A9FDAB2029375D0200B8CA1F /* Yams */,
 				A97080712A03BFCA006E044D /* Citadel */,
+				A9FC3D0D2A0D4FBB00535E9C /* OCI */,
 			);
 			productName = Cilicon;
 			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
@@ -747,6 +760,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
 			productName = SwiftJWT;
+		};
+		A9FC3D0D2A0D4FBB00535E9C /* OCI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OCI;
 		};
 		A9FDAB2029375D0200B8CA1F /* Yams */ = {
 			isa = XCSwiftPackageProductDependency;
