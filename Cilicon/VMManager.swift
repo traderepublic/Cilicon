@@ -204,9 +204,6 @@ class VMManager: NSObject, ObservableObject {
         let imgLayers = manifest.layers.filter { $0.mediaType == "application/vnd.cirruslabs.tart.disk.v1" }
         var lastDataCount = 0
         var lastProgress: Double = -1
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .percent
-        formatter.minimumFractionDigits = 2
         for (index, layer) in imgLayers.enumerated() {
             var data = Data()
             data.reserveCapacity(Int(layer.size))
@@ -224,6 +221,7 @@ class VMManager: NSObject, ObservableObject {
             try filter.write(data)
         }
         try filter.finalize()
+        try disk.close()
         // Getting NVRAM
         Task { @MainActor in
             vmState = .downloading(text: "NVRAM", progress: 0)
