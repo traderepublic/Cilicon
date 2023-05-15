@@ -25,7 +25,7 @@ class ImageCopier {
                 let bundlePath = devicePath.appending("/VM.bundle/")
                 if strongSelf.fileManager.fileExists(atPath: bundlePath) {
                     NSSound.funk?.play()
-                    let targetPath = config.vmBundlePath
+                    let targetPath = config.source.localPath
                     print("Found VM Bundle on \(transferPath). Copying over to \(targetPath)")
                     DispatchQueue.global(qos:.background).async {
                         strongSelf.isCopying = true

@@ -7,7 +7,12 @@ struct ContentView: View {
     var vmManager: VMManager
     let title: String
     let config: Config
-    
+    let progressFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .percent
+        numberFormatter.minimumFractionDigits = 2
+        return numberFormatter
+    }()
     @ObservedObject
     var logger = SSHLogger.shared
     
@@ -15,7 +20,7 @@ struct ContentView: View {
         self.vmManager = VMManager(config: config)
         self.config = config
         if config.editorMode {
-            self.title = "Cilicon (Editor Mode) - \(config.vmBundlePath)"
+            self.title = "Cilicon (Editor Mode) - \(config.source.localPath)"
         } else {
             self.title = "Cilicon"
         }
@@ -40,6 +45,13 @@ struct ContentView: View {
                 Text("Provisioning Image")
             case .copyingFromVolume:
                 Text("Copying image from external volume")
+            case .downloading(let text, let progress):
+                let fProgress = self.progressFormatter.string(from: NSNumber(value: progress))!
+                VStack {
+                    Text("Downloading \(text) - \(fProgress)")
+                    ProgressView(value: progress).frame(width: 500, alignment: .center)
+                }
+                
             }
             ScrollViewReader { scrollViewProxy in
                 ScrollView(.vertical) {

@@ -1,14 +1,13 @@
 import Foundation
 
 public struct OCIURL {
-    let scheme: String
-    let registry: String
-    let repository: String
-    let tag: String?
+    public let scheme: String
+    public let registry: String
+    public let repository: String
+    public let tag: String?
     
-    init?(string: String) {
-        guard let urlComponents = URLComponents(string: string),
-              let scheme = urlComponents.scheme,
+    public init?(urlComponents: URLComponents) {
+        guard let scheme = urlComponents.scheme,
               scheme == "oci",
               let host = urlComponents.host,
               let path = urlComponents.path.removingPercentEncoding,
@@ -31,5 +30,10 @@ public struct OCIURL {
         } else {
             self.tag = nil
         }
+    }
+    
+    public init?(string: String) {
+        guard let components = URLComponents(string: string) else { return nil }
+        self.init(urlComponents: components)
     }
 }

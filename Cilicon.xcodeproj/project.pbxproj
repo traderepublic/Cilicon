@@ -41,6 +41,7 @@
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
 		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
 		A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */ = {isa = PBXBuildFile; productRef = A9FC3D0D2A0D4FBB00535E9C /* OCI */; };
+		A9FC3D102A127BE900535E9C /* VMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC3D0F2A127BE900535E9C /* VMSource.swift */; };
 		A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */; };
 		A9FDAB09292E33F700B8CA1F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB08292E33F700B8CA1F /* ContentView.swift */; };
 		A9FDAB0B292E33F800B8CA1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9FDAB0A292E33F800B8CA1F /* Assets.xcassets */; };
@@ -95,6 +96,7 @@
 		A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cilicon-Bridging-Header.h"; sourceTree = "<group>"; };
 		A98EEC3D2A0BB17200442399 /* OCI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = OCI; sourceTree = "<group>"; };
 		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
+		A9FC3D0F2A127BE900535E9C /* VMSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMSource.swift; sourceTree = "<group>"; };
 		A9FDAB04292E33F600B8CA1F /* Cilicon Installer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cilicon Installer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerApp.swift; sourceTree = "<group>"; };
 		A9FDAB08292E33F700B8CA1F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				A9728DD42918F79000342A77 /* CiliconApp.swift */,
+				A9FC3D0F2A127BE900535E9C /* VMSource.swift */,
 				A9728DD62918F79000342A77 /* ContentView.swift */,
 				A97080732A03F688006E044D /* SSHLogger.swift */,
 				629EA1322A05A6BC00899D73 /* ANSIParser.swift */,
@@ -414,6 +417,7 @@
 				A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
+				A9FC3D102A127BE900535E9C /* VMSource.swift in Sources */,
 				0EA6AF5F2992BFB2007094CD /* GitLabService.swift in Sources */,
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
 				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
