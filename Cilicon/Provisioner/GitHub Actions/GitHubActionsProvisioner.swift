@@ -27,6 +27,21 @@ class GitHubActionsProvisioner: Provisioner {
         let authToken = try await service.getInstallationToken(installation: installation)
         let token = try await service.createRunnerToken(token: authToken.token)
         
+        var command = ""
+        if gitHubConfig.downloadLatest {
+            let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
+            guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
+                throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
+            }
+            
+            let downloadCommands = ["curl -o actions-runner.tar.gz -L \(macURL.downloadUrl.absoluteString)",
+                                    "rm -rf ~/actions-runner",
+                                    "mkdir ~/actions-runner",
+                                    "tar xzf ./actions-runner.tar.gz --directory ~/actions-runner"]
+            
+            command += downloadCommands.joined(separator: " && ") + " && "
+        }
+        
         var configCommandComponents = [
             "~/actions-runner/config.sh",
             "--url \(gitHubConfig.organizationURL)",
@@ -48,59 +63,12 @@ class GitHubActionsProvisioner: Provisioner {
         
         let configCommand = configCommandComponents.joined(separator: " ")
         let runCommand = "~/actions-runner/run.sh"
-        let command = [configCommand, runCommand].joined(separator: " && ")
-        let streams = try await sshClient.executeCommandStream(command)
-        var asyncStreams = streams.makeAsyncIterator()
+        command += [configCommand, runCommand].joined(separator: " && ")
         
-        while let blob = try await asyncStreams.next() {
-            switch blob {
-            case .stdout(let stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
-            case .stderr(let stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
-            }
-        }
-    }
-    
-    private func setRegistrationToken(bundle: VMBundle, authToken: AccessToken) async throws {
+        let shellResp = try await sshClient.executeInShell(command: command)
         
-        let actionsToken = try await service.createRunnerToken(token: authToken.token)
-        
-        let runnerToken = actionsToken.token.data(using: .utf8)
-        let tokenPath = bundle.runnerTokenURL.relativePath
-        guard fileManager.createFile(atPath: tokenPath, contents: runnerToken) else {
-            throw GitHubActionsProvisionerError.couldNotCreateRunnerTokenFile(path: tokenPath)
-        }
-    }
-    
-    private func setRunnerName(bundle: VMBundle) throws {
-        let namePath = bundle.runnerNameURL.relativePath
-        guard fileManager.createFile(atPath: namePath, contents: runnerName.data(using: .utf8)!) else {
-            throw GitHubActionsProvisionerError.couldNotCreateRunnerNameFile(path: namePath)
-        }
-    }
-    
-    private func setRunnerLabels(bundle: VMBundle) throws {
-        let labels = [
-            runnerName,
-            "\(config.hardware.ramGigabytes)-gb-ram",
-            "\(config.hardware.cpuCores ?? ProcessInfo.processInfo.processorCount)-cores"
-        ] + (gitHubConfig.extraLabels ?? [])
-        let labelsPath = bundle.runnerLabelsURL.relativePath
-        let joinedLabels = labels.joined(separator: ",")
-        guard fileManager.createFile(atPath: labelsPath, contents: joinedLabels.data(using: .utf8)!) else {
-            throw GitHubActionsProvisionerError.couldNotCreateLabelsFile(path: labelsPath)
-        }
-    }
-    
-    private func setRunnerDownloadURL(bundle: VMBundle, authToken: AccessToken) async throws {
-        let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
-        guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
-            throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
-        }
-        let downloadURLPath = bundle.runnerDownloadURL.relativePath
-        guard fileManager.createFile(atPath: downloadURLPath, contents: macURL.downloadUrl.absoluteString.data(using: .utf8)!) else {
-            throw GitHubActionsProvisionerError.couldNotCreateRunnerURLFile(path: downloadURLPath)
+        for try await resp in shellResp {
+            await SSHLogger.shared.log(string: String(buffer: resp))
         }
     }
 }
@@ -130,23 +98,5 @@ extension GitHubActionsProvisionerError: LocalizedError {
         case .couldNotFindRunnerDownloadURL:
             return "Could not find runner download URL"
         }
-    }
-}
-
-fileprivate extension VMBundle {
-    var runnerNameURL: URL {
-        resourcesURL.appending(component: "RUNNER_NAME")
-    }
-    
-    var runnerTokenURL: URL {
-        resourcesURL.appending(component: "RUNNER_TOKEN")
-    }
-    
-    var runnerLabelsURL: URL {
-        resourcesURL.appending(component: "RUNNER_LABELS")
-    }
-    
-    var runnerDownloadURL: URL {
-        resourcesURL.appending(component: "RUNNER_DOWNLOAD_URL")
     }
 }

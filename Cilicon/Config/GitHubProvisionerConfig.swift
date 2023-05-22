@@ -11,6 +11,8 @@ struct GitHubProvisionerConfig: Decodable {
     let privateKeyPath: String
     /// Extra labels to add to the runner
     let extraLabels: [String]?
+    /// Default: `true`
+    let downloadLatest: Bool
     
     let runnerGroup: String?
     
@@ -24,6 +26,7 @@ struct GitHubProvisionerConfig: Decodable {
         case extraLabels
         case runnerGroup
         case organizationURL
+        case downloadLatest
     }
     
     init(from decoder: Decoder) throws {
@@ -35,6 +38,7 @@ struct GitHubProvisionerConfig: Decodable {
         self.extraLabels = try container.decodeIfPresent([String].self, forKey: .extraLabels)
         self.runnerGroup = try container.decodeIfPresent(String.self, forKey: .runnerGroup)
         self.organizationURL = try container.decodeIfPresent(URL.self, forKey: .organizationURL) ?? URL(string: "https://github.com/\(organization)")!
+        self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
     }
     
 }

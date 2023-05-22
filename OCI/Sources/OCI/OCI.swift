@@ -17,16 +17,10 @@ public struct OCI {
     }()
     
     public func fetchManifest(authentication: AuthenticationType = .none) async throws -> (String, Manifest) {
-        var manifestURL = baseURL.appending(path: "manifests")
-        
-        if let tag = url.tag {
-            manifestURL.append(path: tag)
-        }
-        print(manifestURL)
+        let manifestURL = baseURL.appending(path: "manifests/\(url.tag)")
         let headers = [
             "Accept": "application/vnd.oci.image.manifest.v1+json"
         ]
-        
         let (data, response) = try await request(authentication: authentication, url: manifestURL, headers: headers)
         let contentDigest = response.value(forHTTPHeaderField: "docker-content-digest")!
         let jsonDecoder = JSONDecoder()
@@ -35,13 +29,13 @@ public struct OCI {
     
     public func pullBlob(digest: String, authentication: AuthenticationType = .none) async throws -> URLSession.AsyncBytes {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
-        let (data, response) = try await download(authentication: authentication, url: blobUrl)
+        let (data, _) = try await download(authentication: authentication, url: blobUrl)
         return data
     }
     
     public func pullBlobData(digest: String, authentication: AuthenticationType = .none) async throws -> Data {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
-        let (data, response) = try await request(authentication: authentication, url: blobUrl)
+        let (data, _) = try await request(authentication: authentication, url: blobUrl)
         return data
     }
     
@@ -63,8 +57,15 @@ public struct OCI {
         for (headerName, headerValue) in headers {
             request.setValue(headerValue, forHTTPHeaderField: headerName)
         }
-        if case let .bearer(token) = authentication {
+        
+        switch authentication {
+        case let .basic(username, password):
+            let credentials =  Data("\(username):\(password)".utf8).base64EncodedString()
+            request.setValue("Basic \(credentials)", forHTTPHeaderField: "Authorization")
+        case let .bearer(token):
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        case .none:
+            break
         }
         let (data, response) = try await urlSession.data(for: request)
         guard let httpResp = response as? HTTPURLResponse else {
@@ -110,37 +111,6 @@ public struct OCI {
         case bearer(token: String)
     }
 }
-
-struct WWWAuthenticate {
-    let authMode: String
-    let realm: String
-    let service: String
-    let scope: String
-    init?(response: HTTPURLResponse) {
-        guard let header = response.value(forHTTPHeaderField: "www-authenticate") else {
-            return nil
-        }
-        let components = header
-            .trimmingCharacters(in: .whitespaces)
-            .split(separator: " ", maxSplits: 1)
-            
-        guard components.count == 2 else { return nil }
-        self.authMode = String(components[0])
-        let items = components[1].split(separator: ",")
-        let dictionary = items.reduce(into: [String: String]()) {
-            let keyVal = $1.split(separator: "=", maxSplits: 1)
-            $0[String(keyVal[0])] = String(keyVal[1]).replacingOccurrences(of: "\"", with: "")
-        }
-        
-        guard let realm = dictionary["realm"],
-              let service = dictionary["service"],
-              let scope = dictionary["scope"] else { return nil }
-        self.realm = realm
-        self.service = service
-        self.scope = scope
-    }
-}
-
 
 struct AuthResponse: Decodable {
     let token: String

@@ -10,13 +10,17 @@ final class SSHLogger: ObservableObject {
     var log: [LogChunk] = []
     
     
-    var combinedLog: AttributedString {
+    var attributedLog: AttributedString {
+        return ANSIParser.parse(combinedLog)
+    }
+    
+    var combinedLog: String {
         var outString = String()
         log.forEach {
             outString.append($0.text)
             outString.append("\n")
         }
-        return ANSIParser.parse(outString)
+        return outString
     }
 
     func log(string: String) {

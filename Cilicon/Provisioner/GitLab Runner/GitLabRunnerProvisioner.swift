@@ -33,17 +33,17 @@ class GitLabRunnerProvisioner: Provisioner {
     }
     
     private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
-        let tokenPath = bundle.runnerEndpointURL.relativePath
-        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-        }
+//        let tokenPath = bundle.runnerEndpointURL.relativePath
+//        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
+//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+//        }
     }
 
     private func setRunnerToken(bundle: VMBundle, token: String) throws {
-        let tokenPath = bundle.runnerTokenURL.relativePath
-        guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-        }
+//        let tokenPath = bundle.runnerTokenURL.relativePath
+//        guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
+//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+//        }
     }
 }
 
@@ -65,16 +65,5 @@ extension GitLabRunnerProvisioner.Error: LocalizedError {
         case let .invalidConfiguration(reason):
             return "Configuration invalid: \(reason)"
         }
-    }
-}
-
-
-fileprivate extension VMBundle {
-    var runnerTokenURL: URL {
-        resourcesURL.appending(component: "RUNNER_TOKEN")
-    }
-    
-    var runnerEndpointURL: URL {
-        resourcesURL.appending(component: "RUNNER_ENDPOINT_URL")
     }
 }

@@ -44,10 +44,20 @@ class VMManager: NSObject, ObservableObject {
     func setupAndRunVM() async throws {
         do {
             vmState = .initializing
-            if case let .OCI(ociURL) = config.source, !fileManager.fileExists(atPath: masterBundle.url.path) {
-                try await downloadFromOCI(url: ociURL)
+            if case let .OCI(ociURL) = config.source {
+                let resolvedPath = masterBundle.url.resolvingSymlinksInPath().path
+                if try fileManager.fileExists(atPath: resolvedPath) && !isBundleComplete() {
+                    try fileManager.removeItem(atPath: resolvedPath)
+                }
+                if !fileManager.fileExists(atPath: resolvedPath) {
+                    try await withTaskCancellationHandler(operation: {
+                        try await downloadFromOCI(url: ociURL)
+                    }, onCancel: {
+                        try? fileManager.removeItem(atPath: resolvedPath)
+                    })
+                }
+                
             }
-            
             try await setupAndRunVirtualMachine()
         }
         catch {
@@ -103,18 +113,12 @@ class VMManager: NSObject, ObservableObject {
             hostKeyValidator: .acceptAnything(),
             reconnect: .always
         )
+        
         print("IP Address: \(ip)")
         if let preRun = config.preRun {
-            let streams = try await client.executeCommandStream(preRun)
-            var asyncStreams = streams.makeAsyncIterator()
-            
-            while let blob = try await asyncStreams.next() {
-                switch blob {
-                case .stdout(let stdout):
-                    await SSHLogger.shared.log(string: String(buffer: stdout))
-                case .stderr(let stderr):
-                    await SSHLogger.shared.log(string: String(buffer: stderr))
-                }
+            let streams = try await client.executeInShell(command: preRun)
+            for try await blob in streams {
+                await SSHLogger.shared.log(string: String(buffer: blob))
             }
         }
         
@@ -123,27 +127,31 @@ class VMManager: NSObject, ObservableObject {
         }
         
         if let postRun = config.postRun {
-            let streams = try await client.executeCommandStream(postRun)
-            var asyncStreams = streams.makeAsyncIterator()
-            
-            while let blob = try await asyncStreams.next() {
-                switch blob {
-                case .stdout(let stdout):
-                    await SSHLogger.shared.log(string: String(buffer: stdout))
-                case .stderr(let stderr):
-                    await SSHLogger.shared.log(string: String(buffer: stderr))
-                }
+            let streams = try await client.executeInShell(command: postRun)
+            for try await blob in streams {
+                await SSHLogger.shared.log(string: String(buffer: blob))
             }
         }
-//
-//        try await client.close()
-//
-//        Task { @MainActor in
-//            try await virtualMachine.stop()
-//            try await handleStop()
-//        }
+        try await client.close()
+
+        Task { @MainActor in
+            try await virtualMachine.stop()
+            try await handleStop()
+        }
     }
     
+    
+    func isBundleComplete() throws -> Bool {
+        let filesExist = [masterBundle.diskImageURL,
+                          masterBundle.configURL,
+                          masterBundle.auxiliaryStorageURL]
+            .map { $0.resolvingSymlinksInPath() }
+            .reduce(into: false) { $0 = fileManager.fileExists(atPath: $1.path) }
+        let notUnfinished = !fileManager.fileExists(atPath: masterBundle.unfinishedURL.path)
+        
+        return filesExist && notUnfinished
+        
+    }
     @MainActor
     func handleStop() async throws {
         if config.editorMode {
@@ -168,12 +176,20 @@ class VMManager: NSObject, ObservableObject {
         }
     }
     
+    func cleanup() throws {
+        try removeBundleIfExists()
+    }
+    
     func downloadFromOCI(url: OCIURL) async throws {
         let client = OCI(url: url)
         let (digest, manifest) = try await client.fetchManifest()
         let path = URL(filePath: url.localPath).deletingLastPathComponent().appending(path: digest)
         try fileManager.createDirectory(at: path, withIntermediateDirectories: true)
-        try fileManager.createSymbolicLink(at: URL(filePath: url.localPath), withDestinationURL: path)
+        
+        if !fileManager.fileExists(atPath: url.localPath) {
+            try fileManager.createSymbolicLink(at: URL(filePath: url.localPath), withDestinationURL: path)
+        }
+        fileManager.createFile(atPath: masterBundle.unfinishedURL.path, contents: nil)
         let bundleForPaths = VMBundle(url: path)
         
         guard let configLayer = manifest.layers.first(where: { $0.mediaType == "application/vnd.cirruslabs.tart.config.v1" }) else {
@@ -231,6 +247,7 @@ class VMManager: NSObject, ObservableObject {
         }
         let nvramData = try await client.pullBlobData(digest: nvramLayer.digest)
         try nvramData.write(to: bundleForPaths.auxiliaryStorageURL)
+        try fileManager.removeItem(at: masterBundle.unfinishedURL)
     }
 }
 
@@ -272,3 +289,4 @@ enum VMState {
     case running(VZVirtualMachine)
     case downloading(text: String, progress: Double)
 }
+

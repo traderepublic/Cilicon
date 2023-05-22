@@ -3,14 +3,6 @@ import Foundation
 struct VMBundle {
     let url: URL
     
-    var resourcesURL: URL {
-        url.appending(component: "Resources/")
-    }
-    
-    var editorResourcesURL: URL {
-        url.appending(component: "Editor Resources/")
-    }
-    
     var diskImageURL: URL {
         url.appending(component: "disk.img")
     }
@@ -21,6 +13,11 @@ struct VMBundle {
     
     var configURL: URL {
         url.appending(component: "config.json")
+    }
+    
+    /// The presence of this file indicates that the OCI pull was unsucessful
+    var unfinishedURL: URL {
+        url.appending(component: "UNFINISHED")
     }
     
     var configuration: VMConfig {

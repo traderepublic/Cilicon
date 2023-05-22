@@ -4,7 +4,7 @@ public struct OCIURL {
     public let scheme: String
     public let registry: String
     public let repository: String
-    public let tag: String?
+    public let tag: String
     
     public init?(urlComponents: URLComponents) {
         guard let scheme = urlComponents.scheme,
@@ -20,16 +20,10 @@ public struct OCIURL {
         guard components.count >= 2 else {
             return nil
         }
-        
         self.scheme = scheme
         self.registry = host
         self.repository = components[0]
-        
-        if components.count >= 2 {
-            self.tag = components[1]
-        } else {
-            self.tag = nil
-        }
+        self.tag = components[1]
     }
     
     public init?(string: String) {

@@ -18,7 +18,6 @@
 		A961960729DC3A0B0095CAEC /* VMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* VMConfig.swift */; };
 		A961960929DC3DA80095CAEC /* TartBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960829DC3DA80095CAEC /* TartBundle.swift */; };
 		A970806F2A03B999006E044D /* LeaseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A970806E2A03B999006E044D /* LeaseParser.swift */; };
-		A97080722A03BFCA006E044D /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = A97080712A03BFCA006E044D /* Citadel */; };
 		A97080742A03F688006E044D /* SSHLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080732A03F688006E044D /* SSHLogger.swift */; };
 		A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080762A041553006E044D /* BuildkiteAgentProvisioner.swift */; };
 		A97080792A041628006E044D /* BuildkiteAgentProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97080782A041628006E044D /* BuildkiteAgentProvisionerConfig.swift */; };
@@ -40,6 +39,7 @@
 		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
 		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
+		A9FA15C62A1BCC230085A676 /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = A9FA15C52A1BCC230085A676 /* Citadel */; };
 		A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */ = {isa = PBXBuildFile; productRef = A9FC3D0D2A0D4FBB00535E9C /* OCI */; };
 		A9FC3D102A127BE900535E9C /* VMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC3D0F2A127BE900535E9C /* VMSource.swift */; };
 		A9FDAB07292E33F700B8CA1F /* InstallerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB06292E33F700B8CA1F /* InstallerApp.swift */; };
@@ -111,8 +111,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A97080722A03BFCA006E044D /* Citadel in Frameworks */,
 				A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */,
+				A9FA15C62A1BCC230085A676 /* Citadel in Frameworks */,
 				A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */,
 				A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */,
 			);
@@ -305,8 +305,8 @@
 			packageProductDependencies = (
 				A9728E0E2918FA2300342A77 /* SwiftJWT */,
 				A9FDAB2029375D0200B8CA1F /* Yams */,
-				A97080712A03BFCA006E044D /* Citadel */,
 				A9FC3D0D2A0D4FBB00535E9C /* OCI */,
+				A9FA15C52A1BCC230085A676 /* Citadel */,
 			);
 			productName = Cilicon;
 			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
@@ -359,7 +359,7 @@
 			packageReferences = (
 				A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
 				A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */,
-				A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */,
+				A9FA15C42A1BCC230085A676 /* XCRemoteSwiftPackageReference "Citadel" */,
 			);
 			productRefGroup = A9728DD22918F79000342A77 /* Products */;
 			projectDirPath = "";
@@ -728,20 +728,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orlandos-nl/Citadel";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.0;
-			};
-		};
 		A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Kitura/Swift-JWT";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.0.0;
+			};
+		};
+		A9FA15C42A1BCC230085A676 /* XCRemoteSwiftPackageReference "Citadel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Marcocanc/Citadel";
+			requirement = {
+				branch = "shell-exec";
+				kind = branch;
 			};
 		};
 		A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */ = {
@@ -755,15 +755,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A97080712A03BFCA006E044D /* Citadel */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A97080702A03BFCA006E044D /* XCRemoteSwiftPackageReference "Citadel" */;
-			productName = Citadel;
-		};
 		A9728E0E2918FA2300342A77 /* SwiftJWT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
 			productName = SwiftJWT;
+		};
+		A9FA15C52A1BCC230085A676 /* Citadel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9FA15C42A1BCC230085A676 /* XCRemoteSwiftPackageReference "Citadel" */;
+			productName = Citadel;
 		};
 		A9FC3D0D2A0D4FBB00535E9C /* OCI */ = {
 			isa = XCSwiftPackageProductDependency;

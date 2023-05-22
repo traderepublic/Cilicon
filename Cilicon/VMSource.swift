@@ -17,10 +17,8 @@ enum VMSource: Decodable {
                 throw VMSourceError.invalidURL
             }
             self = .OCI(ociURL)
-        case "file":
-            self = .local(url)
         default:
-            throw VMSourceError.invalidURL
+            self = .local(url)
         }
     }
     
@@ -46,7 +44,7 @@ enum VMSource: Decodable {
 
 extension OCIURL {
     var localPath: String {
-        let path = ("~/.tart/cache/OCIs/\(registry)\(repository)/\(tag!)" as NSString).resolvingSymlinksInPath
+        let path = ("~/.tart/cache/OCIs/\(registry)\(repository)/\(tag)" as NSString).resolvingSymlinksInPath
         return path
     }
 }
