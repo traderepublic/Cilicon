@@ -24,6 +24,12 @@ struct VMBundle {
         let tartConfigData = try! Data(contentsOf: configURL)
         return try! JSONDecoder().decode(VMConfig.self, from: tartConfigData)
     }
+    
+    var isLegacy: Bool {
+        FileManager
+            .default
+            .fileExists(atPath: url.appending(component: "AuxiliaryStorage").path)
+    }
 }
 
 protocol BundleType {

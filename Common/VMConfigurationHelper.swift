@@ -38,26 +38,24 @@ class VMConfigHelper {
     
     
     func createMacPlatform(macOSConfiguration: VZMacOSConfigurationRequirements) throws -> VZMacPlatformConfiguration {
-        fatalError()
-//        guard case .cilicon(let ciliconBundle) = vmBundle else {
-//            throw VMConfigHelperError.error("Tried to create a bundle of type other than cilicon")
-//        }
-//        let macPlatformConfiguration = VZMacPlatformConfiguration()
-//
-//        let auxiliaryStorage = try VZMacAuxiliaryStorage(creatingStorageAt: ciliconBundle.auxiliaryStorageURL,
-//                                                         hardwareModel: macOSConfiguration.hardwareModel,
-//                                                         options: [])
-//        macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
-//        macPlatformConfiguration.hardwareModel = macOSConfiguration.hardwareModel
-//        macPlatformConfiguration.machineIdentifier = VZMacMachineIdentifier()
-//
-//        // Store the hardware model and machine identifier to disk so that we
-//        // can retrieve them for subsequent boots.
-//
-//        try! macPlatformConfiguration.hardwareModel.dataRepresentation.write(to: ciliconBundle.hardwareModelURL)
-//        try! macPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: ciliconBundle.machineIdentifierURL)
-//
-//        return macPlatformConfiguration
+        let macPlatformConfiguration = VZMacPlatformConfiguration()
+        let auxiliaryStorage = try VZMacAuxiliaryStorage(creatingStorageAt: vmBundle.auxiliaryStorageURL,
+                                                         hardwareModel: macOSConfiguration.hardwareModel,
+                                                         options: [])
+        macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
+        macPlatformConfiguration.hardwareModel = macOSConfiguration.hardwareModel
+        macPlatformConfiguration.machineIdentifier = VZMacMachineIdentifier()
+
+        let config = VMConfig(arch: .arm64,
+                                   os: .darwin,
+                                   hardwareModel: macPlatformConfiguration.hardwareModel,
+                                   ecid: macPlatformConfiguration.machineIdentifier,
+                                   macAddress: VZMACAddress.randomLocallyAdministered())
+        
+        let configJSON = try JSONEncoder().encode(config)
+        try configJSON.write(to: vmBundle.configURL)
+
+        return macPlatformConfiguration
     }
     
     func parseMacPlatform() throws -> VZMacPlatformConfiguration {

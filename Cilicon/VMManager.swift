@@ -11,7 +11,6 @@ class VMManager: NSObject, ObservableObject {
     let provisioner: Provisioner?
     let fileManager: FileManager = .default
     var runCounter: Int = 0
-    let copier: ImageCopier
     var sshOutput: [String] = []
     
     var activeBundle: VMBundle {
@@ -35,7 +34,6 @@ class VMManager: NSObject, ObservableObject {
             self.provisioner = nil
         }
         self.config = config
-        self.copier = ImageCopier(config: config)
         self.masterBundle = VMBundle(url: URL(filePath: config.source.localPath))
         self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
     }
@@ -44,6 +42,11 @@ class VMManager: NSObject, ObservableObject {
     func setupAndRunVM() async throws {
         do {
             vmState = .initializing
+            if masterBundle.isLegacy {
+                vmState = .legacyWarning(path: masterBundle.url.path)
+                return
+            }
+            
             if case let .OCI(ociURL) = config.source {
                 let resolvedPath = masterBundle.url.resolvingSymlinksInPath().path
                 if try fileManager.fileExists(atPath: resolvedPath) && !isBundleComplete() {
@@ -83,13 +86,7 @@ class VMManager: NSObject, ObservableObject {
     }
     
     
-    func setupAndRunVirtualMachine() async throws {
-        if copier.isCopying {
-            vmState = .copyingFromVolume
-            print("Copying bundle from external Volume. Retrying in 10 seconds.")
-            try await Task.sleep(for: .seconds(10))
-            try await setupAndRunVirtualMachine()
-        }
+    private func setupAndRunVirtualMachine() async throws {
         if !config.editorMode {
             try await cloneBundle()
         }
@@ -101,6 +98,9 @@ class VMManager: NSObject, ObservableObject {
         Task { @MainActor in
             vmState = .running(virtualMachine)
             try await virtualMachine.start()
+        }
+        if config.editorMode {
+            return
         }
         try await Task.sleep(for: .seconds(5))
         guard let ip = LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string)?.ipAddress else {
@@ -267,6 +267,19 @@ extension VMManager: VZVirtualMachineDelegate {
     }
 }
 
+extension VMManager {
+    func upgradeImageFromLegacy() {
+        do {
+            try LegacyVMBundle(url: masterBundle.url).upgrade()
+            Task.detached {
+                try await self.setupAndRunVM()
+            }
+        } catch {
+            vmState = .legacyUpgradeFailed
+        }
+    }
+}
+
 enum VMManagerError: Error {
     case masterBundleNotFound(path: String)
 }
@@ -288,5 +301,7 @@ enum VMState {
     case provisioning
     case running(VZVirtualMachine)
     case downloading(text: String, progress: Double)
+    case legacyWarning(path: String)
+    case legacyUpgradeFailed
 }
 

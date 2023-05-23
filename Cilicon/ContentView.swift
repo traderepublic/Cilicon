@@ -67,18 +67,22 @@ struct ContentView: View {
                     Text("Downloading \(text) - \(fProgress)")
                     ProgressView(value: progress).frame(width: 500, alignment: .center)
                 }
-                
+            case .legacyWarning:
+                Text("The Bundle you have selected is in the legacy format. Do you want to convert it?")
+                Button("Yes Please", action: vmManager.upgradeImageFromLegacy)
+            case .legacyUpgradeFailed:
+                Text("Upgrade from legacy VM failed")
             }
             
         }
         .navigationTitle(title)
-        .onAppear(perform: onAppear)
+        .onAppear(perform: start)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification), perform: { [vmManager] _ in
             try? vmManager.cleanup()
         })
     }
     
-    func onAppear() {
+    func start() {
         Task.detached {
             try await vmManager.setupAndRunVM()
         }

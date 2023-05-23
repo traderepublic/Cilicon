@@ -1,18 +1,23 @@
 import Foundation
 import Virtualization
 
-struct VMConfig: Decodable {
-    let memorySize: UInt
+struct VMConfig: Codable {
+    internal init(arch: VMConfig.Arch, os: VMConfig.OS, hardwareModel: VZMacHardwareModel, ecid: VZMacMachineIdentifier, macAddress: VZMACAddress) {
+        self.arch = arch
+        self.os = os
+        self.hardwareModel = hardwareModel
+        self.ecid = ecid
+        self.macAddress = macAddress
+    }
+    
     let arch: Arch
     let os: OS
     let hardwareModel: VZMacHardwareModel
     let ecid: VZMacMachineIdentifier
     let macAddress: VZMACAddress
     
-    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.memorySize = try container.decode(UInt.self, forKey: .memorySize)
         self.arch = try container.decode(Arch.self, forKey: .arch)
         self.os = try container.decode(OS.self, forKey: .os)
         let encodedHardwareModel = try container.decode(String.self, forKey: .hardwareModel)
@@ -49,9 +54,17 @@ struct VMConfig: Decodable {
         self.macAddress = macAddress
     }
     
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(arch, forKey: .arch)
+        try container.encode(os, forKey: .os)
+        try container.encode(macAddress.string, forKey: .macAddress)
+        try container.encode(ecid.dataRepresentation.base64EncodedString(), forKey: .ecid)
+        try container.encode(hardwareModel.dataRepresentation.base64EncodedString(), forKey: .hardwareModel)
+    }
+    
     
     enum CodingKeys: CodingKey {
-        case memorySize
         case arch
         case os
         case hardwareModel

@@ -84,7 +84,6 @@ class Installer: ObservableObject {
         }
         
         try createVMBundle(bundle: bundle)
-        try createDummyStartCommand(bundle: bundle)
         try createDiskImage(bundle: bundle, size: diskSize)
         
         let configHelper = VMConfigHelper(vmBundle: bundle)
@@ -118,20 +117,12 @@ class Installer: ObservableObject {
         if FileManager.default.fileExists(atPath: bundle.url.relativePath) {
             throw InstallerError.bundleAlreadyExists(bundle.url.relativePath)
         }
-        let bundleFolders = [bundle.url, bundle.resourcesURL, bundle.editorResourcesURL]
+        let bundleFolders = [bundle.url]
         try bundleFolders.forEach {
             try FileManager.default.createDirectory(at: $0, withIntermediateDirectories: true)
         }
     }
     
-    private func createDummyStartCommand(bundle: VMBundle) throws {
-        let contents = #"echo "This is a dummy script which you may select as a Login Item while in Editor Mode.""#
-        let path = bundle.editorResourcesURL.appending(component: "/start.command").relativePath
-        guard FileManager.default.createFile(atPath: path, contents: contents.data(using: .utf8)) else {
-            throw InstallerError.failedCreatingDummyStartFile(path)
-        }
-    }
-
     private func createDiskImage(bundle: VMBundle, size: Int64) throws {
         let diskFd = open(bundle.diskImageURL.relativePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)
         if diskFd == -1 {
