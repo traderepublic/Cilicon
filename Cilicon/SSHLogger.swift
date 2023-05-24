@@ -28,6 +28,7 @@ final class SSHLogger: ObservableObject {
         guard string.isNotBlank else { return }
         if log.isEmpty {
             log = [LogChunk(text: string)]
+            return
         }
         let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
         for (index, line) in lines.enumerated() {

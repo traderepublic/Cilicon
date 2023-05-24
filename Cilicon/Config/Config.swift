@@ -1,6 +1,22 @@
 import Foundation
 
-struct Config: Decodable {
+struct Config: Codable {
+    internal init(provisioner: ProvisionerConfig, hardware: HardwareConfig, directoryMounts: [DirectoryMountConfig], source: VMSource, vmClonePath: String, numberOfRunsUntilHostReboot: Int? = nil, runnerName: String? = nil, editorMode: Bool, autoTransferImageVolume: String? = nil, retryDelay: Int, sshCredentials: SSHCredentials, preRun: String? = nil, postRun: String? = nil) {
+        self.provisioner = provisioner
+        self.hardware = hardware
+        self.directoryMounts = directoryMounts
+        self.source = source
+        self.vmClonePath = vmClonePath
+        self.numberOfRunsUntilHostReboot = numberOfRunsUntilHostReboot
+        self.runnerName = runnerName
+        self.editorMode = editorMode
+        self.autoTransferImageVolume = autoTransferImageVolume
+        self.retryDelay = retryDelay
+        self.sshCredentials = sshCredentials
+        self.preRun = preRun
+        self.postRun = postRun
+    }
+    
     /// Provisioner Configuration.
     let provisioner: ProvisionerConfig
     /// Hardware Configuration.
@@ -67,7 +83,7 @@ struct Config: Decodable {
 }
 
 
-struct SSHCredentials: Decodable {
+struct SSHCredentials: Codable {
     let username: String
     let password: String
 }

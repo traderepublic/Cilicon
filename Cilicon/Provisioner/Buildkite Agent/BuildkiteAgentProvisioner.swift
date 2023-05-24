@@ -20,10 +20,8 @@ class BuildkiteAgentProvisioner: Provisioner {
             block.append(" --tags \(tags.joined(separator: ","))")
         }
         
-        let streams = try await sshClient.executeCommandStream(block)
-        var asyncStreams = streams.makeAsyncIterator()
-        
-        while let blob = try await asyncStreams.next() {
+        let streamOutput = try await sshClient.executeCommandStream(block, inShell: true)
+        for try await blob in streamOutput {
             switch blob {
             case .stdout(let stdout):
                 await SSHLogger.shared.log(string: String(buffer: stdout))
@@ -31,6 +29,5 @@ class BuildkiteAgentProvisioner: Provisioner {
                 await SSHLogger.shared.log(string: String(buffer: stderr))
             }
         }
-        try await sshClient.close()
     }
 }

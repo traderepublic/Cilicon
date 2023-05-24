@@ -1,6 +1,13 @@
 import Foundation
 
-struct HardwareConfig: Decodable {
+struct HardwareConfig: Codable {
+    internal init(ramGigabytes: UInt64, cpuCores: Int? = nil, display: HardwareConfig.DisplayConfig, connectsToAudioDevice: Bool) {
+        self.ramGigabytes = ramGigabytes
+        self.cpuCores = cpuCores
+        self.display = display
+        self.connectsToAudioDevice = connectsToAudioDevice
+    }
+    
     /// Gigabytes of RAM for the Guest System.
     let ramGigabytes: UInt64
     /// Number of virtual CPU Cores. Defaults to the number of physical CPU cores.
@@ -25,7 +32,7 @@ struct HardwareConfig: Decodable {
         self.connectsToAudioDevice = try container.decodeIfPresent(Bool.self, forKey: .connectsToAudioDevice) ?? true
     }
     
-    struct DisplayConfig: Decodable {
+    struct DisplayConfig: Codable {
         static let `default`: DisplayConfig = .init(width: 1920, height: 1200, pixelsPerInch: 80)
         
         let width: Int

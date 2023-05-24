@@ -1,20 +1,38 @@
 import Foundation
 import OCI
 
-enum VMSource: Decodable {
+enum VMSource: Codable {
     case OCI(OCIURL)
     case local(URL)
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self)
+        guard let parsed = VMSource(string: string) else {
+            throw VMSourceError.invalidPath
+        }
+        self = parsed
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .OCI(let url):
+            try container.encode(url)
+        case .local(let url):
+            try container.encode(url.path)
+        }
+        
+    }
+    
+    init?(string: String) {
         guard let components = URLComponents(string: string), let url = components.url else {
-            throw VMSourceError.invalidURL
+            return nil
         }
         switch components.scheme {
         case "oci":
             guard let ociURL = OCIURL(urlComponents: components) else {
-                throw VMSourceError.invalidURL
+                return nil
             }
             self = .OCI(ociURL)
         default:
@@ -33,7 +51,7 @@ enum VMSource: Decodable {
     }
     
     enum VMSourceError: LocalizedError {
-        case invalidURL
+        case invalidPath
         
         
         var errorDescription: String? {

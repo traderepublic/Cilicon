@@ -12,6 +12,7 @@ class VMManager: NSObject, ObservableObject {
     let fileManager: FileManager = .default
     var runCounter: Int = 0
     var sshOutput: [String] = []
+    var ip: String = ""
     
     var activeBundle: VMBundle {
         config.editorMode ? masterBundle : clonedBundle
@@ -28,7 +29,7 @@ class VMManager: NSObject, ObservableObject {
             self.provisioner = GitLabRunnerProvisioner(config: config, gitLabConfig: gitLabConfig)
         case .buildkite(let buildkiteConfig):
             self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
-        case .process(let scriptConfig):
+        case .script(let scriptConfig):
             self.provisioner = ScriptProvisioner(runBlock: scriptConfig.run)
         case .none:
             self.provisioner = nil
@@ -106,6 +107,7 @@ class VMManager: NSObject, ObservableObject {
         guard let ip = LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string)?.ipAddress else {
             return
         }
+        self.ip = ip
         
         let client = try await SSHClient.connect(
             host: ip,
@@ -116,22 +118,39 @@ class VMManager: NSObject, ObservableObject {
         
         print("IP Address: \(ip)")
         if let preRun = config.preRun {
-            let streams = try await client.executeInShell(command: preRun)
-            for try await blob in streams {
-                await SSHLogger.shared.log(string: String(buffer: blob))
+            let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
+            for try await blob in streamOutput {
+                switch blob {
+                case .stdout(let stdout):
+                    await SSHLogger.shared.log(string: String(buffer: stdout))
+                case .stderr(let stderr):
+                    await SSHLogger.shared.log(string: String(buffer: stderr))
+                }
             }
         }
         
         if let provisioner = provisioner {
-            try await provisioner.provision(bundle: activeBundle, sshClient: client)
+            do {
+                try await provisioner.provision(bundle: activeBundle, sshClient: client)
+            } catch {
+                print(error.localizedDescription)
+            }
+            
         }
         
         if let postRun = config.postRun {
-            let streams = try await client.executeInShell(command: postRun)
-            for try await blob in streams {
-                await SSHLogger.shared.log(string: String(buffer: blob))
+            let streamOutput = try await client.executeCommandStream(postRun, inShell: true)
+            for try await blob in streamOutput {
+                switch blob {
+                case .stdout(let stdout):
+                    await SSHLogger.shared.log(string: String(buffer: stdout))
+                case .stderr(let stderr):
+                    await SSHLogger.shared.log(string: String(buffer: stderr))
+                }
             }
         }
+        
+        await SSHLogger.shared.log(string: "---------- Shutting Down ----------\n")
         try await client.close()
 
         Task { @MainActor in

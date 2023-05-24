@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OCIURL {
+public struct OCIURL: Encodable {
     public let scheme: String
     public let registry: String
     public let repository: String
@@ -29,5 +29,10 @@ public struct OCIURL {
     public init?(string: String) {
         guard let components = URLComponents(string: string) else { return nil }
         self.init(urlComponents: components)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode("\(scheme)://\(registry)\(repository):\(tag)")
     }
 }

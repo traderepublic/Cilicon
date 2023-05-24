@@ -20,7 +20,7 @@ struct ContentView: View {
         self.vmManager = VMManager(config: config)
         self.config = config
         if config.editorMode {
-            self.title = "Cilicon (Editor Mode) - \(config.source.localPath)"
+            self.title = "Cilicon (Editor Mode)"
         } else {
             self.title = "Cilicon"
         }
@@ -75,7 +75,7 @@ struct ContentView: View {
             }
             
         }
-        .navigationTitle(title)
+        .navigationTitle(title + " - " + vmManager.ip)
         .onAppear(perform: start)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification), perform: { [vmManager] _ in
             try? vmManager.cleanup()

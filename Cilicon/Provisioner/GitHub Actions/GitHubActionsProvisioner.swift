@@ -65,10 +65,15 @@ class GitHubActionsProvisioner: Provisioner {
         let runCommand = "~/actions-runner/run.sh"
         command += [configCommand, runCommand].joined(separator: " && ")
         
-        let shellResp = try await sshClient.executeInShell(command: command)
+        let streamOutput = try await sshClient.executeCommandStream(command, inShell: true)
         
-        for try await resp in shellResp {
-            await SSHLogger.shared.log(string: String(buffer: resp))
+        for try await blob in streamOutput {
+            switch blob {
+            case .stdout(let stdout):
+                await SSHLogger.shared.log(string: String(buffer: stdout))
+            case .stderr(let stderr):
+                await SSHLogger.shared.log(string: String(buffer: stderr))
+            }
         }
     }
 }
