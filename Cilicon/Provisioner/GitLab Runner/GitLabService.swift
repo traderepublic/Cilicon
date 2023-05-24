@@ -31,7 +31,7 @@ extension GitLabService {
     func registerRunner() async throws -> RunnerRegistrationResponse {
         let registration = RunnerRegistration(registrationToken: config.registrationToken,
                                               description: config.name,
-                                              run_untagged: config.run_untagged,
+                                              run_untagged: config.runUntagged,
                                               tags: config.tagList.components(separatedBy: ","))
         let jsonData = try encode(registration)
         let (data, response) = try await postRequest(to: runnersURL(), jsonData: jsonData)
