@@ -31,6 +31,7 @@ extension GitLabService {
     func registerRunner() async throws -> RunnerRegistrationResponse {
         let registration = RunnerRegistration(registrationToken: config.registrationToken,
                                               description: config.name,
+                                              run_untagged: config.run_untagged,
                                               tags: config.tagList.components(separatedBy: ","))
         let jsonData = try encode(registration)
         let (data, response) = try await postRequest(to: runnersURL(), jsonData: jsonData)
@@ -108,11 +109,13 @@ extension GitLabService {
     private struct RunnerRegistration: Codable {
         let registrationToken: String
         let description: String
+        let run_untagged: Bool
         let tags: [String]
         
         enum CodingKeys: String, CodingKey {
             case registrationToken = "token"
             case description
+            case run_untagged
             case tags = "tag_list"
         }
     }

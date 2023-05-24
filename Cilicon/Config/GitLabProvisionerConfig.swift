@@ -7,6 +7,8 @@ struct GitLabProvisionerConfig: Decodable {
     let url: URL
     /// The runner registration token, can be obtained in the GitLab runner UI
     let registrationToken: String
+    /// Specifies if the runner should handle untagged jobs
+    let run_untagged: Bool
     /// A list of tags to apply to the runner, comma-separated
     let tagList: String
 }
