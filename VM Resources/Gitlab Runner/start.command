@@ -19,4 +19,4 @@ endpoint=$(cat "$endpoint_file")
 /usr/local/bin/gitlab-runner run-single -u $endpoint -t $token --executor shell --env "FF_RESOLVE_FULL_TLS_CHAIN=1" --max-builds 1
 
 # Shut down the VM after build is completed
-sudo shutdown -r now
+sudo shutdown -h now
