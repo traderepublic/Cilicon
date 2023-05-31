@@ -39,10 +39,9 @@
     {
       "identity" : "citadel",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Marcocanc/Citadel",
+      "location" : "https://github.com/orlandos-nl/Citadel",
       "state" : {
-        "branch" : "shell-exec",
-        "revision" : "a78e1f561421dce0a754064c64ef1003904f709b"
+        "revision" : "3e920e6f4b364b272a7e40cf675d5145de520f76"
       }
     },
     {

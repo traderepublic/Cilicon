@@ -80,10 +80,6 @@ class GitHubActionsProvisioner: Provisioner {
 
 enum GitHubActionsProvisionerError: Error {
     case githubAppNotInstalled(appID: Int, org: String)
-    case couldNotCreateRunnerTokenFile(path: String)
-    case couldNotCreateRunnerNameFile(path: String)
-    case couldNotCreateLabelsFile(path: String)
-    case couldNotCreateRunnerURLFile(path: String)
     case couldNotFindRunnerDownloadURL
 }
 
@@ -92,14 +88,6 @@ extension GitHubActionsProvisionerError: LocalizedError {
         switch self {
         case let .githubAppNotInstalled(appId, org):
             return "No installations found for \(appId) on \(org) organization"
-        case let .couldNotCreateRunnerTokenFile(path):
-            return "Could not create Runner Token File at \(path)"
-        case let .couldNotCreateRunnerNameFile(path):
-            return "Could not create Runner Name File at \(path)"
-        case let .couldNotCreateLabelsFile(path):
-            return "Could not create Labels Name File at \(path)"
-        case let .couldNotCreateRunnerURLFile(path):
-            return "Could not create Runner URL File at \(path)"
         case .couldNotFindRunnerDownloadURL:
             return "Could not find runner download URL"
         }
