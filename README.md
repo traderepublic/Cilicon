@@ -8,6 +8,11 @@
   • <a href="#-join-us">Join Us</a>
 </p>
 
+## 💥 What's new in 2.0?
+We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
+- While Cilicon 1.0 relied on a user-defined Login Item in the VM, its new version now includes an SSH client and directly executes commands on the Guest OS
+- Cilicon has partially adopted the [tart](https://github.com/cirruslabs/tart) image format and allows converting 1.0 images to it
+- The integrated OCI client can download pre-built CI VMs that have been created with/for tart. We recommend their [tart-ventura-xcode](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode) images.
 
 ## 🔁 About Cilicon
 
@@ -16,7 +21,7 @@ Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https:/
 Cilicon is based on the following simple cycle.
 
 <p align="center">
-<img width="500" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204821334-d71a567a-6bc7-4a93-b87e-40a14195097c.png">
+<img width="500" alt="Cilicon Cycle" src="https://github.com/traderepublic/Cilicon/assets/1622982/0774ad39-4c86-4f23-ab27-5be4c89fa8f8">
 </br><i>The Cilicon Cycle</i>
 </p>
 
@@ -24,9 +29,11 @@ Cilicon is based on the following simple cycle.
 
 Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clones](https://developer.apple.com/documentation/foundation/file_system/about_apple_file_system) make this task extremely fast, even with large bundles.
 
-### Provision Shared Folder
+### Start and connect via SSH
 
-Depending on the provisioner you choose, Cilicon places files required by your Guest OS in your bundle's `Resources` folder.
+### Run provisioning commands
+
+Depending on the provisioner you choose, Cilicon a different set of commands on the guest VM via SSH
 
 The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
 
@@ -40,8 +47,8 @@ You may also opt out of using a provisioner by setting the provisioner type to `
 
 Cilicon starts the Virtual Machine and automatically mounts the bundle's `Resources` folder on the Guest OS.
 
-### Listen for Shutdown
-Cilicon listens for a shutdown of the Guest OS and removes the used image before starting over.
+### Stop and remove the VM
+Cilicon stops and removes the VM as soon as the last command run via SSH extits. Once the cloned image has been removed, it starts over.
 
 <p align="center">
 <img width="600" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204568479-d17aae2e-a02f-4e3b-bed7-a6fe66860dab.gif">
@@ -49,7 +56,8 @@ Cilicon listens for a shutdown of the Guest OS and removes the used image before
 </p>
 
 ## 🚀 Getting Started
-Currently Cilicon offers native support for GitHub Actions and Gitlab Runner on self-hosted instances. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
+Currently Cilicon offers native support for GitHub Actions and Gitlab Runner on self-hosted instances. It also offers a "Script" provisioner which allows running any type of command.
+
 The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
 To get started download Cilicon and Cilicon Installer from the [latest release](https://github.com/traderepublic/Cilicon/releases/latest).
