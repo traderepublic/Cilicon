@@ -35,17 +35,21 @@ struct CiliconApp: App {
                                         sshCredentials: .init(username: "admin", password: "admin"))
                     
                     try? YAMLEncoder().encode(config).write(toFile: ConfigManager.path, atomically: true, encoding: .utf8)
-                    
-                    let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
-                    let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString
-                    let task = Process()
-                    task.launchPath = "/usr/bin/open"
-                    task.arguments = [path]
-                    task.launch()
-                    exit(0)
+                    restart()
                 }
             }
         }
     }
+}
 
+extension App {
+    func restart() {
+        let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
+        let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString
+        let task = Process()
+        task.launchPath = "/usr/bin/open"
+        task.arguments = [path]
+        task.launch()
+        exit(0)
+    }
 }
