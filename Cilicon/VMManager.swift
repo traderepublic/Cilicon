@@ -31,8 +31,6 @@ class VMManager: NSObject, ObservableObject {
             self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
         case .script(let scriptConfig):
             self.provisioner = ScriptProvisioner(runBlock: scriptConfig.run)
-        case .none:
-            self.provisioner = nil
         }
         self.config = config
         self.masterBundle = VMBundle(url: URL(filePath: config.source.localPath))

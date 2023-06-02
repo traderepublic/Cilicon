@@ -21,6 +21,7 @@ class GitHubActionsProvisioner: Provisioner {
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         let org = gitHubConfig.organization
         let appId = gitHubConfig.appId
+        await SSHLogger.shared.log(string: "[1;35mFetching Github Runner Token[0m\n")
         guard let installation = try await service.getInstallations().first(where: { $0.account.login == gitHubConfig.organization }) else {
             throw GitHubActionsProvisionerError.githubAppNotInstalled(appID: appId, org: org)
         }
