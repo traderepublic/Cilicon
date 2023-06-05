@@ -31,21 +31,19 @@ Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clone
 
 ### Start and connect via SSH
 
+Cilcion starts the VM, detects its DHCP lease address and connects with the provided credentials (`admin`:`admin` by default)
+
 ### Run provisioning commands
 
-Depending on the provisioner you choose, Cilicon a different set of commands on the guest VM via SSH
+Depending on the provisioner you choose, Cilicon sends a different set of commands on the guest VM via SSH
 
-The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
+The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) fetches a registration token, downloads the latest actions runner and starts the runner with the `ephemeral` flag.
 
 The [GitLab Runner Provisioner](/Cilicon/Provisioner/GitLab%20Runner/GitLabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
 
-The [Process Provisioner](Cilicon/Provisioner/Process/ProcessProvisioner.swift) runs an executable of your choice when provisioning and deprovisioning a bundle. It passes the bundle path, the action (either `provision` or `deprovision`) as well as any extra arguments of your choice to the executable.
+The [Buildkite Agent Provisioner](/Cilicon/Provisioner/Buildkite%20Agent/BuildkiteAgentProvisioner.swift) downloads and installs the latest buildkite agent and starts it with the `disconnect-after-job` flag.
 
-You may also opt out of using a provisioner by setting the provisioner type to `none`. This may work fine with services like Buildkite which use non-expiring registration tokens.
-
-### Start Virtual Machine
-
-Cilicon starts the Virtual Machine and automatically mounts the bundle's `Resources` folder on the Guest OS.
+The [Process Provisioner](Cilicon/Provisioner/Process/ScriptProvisioner.swift) runs a given shell script.
 
 ### Stop and remove the VM
 Cilicon stops and removes the VM as soon as the last command run via SSH extits. Once the cloned image has been removed, it starts over.
