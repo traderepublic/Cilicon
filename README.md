@@ -65,13 +65,14 @@ To get started download Cilicon and Cilicon Installer from the [latest release](
   </ul>
 </details>
 
-### ✨ Creating a VM Bundle
-To create VM Bundles, Cilicon comes with its own standalone App called "Cilicon Installer".
+### ✨ Choosing a Source
 
-With it you can either install a previously downloaded IPSW file or download the latest available restore image directly from Apple.
+Cilicon uses the `tart` container format and comes with an integrated OCI client.
+It's recommended to use the [publically hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode) 
+There are two ways to create images for Cilicon:
 
-The resulting `.bundle` file can be opened by right-clicking it in Finder and pressing "Show Package Contents".
-
+- Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading to OCI) - recommended
+- Using Cilicon Installer (supports downloading and installing. Editing can be done in Cilicon by enabling `editorMode`)
 <p align="left">
 <img width="300" alt="Cilicon Installer Window" src="https://user-images.githubusercontent.com/1622982/204774660-3583a889-562b-4dfd-a2c0-89c90cc0873b.gif">
 </p>
