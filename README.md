@@ -31,11 +31,11 @@ Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clone
 
 ### Start and connect via SSH
 
-Cilcion starts the VM, detects its DHCP lease address and connects with the provided credentials (`admin`:`admin` by default)
+Cilcion starts the VM, detects its DHCP lease address and connects via SSH using the provided credentials.
 
 ### Run provisioning commands
 
-The VM is provisioned via SSH commands. Cilicon comes with several provisioners out of the box:
+Cilicon comes with several provisioners out of the box:
 
 - Github Actions
 - GitLab Runner
@@ -43,7 +43,7 @@ The VM is provisioned via SSH commands. Cilicon comes with several provisioners 
 - Script
 
 ### Stop and remove the VM
-Cilicon stops and removes the VM as soon as the last command run via SSH extits. Once the cloned image has been removed, it starts over.
+Cilicon stops and removes the VM as soon as the last command exits. After removing the "spent" image, it starts over.
 
 <p align="center">
 <img width="600" alt="Cilicon Cycle" src="https://github.com/traderepublic/Cilicon/assets/1622982/31a0e031-4938-4d42-bc75-6ee29269abe4">
