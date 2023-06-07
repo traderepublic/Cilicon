@@ -35,15 +35,12 @@ Cilcion starts the VM, detects its DHCP lease address and connects with the prov
 
 ### Run provisioning commands
 
-Depending on the provisioner you choose, Cilicon sends a different set of commands on the guest VM via SSH
+The VM is provisioned via SSH commands. Cilicon comes with several provisioners out of the box:
 
-The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) fetches a registration token, downloads the latest actions runner and starts the runner with the `ephemeral` flag.
-
-The [GitLab Runner Provisioner](/Cilicon/Provisioner/GitLab%20Runner/GitLabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
-
-The [Buildkite Agent Provisioner](/Cilicon/Provisioner/Buildkite%20Agent/BuildkiteAgentProvisioner.swift) downloads and installs the latest buildkite agent and starts it with the `disconnect-after-job` flag.
-
-The [Process Provisioner](Cilicon/Provisioner/Process/ScriptProvisioner.swift) runs a given shell script.
+- Github Actions
+- GitLab Runner
+- Buildkite Agent
+- Script
 
 ### Stop and remove the VM
 Cilicon stops and removes the VM as soon as the last command run via SSH extits. Once the cloned image has been removed, it starts over.
