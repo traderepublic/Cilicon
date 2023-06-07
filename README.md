@@ -82,27 +82,16 @@ Cilicon expects a valid `cilicon.yml` file to be present in the Host OS's home d
 
 #### GitHub Actions
 
-To use the GitHub Actions provisioner you will need to create and install a new GitHub App with `Self-hosted runners` `Read & Write` permissions on the organization level and provide your config with the respective information.
-
+To use the GitHub Actions provisioner you will need to [create and install a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) with `Self-hosted runners` `Read & Write` permissions on the organization level and download the private key file to be referenced in the configuration file.
 
 ``` yml
-vmBundlePath: ~/CI/VM.bundle
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.2
 provisioner:
   type: github
   config:
     appId: 123456
     organization: traderepublic
-    privateKeyPath: ~/CI/github.pem
-hardware:
-  ramGigabytes: 16
-  connectsToAudioDevice: false
-directoryMounts:
-  - hostPath: ~/CI/VM Cache
-    guestFolder: Cache
-    readOnly: false
-autoTransferImageVolume: /Volumes/Cilicon Drive
-numberOfRunsUntilHostReboot: 20
-editorMode: false
+    privateKeyPath: ~/github.pem
 ```
 
 For more information on available optional and required properties, see [Config.swift](/Cilicon/Config/Config.swift).
