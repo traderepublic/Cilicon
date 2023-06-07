@@ -46,7 +46,7 @@ The VM is provisioned via SSH commands. Cilicon comes with several provisioners 
 Cilicon stops and removes the VM as soon as the last command run via SSH extits. Once the cloned image has been removed, it starts over.
 
 <p align="center">
-<img width="600" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204568479-d17aae2e-a02f-4e3b-bed7-a6fe66860dab.gif">
+<img width="600" alt="Cilicon Cycle" src="https://github.com/traderepublic/Cilicon/assets/1622982/31a0e031-4938-4d42-bc75-6ee29269abe4">
 </br><i>Cilicon Cycle: Running a sample job via GitHub Actions (2x playback)</i>
 </p>
 
