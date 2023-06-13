@@ -16,7 +16,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral virtual machines with minimal setup or maintenance effort. You should be able to get up and running with your self-hosted CI in minutes.
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral virtual machines with minimal setup or maintenance effort. You should be able to get up and running with your self-hosted CI in minutes (not counting the initial image download).
 
 <table>
   <tr>
