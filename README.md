@@ -111,6 +111,9 @@ It is recommended to use Cilicon on a macOS device fully dedicated to the task, 
 We use GitHub Actions for our iOS builds at [Trade Republic](https://traderepublic.com) but would love to see Cilicon being used for other CI services as well.
 Implementing support for more services should be easy by building on top of the `Provisioner` protocol.
 
+### Running 2 VMs in parallel
+Xcode builds often don't use all of the compute resources available. Therefore running 2 VMs im parallel (more are not possible due to a limitation of the Virtualization framework) would be a welcome addition.
+
 ### Monitoring
 A logging or monitoring concept would greatly improve identifying and troubleshooting any potential issues and provide the ability to notify the team in real time.
 
