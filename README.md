@@ -48,8 +48,8 @@ It's recommended to use [publicly hosted images](https://github.com/cirruslabs/m
 #### ⚠️ Important
 - When choosing an OCI hosted image, make sure to prepend the `oci://` scheme to the url. Cilicon will otherwise assume a local filesystem path.
 - Don't use the `latest` tag when choosing an image version. Instead pick the specific version of Xcode you would like to have installed (e.g. `14.3`).
-- Images downloaded via OCI will reside in the `~/.tart` folder and should be cleared of unused images periodically.
-- Newer versions of macOS may be published with the same version of Xcode installed. In case you want to update, you must manually delete the corresponding image and start Cilicon again.
+- Images downloaded via OCI will reside in the `~/.tart` folder which should be cleared of unused images periodically.
+- Images with newer versions of macOS may be published with the same version of Xcode installed. In case you want to upgrade, you may need to manually delete the outdated image and start Cilicon again.
 
 ### ⚙️ Configuration
 
@@ -86,6 +86,7 @@ provisioner:
 If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
 
 ``` yml
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.2
 provisioner:
   type: script
   config:
