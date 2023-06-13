@@ -100,10 +100,10 @@ It is recommended to use Cilicon on a macOS device fully dedicated to the task, 
 
 - Transfer `Cilicon.app`, `cilicon.yml` as well as any other files referenced by your config (e.g. Local image, GitHub private key etc.) to your Host OS.
 - Add `Cilicon.app` as a launch item
-- Set up automatic Login
+- Set up Automatic Login
 - Disable automatic software updates
-- Run `sudo pmset -b sleep 0; sudo pmset -b disablesleep 1` to disable sleep
-- Disable any concept of battery savings, screen lock, wallpaper etc.
+- Disable any concept of screen lock, battery saving etc.
+
 
 ## 🔮 Ideas for the Future
 
