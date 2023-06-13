@@ -84,7 +84,7 @@ provisioner:
 ### 🔨 Setting Up the Host OS
 It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally one that is [freshly restored](https://support.apple.com/en-gb/guide/apple-configurator-mac/apdd5f3c75ad/mac).
 
-- Transfer `Cilicon.app`, `VM.bundle`, `cilicon.yml` as well as any other files referenced by your config (e.g. Github private key) to your Host OS.
+- Transfer `Cilicon.app`, `cilicon.yml` as well as any other files referenced by your config (e.g. Local image, GitHub private key etc.) to your Host OS.
 - Add `Cilicon.app` as a launch item
 - Set up automatic Login
 - Disable automatic software updates
