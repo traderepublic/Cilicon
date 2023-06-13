@@ -3,20 +3,25 @@
 	Self-Hosted macOS CI on Apple Silicon<br /><br />
     <a href="#-about-cilicon">About</a>
   • <a href="#-getting-started">Getting Started</a>
-  • <a href="#-maintenance">Maintenance</a>
   • <a href="#-ideas-for-the-future">Ideas for the Future</a>
   • <a href="#-join-us">Join Us</a>
 </p>
 
-## 💥 What's new in 2.0?
+<details><summary><h3>💥 What's new in 2.0?</h3></summary>
 We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
-- While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the Guest OS
-- Cilicon has partially adopted the [tart](https://github.com/cirruslabs/tart) image format and can automatically convert 1.0 images to it
-- The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their [tart-ventura-xcode](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode) images.
+<ul>
+  <li>While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the Guest OS</li>
+	<li>Cilicon has partially adopted the <a href="https://github.com/cirruslabs/tart">tart</a> image format and can automatically convert 1.0 images to it</li>
+  <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode">macos-ventura-xcode</a> images.</li>
+</ul>
+
+</details>
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral virtual machines with minimal setup or maintenance effort. You should be able to get up and running with your self-hosted CI in minutes (not counting the initial image download).
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀.
+
+Cilicon operates in a very simple cycle described below:
 
 <table>
   <tr>
@@ -31,17 +36,25 @@ Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https:/
 
 ### ✨ Choosing a Source
 
-Cilicon uses the `tart` container format and comes with an integrated OCI client to fetch images from the internet.
+Cilicon uses the `tart` container format and comes with an integrated [OCI](https://opencontainers.org/) client to fetch images from the internet.
 
-It's recommended to use the [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode), however you may create new images using one of the following:
+It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode), however if you need to create or edit your master image, you may choose one of the following options:
 
-- Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading to OCI) - recommended
-- Using Cilicon Installer (supports downloading and installing. Editing can be done in Cilicon by enabling `editorMode`)
+- Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading via OCI) - recommended
+- Using Cilicon Installer (supports downloading and installing)
+- Using Cilicon (supports editing by enabling `editorMode` in the configuration file)
+
+
+#### ⚠️ Important
+- When choosing an OCI hosted image, make sure to prepend the `oci://` scheme to the url. Cilicon will otherwise assume a local filesystem path.
+- Don't use the `latest` tag when choosing an image version. Instead pick the specific version of Xcode you would like to have installed (e.g. `14.3`).
+- Images downloaded via OCI will reside in the `~/.tart` folder and should be cleared of unused images periodically.
+- Newer versions of macOS may be published with the same version of Xcode installed. In case you want to update, you must manually delete the corresponding image and start Cilicon again.
 
 ### ⚙️ Configuration
 
-Cilicon expects a valid `cilicon.yml` file to be present in the Host OS's home directory.
-For more information on available optional and required properties, see [Config.swift](/Cilicon/Config/Config.swift).
+Cilicon expects a `cilicon.yml` file to be present in the Host OS's home directory.
+For more information on all available settings see [Config.swift](/Cilicon/Config/Config.swift).
 
 #### GitHub Actions
 
@@ -103,3 +116,7 @@ A logging or monitoring concept would greatly improve identifying and troublesho
 ## 👩‍💻 Join Us!
 
 At [Trade Republic](https://traderepublic.com/), we are on a mission to democratize wealth. We set up millions of Europeans for wealth with fast, easy, and free access to capital markets. With over one million customers we are one of the largest savings platforms in Europe, with users holding over €6 billion on our platform. [Join us](https://traderepublic.com/careers?department=4026464003) to build the FinTech of the future.
+
+
+
+> *Disclaimer*: Trade Republic is not affiliated with Cirrus Labs or their tart product
