@@ -34,6 +34,8 @@ Cilicon operates in a very simple cycle described below:
 
 ## 🚀 Getting Started
 
+To get started, download the latest release [here](https://github.com/traderepublic/Cilicon/releases/latest).
+
 ### ✨ Choosing a Source
 
 Cilicon uses the `tart` container format and comes with an integrated [OCI](https://opencontainers.org/) client to fetch images from the internet.
