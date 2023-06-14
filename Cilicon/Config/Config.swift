@@ -10,7 +10,6 @@ struct Config: Codable {
         self.numberOfRunsUntilHostReboot = numberOfRunsUntilHostReboot
         self.runnerName = runnerName
         self.editorMode = editorMode
-        self.autoTransferImageVolume = autoTransferImageVolume
         self.retryDelay = retryDelay
         self.sshCredentials = sshCredentials
         self.preRun = preRun
@@ -27,7 +26,7 @@ struct Config: Codable {
     let source: VMSource
     /// The path where the cloned VM bundle for each run is located.
     /// This should be on the same APFS volume as `vmBundlePath`.
-    /// Can be omitted, in which case it defaults to `~/EphemeralVM.bundle`.
+    /// Can be omitted, in which case it defaults to `~/vmclone`.
     let vmClonePath: String
     /// Number of runs until the Host machine reboots.
     let numberOfRunsUntilHostReboot: Int?
@@ -35,17 +34,13 @@ struct Config: Codable {
     let runnerName: String?
     /// Does not copy the VM bundle and mounts the `Editor Resources` folder contained in the bundle on the guest machine.
     let editorMode: Bool
-    /// A volume from which's root directory to transfer a `VM.bundle` to the `vmBundlePath` automatically.
-    /// The volume is automatically unmounted after the copying process is complete.
-    /// Start and End of the copying phase are signaled with system sounds.
-    /// Must be the full path including `/Volumes/`.
-    let autoTransferImageVolume: String?
-    /// Delay in seconds before retrying to provision the image a failed cycle
+    /// Delay in seconds before retrying to provision the image a failed cycle.
     let retryDelay: Int
-    
+    /// Credentials to be used when connecting via SSH.
     let sshCredentials: SSHCredentials
-    
+    /// A command to run before the provisioning commands are run.
     let preRun: String?
+    /// A command to run after the provisioning commands are run.
     let postRun: String?
     
     enum CodingKeys: CodingKey {
@@ -57,7 +52,6 @@ struct Config: Codable {
         case numberOfRunsUntilHostReboot
         case runnerName
         case editorMode
-        case autoTransferImageVolume
         case retryDelay
         case sshCredentials
         case preRun
@@ -74,7 +68,6 @@ struct Config: Codable {
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
-        self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
         self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .default
         self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)
