@@ -340,7 +340,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -594,7 +594,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -627,7 +627,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -660,7 +660,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -692,7 +692,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
