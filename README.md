@@ -63,7 +63,7 @@ For more information on all available settings see [Config.swift](/Cilicon/Confi
 To use the GitHub Actions provisioner you will need to [create and install a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) with `Self-hosted runners` `Read & Write` permissions on the organization level and download the private key file to be referenced in the configuration file.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.2
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
 provisioner:
   type: github
   config:
@@ -76,7 +76,7 @@ provisioner:
 To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.2
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
 provisioner:
   type: buildkite
   config:
@@ -88,7 +88,7 @@ provisioner:
 If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.2
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
 provisioner:
   type: script
   config:
