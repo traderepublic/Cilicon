@@ -10,11 +10,15 @@
 <details><summary><h3>💥 What's new in 2.0?</h3></summary>
 We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
 <ul>
-  <li>While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the VM.</li>
-	<li>Cilicon has partially adopted the <a href="https://github.com/cirruslabs/tart">tart</a> image format and can automatically convert 1.0 images to it.</li>
-  <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode">macos-ventura-xcode</a> images.</li>
+        <li>While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the VM.</li>
+        <li>Cilicon has partially adopted the <a href="https://github.com/cirruslabs/tart">tart</a> image format and can automatically convert 1.0 images to it.</li>
+        <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode">macos-ventura-xcode</a> images.</li>
 </ul>
-
+<h4>Migrating from 1.0</h4>
+<ul>
+        <li>The config file schema has changed slightly. In most cases renaming the <code>vmBundlePath</code> property to <code>source</code> should suffice.</li>
+        <li>When Cilicon detects a 1.0 image it will offer you to automatically convert it to the new format for you.</li>
+</ul>
 </details>
 
 ## 🔁 About Cilicon
