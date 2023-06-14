@@ -19,7 +19,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀.
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀. It currently supports Github Actions, Buildkite Agent and arbitrary scripts (GitLab coming soon).
 
 Cilicon operates in a very simple cycle described below:
 
