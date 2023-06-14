@@ -1,4 +1,5 @@
 import Foundation
+import Citadel
 
 class GitLabRunnerProvisioner: Provisioner {
     let config: Config
@@ -15,14 +16,30 @@ class GitLabRunnerProvisioner: Provisioner {
         self.fileManager = fileManager
     }
     
-    func provision(bundle: VMBundle) async throws {
-        let registration = try await service.registerRunner()
-        try setRunnerEndpointURL(bundle: bundle, url: runnerConfig.url)
-        try setRunnerToken(bundle: bundle, token: registration.token)
-        self.runnerToken = registration.token
+    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
+        var block = """
+        sudo curl --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-darwin-arm64
+        sudo chmod +x /usr/local/bin/gitlab-runner
+        
+        /usr/local/bin/gitlab-runner run-single -u \(runnerConfig.url.absoluteString) -t \(runnerConfig.registrationToken) --executor shell --max-builds 1
+        """
+        
+        if let name = runnerConfig.name ?? Host.current().localizedName {
+            block.append(" --name '\(name)'")
+        }
+        
+        let streamOutput = try await sshClient.executeCommandStream(block, inShell: true)
+        for try await blob in streamOutput {
+            switch blob {
+            case .stdout(let stdout):
+                await SSHLogger.shared.log(string: String(buffer: stdout))
+            case .stderr(let stderr):
+                await SSHLogger.shared.log(string: String(buffer: stderr))
+            }
+        }
     }
     
-    func deprovision(bundle: VMBundle) async throws {
+    func deprovision(bundle: VMBundle, sshClient: SSHClient) async throws {
         if let runnerToken {
             try await service.deregisterRunner(runnerToken: runnerToken)
         } else {
@@ -32,17 +49,17 @@ class GitLabRunnerProvisioner: Provisioner {
     }
     
     private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
-        let tokenPath = bundle.runnerEndpointURL.relativePath
-        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-        }
+//        let tokenPath = bundle.runnerEndpointURL.relativePath
+//        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
+//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+//        }
     }
 
     private func setRunnerToken(bundle: VMBundle, token: String) throws {
-        let tokenPath = bundle.runnerTokenURL.relativePath
-        guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
-            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-        }
+//        let tokenPath = bundle.runnerTokenURL.relativePath
+//        guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
+//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
+//        }
     }
 }
 
@@ -64,16 +81,5 @@ extension GitLabRunnerProvisioner.Error: LocalizedError {
         case let .invalidConfiguration(reason):
             return "Configuration invalid: \(reason)"
         }
-    }
-}
-
-
-fileprivate extension VMBundle {
-    var runnerTokenURL: URL {
-        resourcesURL.appending(component: "RUNNER_TOKEN")
-    }
-    
-    var runnerEndpointURL: URL {
-        resourcesURL.appending(component: "RUNNER_ENDPOINT_URL")
     }
 }

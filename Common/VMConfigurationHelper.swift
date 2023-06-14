@@ -23,8 +23,11 @@ class VMConfigHelper {
         
         virtualMachineConfiguration.bootLoader = VZMacOSBootLoader()
         virtualMachineConfiguration.graphicsDevices = [createGraphicsDeviceConfiguration(width: 1080, height: 920, ppi: 80)]
+        
         virtualMachineConfiguration.storageDevices = [try createBlockDeviceConfiguration()]
-        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration()]
+        
+        
+        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: vmBundle.configuration.macAddress)]
         virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [VZUSBKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
@@ -36,19 +39,22 @@ class VMConfigHelper {
     
     func createMacPlatform(macOSConfiguration: VZMacOSConfigurationRequirements) throws -> VZMacPlatformConfiguration {
         let macPlatformConfiguration = VZMacPlatformConfiguration()
-        
         let auxiliaryStorage = try VZMacAuxiliaryStorage(creatingStorageAt: vmBundle.auxiliaryStorageURL,
                                                          hardwareModel: macOSConfiguration.hardwareModel,
                                                          options: [])
         macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
         macPlatformConfiguration.hardwareModel = macOSConfiguration.hardwareModel
         macPlatformConfiguration.machineIdentifier = VZMacMachineIdentifier()
+
+        let config = VMConfig(arch: .arm64,
+                                   os: .darwin,
+                                   hardwareModel: macPlatformConfiguration.hardwareModel,
+                                   ecid: macPlatformConfiguration.machineIdentifier,
+                                   macAddress: VZMACAddress.randomLocallyAdministered())
         
-        // Store the hardware model and machine identifier to disk so that we
-        // can retrieve them for subsequent boots.
-        try! macPlatformConfiguration.hardwareModel.dataRepresentation.write(to: vmBundle.hardwareModelURL)
-        try! macPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: vmBundle.machineIdentifierURL)
-        
+        let configJSON = try JSONEncoder().encode(config)
+        try configJSON.write(to: vmBundle.configURL)
+
         return macPlatformConfiguration
     }
     
@@ -57,25 +63,12 @@ class VMConfigHelper {
         let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: vmBundle.auxiliaryStorageURL)
         macPlatform.auxiliaryStorage = auxiliaryStorage
         
-        // Retrieve the hardware model; you should save this value to disk
-        // during installation.
-        let hardwareModelData = try Data(contentsOf: vmBundle.hardwareModelURL)
-        guard let hardwareModel = VZMacHardwareModel(dataRepresentation: hardwareModelData) else {
-            throw VMConfigHelperError.error("Failed to create hardware model.")
-        }
+        let hardwareModel = vmBundle.configuration.hardwareModel
         if !hardwareModel.isSupported {
             throw VMConfigHelperError.error("The hardware model isn't supported on the current host")
         }
         macPlatform.hardwareModel = hardwareModel
-        
-        // Retrieve the machine identifier; you should save this value to disk
-        // during installation.
-        let machineIdentifierData = try Data(contentsOf: vmBundle.machineIdentifierURL)
-        
-        guard let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
-            throw VMConfigHelperError.error("Failed to create machine identifier.")
-        }
-        macPlatform.machineIdentifier = machineIdentifier
+        macPlatform.machineIdentifier = vmBundle.configuration.ecid
         
         return macPlatform
     }
@@ -109,11 +102,14 @@ class VMConfigHelper {
         return disk
     }
     
-    func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {
+    func createNetworkDeviceConfiguration(mac: VZMACAddress?) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
         
         let networkAttachment = VZNATNetworkDeviceAttachment()
         networkDevice.attachment = networkAttachment
+        if let mac = mac {
+            networkDevice.macAddress = mac
+        }
         return networkDevice
     }
     

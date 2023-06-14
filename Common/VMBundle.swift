@@ -3,27 +3,49 @@ import Foundation
 struct VMBundle {
     let url: URL
     
-    var resourcesURL: URL {
-        url.appending(component: "Resources/")
-    }
-    
-    var editorResourcesURL: URL {
-        url.appending(component: "Editor Resources/")
-    }
-    
     var diskImageURL: URL {
-        url.appending(component: "Disk.img")
+        url.appending(component: "disk.img")
     }
     
     var auxiliaryStorageURL: URL {
-        url.appending(component: "AuxiliaryStorage")
+        url.appending(component: "nvram.bin")
     }
     
-    var machineIdentifierURL: URL {
-        url.appending(component: "MachineIdentifier")
+    var configURL: URL {
+        url.appending(component: "config.json")
     }
     
-    var hardwareModelURL: URL {
-        url.appending(component: "HardwareModel")
+    /// The presence of this file indicates that the OCI pull was unsucessful
+    var unfinishedURL: URL {
+        url.appending(component: "UNFINISHED")
+    }
+    
+    var configuration: VMConfig {
+        let tartConfigData = try! Data(contentsOf: configURL)
+        return try! JSONDecoder().decode(VMConfig.self, from: tartConfigData)
+    }
+    
+    var isLegacy: Bool {
+        FileManager
+            .default
+            .fileExists(atPath: url.appending(component: "AuxiliaryStorage").path)
+    }
+}
+
+protocol BundleType {
+    var url: URL { get }
+    var resourcesURL: URL { get }
+    var editorResourcesURL: URL { get }
+    var diskImageURL: URL { get }
+    var auxiliaryStorageURL: URL { get }
+    init(url: URL)
+}
+
+extension URL {
+    func createIfNotExists() throws {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: self.relativePath) {
+            try fileManager.createDirectory(at: self, withIntermediateDirectories: true)
+        }
     }
 }

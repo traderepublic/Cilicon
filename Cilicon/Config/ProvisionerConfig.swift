@@ -1,10 +1,10 @@
 import Foundation
 
-enum ProvisionerConfig: Decodable {
+enum ProvisionerConfig: Codable {
     case github(GitHubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
-    case process(ProcessProvisionerConfig)
-    case none
+    case buildkite(BuildkiteAgentProvisionerConfig)
+    case script(ScriptProvisionerConfig)
     
     enum CodingKeys: CodingKey {
         case type
@@ -21,18 +21,30 @@ enum ProvisionerConfig: Decodable {
         case .gitlab:
             let config = try container.decode(GitLabProvisionerConfig.self, forKey: .config)
             self = .gitlab(config)
-        case .process:
-            let config = try container.decode(ProcessProvisionerConfig.self, forKey: .config)
-            self = .process(config)
-        case .none:
-            self = .none
+        case .buildkite:
+            let config = try container.decode(BuildkiteAgentProvisionerConfig.self, forKey: .config)
+            self = .buildkite(config)
+        case .script:
+            let config = try container.decode(ScriptProvisionerConfig.self, forKey: .config)
+            self = .script(config)
+        }
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .script(let config):
+            try container.encode(ProvisionerType.script, forKey: .type)
+            try container.encode(config, forKey: .config)
+        default:
+            //don't need to encode anything else for now
+            break
         }
     }
     
-    enum ProvisionerType: String, Decodable {
+    enum ProvisionerType: String, Codable {
         case github
         case gitlab
-        case process
-        case none
+        case buildkite
+        case script
     }
 }

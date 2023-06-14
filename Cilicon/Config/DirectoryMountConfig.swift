@@ -1,6 +1,6 @@
 import Foundation
 
-struct DirectoryMountConfig: Decodable {
+struct DirectoryMountConfig: Codable {
     /// The path of the folder to be mounted in the Guest OS.
     let hostPath: String
     /// The folder name in /Volumes/My Shared Files/ that the directory should be mounted to.

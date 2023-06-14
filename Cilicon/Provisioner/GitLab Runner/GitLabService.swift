@@ -29,9 +29,9 @@ class GitLabService {
 
 extension GitLabService {
     func registerRunner() async throws -> RunnerRegistrationResponse {
-        let registration = RunnerRegistration(registrationToken: config.registrationToken,
-                                              description: config.name,
-                                              tags: config.tagList.components(separatedBy: ","))
+        let registration = RunnerRegistration(token: config.registrationToken,
+                                              description: config.name ?? Host.current().localizedName,
+                                              tags: config.tags)
         let jsonData = try encode(registration)
         let (data, response) = try await postRequest(to: runnersURL(), jsonData: jsonData)
         
@@ -105,15 +105,24 @@ private extension GitLabService {
 // MARK: Models
 
 extension GitLabService {
-    private struct RunnerRegistration: Codable {
-        let registrationToken: String
-        let description: String
-        let tags: [String]
+    private struct RunnerRegistration: Encodable {
+        let token: String
+        let description: String?
+        let tags: [String]?
         
         enum CodingKeys: String, CodingKey {
-            case registrationToken = "token"
+            case registrationToken
             case description
             case tags = "tag_list"
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(token, forKey: .registrationToken)
+            try container.encodeIfPresent(description, forKey: .description)
+            if let tags = tags {
+                try container.encode(tags.joined(separator: ", "), forKey: .tags)
+            }
         }
     }
     

@@ -3,192 +3,109 @@
 	Self-Hosted macOS CI on Apple Silicon<br /><br />
     <a href="#-about-cilicon">About</a>
   • <a href="#-getting-started">Getting Started</a>
-  • <a href="#-maintenance">Maintenance</a>
   • <a href="#-ideas-for-the-future">Ideas for the Future</a>
   • <a href="#-join-us">Join Us</a>
 </p>
 
+<details><summary><h3>💥 What's new in 2.0?</h3></summary>
+We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
+<ul>
+  <li>While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the VM.</li>
+	<li>Cilicon has partially adopted the <a href="https://github.com/cirruslabs/tart">tart</a> image format and can automatically convert 1.0 images to it.</li>
+  <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode">macos-ventura-xcode</a> images.</li>
+</ul>
+
+</details>
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral virtual machines with minimal setup or maintenance effort. You should be able to get up and running with your self-hosted CI in less than an hour.
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀.
 
-Cilicon is based on the following simple cycle.
+Cilicon operates in a very simple cycle described below:
 
-<p align="center">
-<img width="500" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204821334-d71a567a-6bc7-4a93-b87e-40a14195097c.png">
-</br><i>The Cilicon Cycle</i>
-</p>
-
-### Duplicate Image
-
-Cilicon creates a clone of your Virtual Machine bundle for each run. [APFS clones](https://developer.apple.com/documentation/foundation/file_system/about_apple_file_system) make this task extremely fast, even with large bundles.
-
-### Provision Shared Folder
-
-Depending on the provisioner you choose, Cilicon places files required by your Guest OS in your bundle's `Resources` folder.
-
-The [GitHub Actions Provisioner](/Cilicon/Provisioner/GitHub%20Actions/GitHubActionsProvisioner.swift) provisions the image with the runner download URL, a registration token, the runner name and runner labels.
-
-The [GitLab Runner Provisioner](/Cilicon/Provisioner/GitLab%20Runner/GitLabRunnerProvisioner.swift) provisions the image with the runner endpoint URL and a runner token.
-
-The [Process Provisioner](Cilicon/Provisioner/Process/ProcessProvisioner.swift) runs an executable of your choice when provisioning and deprovisioning a bundle. It passes the bundle path, the action (either `provision` or `deprovision`) as well as any extra arguments of your choice to the executable.
-
-You may also opt out of using a provisioner by setting the provisioner type to `none`. This may work fine with services like Buildkite which use non-expiring registration tokens.
-
-### Start Virtual Machine
-
-Cilicon starts the Virtual Machine and automatically mounts the bundle's `Resources` folder on the Guest OS.
-
-### Listen for Shutdown
-Cilicon listens for a shutdown of the Guest OS and removes the used image before starting over.
-
-<p align="center">
-<img width="600" alt="Cilicon Cycle" src="https://user-images.githubusercontent.com/1622982/204568479-d17aae2e-a02f-4e3b-bed7-a6fe66860dab.gif">
-</br><i>Cilicon Cycle: Running a sample job via GitHub Actions (2x playback)</i>
-</p>
+<table>
+  <tr>
+    <td><img width="500" alt="Cilicon Cycle" src="https://github.com/traderepublic/Cilicon/assets/1622982/0774ad39-4c86-4f23-ab27-5be4c89fa8f8">
+</br><p align="center"><i>The Cilicon Cycle</i></p></td>
+    <td><img width="600" alt="Cilicon Cycle" src="https://github.com/traderepublic/Cilicon/assets/1622982/31a0e031-4938-4d42-bc75-6ee29269abe4">
+</br><p align="center"><i>Running a sample job via GitHub Actions (2x playback)</i></p></td>
+  </tr>
+</table>
 
 ## 🚀 Getting Started
-Currently Cilicon offers native support for GitHub Actions and Gitlab Runner on self-hosted instances. It also offers a "Process" provisioner (which allows running an executable for provisioning and deprovisioning) and a provisioner-less mode.
-The host as well as the guest system must be running macOS 13 or newer and, as the name implies, Cilicon only runs on Apple Silicon.
 
-To get started download Cilicon and Cilicon Installer from the [latest release](https://github.com/traderepublic/Cilicon/releases/latest).
+To get started, download the latest release [here](https://github.com/traderepublic/Cilicon/releases/latest).
 
-<details>
-  <summary>📖 Terminology</summary> 
-  <ul>
-  	<li><code>Host OS</code> is the OS that runs the Cilicon App</li>
-  	<li><code>Guest OS</code> is the Virtual Machine running through Cilicon</li>
-  </ul>
-</details>
+### ✨ Choosing a Source
 
-### ✨ Creating a VM Bundle
-To create VM Bundles, Cilicon comes with its own standalone App called "Cilicon Installer".
+Cilicon uses the `tart` container format and comes with an integrated [OCI](https://opencontainers.org/) client to fetch images from the internet.
 
-With it you can either install a previously downloaded IPSW file or download the latest available restore image directly from Apple.
+It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode), however if you need to create or edit your master image, you may choose one of the following options:
 
-The resulting `.bundle` file can be opened by right-clicking it in Finder and pressing "Show Package Contents".
+- Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading via OCI) - recommended
+- Using Cilicon Installer (supports downloading and installing)
+- Using Cilicon (supports editing by enabling `editorMode` in the configuration file)
 
-<p align="left">
-<img width="300" alt="Cilicon Installer Window" src="https://user-images.githubusercontent.com/1622982/204774660-3583a889-562b-4dfd-a2c0-89c90cc0873b.gif">
-</p>
+
+#### ⚠️ Important
+- When choosing an OCI hosted image, make sure to prepend the `oci://` scheme to the url. Cilicon will otherwise assume a local filesystem path.
+- Don't use the `latest` tag when choosing an image version. Instead pick the specific version of Xcode you would like to have installed (e.g. `14.3`).
+- Images downloaded via OCI will reside in the `~/.tart` folder which should be cleared of unused images periodically.
+- Images with newer versions of macOS may be published with the same version of Xcode installed. In case you want to upgrade, you may need to manually delete the outdated image and start Cilicon again.
 
 ### ⚙️ Configuration
 
-Cilicon expects a valid `cilicon.yml` file to be present in the Host OS's home directory.
+Cilicon expects a `cilicon.yml` file to be present in the Host OS's home directory.
+For more information on all available settings see [Config.swift](/Cilicon/Config/Config.swift).
 
 #### GitHub Actions
 
-To use the GitHub Actions provisioner you will need to create and install a new GitHub App with `Self-hosted runners` `Read & Write` permissions on the organization level and provide your config with the respective information.
-
+To use the GitHub Actions provisioner you will need to [create and install a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) with `Self-hosted runners` `Read & Write` permissions on the organization level and download the private key file to be referenced in the configuration file.
 
 ``` yml
-vmBundlePath: ~/CI/VM.bundle
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
 provisioner:
   type: github
   config:
-    appId: 123456
-    organization: traderepublic
-    privateKeyPath: ~/CI/github.pem
-hardware:
-  ramGigabytes: 16
-  connectsToAudioDevice: false
-directoryMounts:
-  - hostPath: ~/CI/VM Cache
-    guestFolder: Cache
-    readOnly: false
-autoTransferImageVolume: /Volumes/Cilicon Drive
-numberOfRunsUntilHostReboot: 20
-editorMode: false
+    appId: <APP_ID>
+    organization: <ORGANIZATION_SLUG>
+    privateKeyPath: ~/github.pem
 ```
+#### Buildkite Agent
 
-For more information on available optional and required properties, see [Config.swift](/Cilicon/Config/Config.swift).
-
-#### GitLab Runner
-
-To use the GitLab Runner provisioner, download the GitLab Runner binary `gitlab-runner-darwin-arm64` from the GitLab Runner Releases page and place it in the VM Bundle's `Resources` folder so that it can be accessed by the VM.
-
-Configure the `cilicon.yml` file with the correct values:
+To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
 
 ``` yml
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
 provisioner:
-  type: gitlab
+  type: buildkite
   config:
-     name: "my-runner"
-     url: "https://gitlab.yourcompany.net/"
-     registrationToken: "your-runner-registration-token"
-     tagList: "some-tags,comma-separated"
+    agentToken: <AGENT_TOKEN>
 ```
 
-### 🔧 Setting up the Guest OS
-Once you have created a new VM Bundle you will need to set it up. To do so, enable the `editorMode` in the `cilicon.yml` file.
-This will disable bundle duplication, provisioning and automatic restarting after shutdown.
+#### Script
 
-It will also mount the bundle's `Editor Resources` folder to `/Volumes/My Shared Files/Resources`, which is the same path that `Resources` will be mounted to outside of editor mode. You can use this to provide any dependencies like installers to your Guest OS during setup.
-After clicking through the macOS setup screens you can set up your Guest OS:
-- Enable automatic login
-- Disable Automatic Software updates
-- Disable any concept of screen locking or power saving
-- Select the dummy `start.command` file as a launch item which will start the CI agent/runner when mounted to the actual `Resources` folder.
-- Install any dependencies you may need, such as Xcode, Command line tools, brew, etc.
+If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
 
-<details>
-  <summary>Depending on your setup, you may also want to enable passwordless <code>sudo</code>.</summary> 
-
-Enter visudo:
-
+``` yml
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+provisioner:
+  type: script
+  config:
+     run: |
+     	echo "Hello World"
+        sleep 10
 ```
-sudo visudo
-```
-
-Find the admin group permission section:
-```
-%admin          ALL = (ALL) ALL
-```
-	
-Change to add `NOPASSWD:`:
-```
-%admin          ALL = (ALL) NOPASSWD: ALL
-```
-</details>
-
-Once you've set up your Guest OS, close all applications and shut down the Guest OS.
-
-You can always edit your bundle further using editor mode.
-
-Once you have configured your Guest OS, you will need provision your `Resources` folder with a `start.command` script to be run outside of editor mode.
-You can find examples in [VM Resources](/VM%20Resources).
 
 ### 🔨 Setting Up the Host OS
 It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally one that is [freshly restored](https://support.apple.com/en-gb/guide/apple-configurator-mac/apdd5f3c75ad/mac).
 
-- Transfer `Cilicon.app`, `VM.bundle`, `cilicon.yml` as well as any other files referenced by your config (e.g. Github private key) to your Host OS.
+- Transfer `Cilicon.app`, `cilicon.yml` as well as any other files referenced by your config (e.g. Local image, GitHub private key etc.) to your Host OS.
 - Add `Cilicon.app` as a launch item
-- Set up automatic Login
+- Set up Automatic Login
 - Disable automatic software updates
-- Run `sudo pmset -b sleep 0; sudo pmset -b disablesleep 1` to disable sleep
-- Disable any concept of battery savings, screen lock, wallpaper etc.
+- Disable any concept of screen lock, battery saving etc.
 
-## 🧑‍🔧 Maintenance
-Cilicon strives to keep maintenance effort at a minimum with features like automatic system restarts and provisioning from external disks.
-
-### Automatic Host OS Restart
-
-Cilicon supports restarting the Host OS after a set number of runs.
-
-To enable this, simply set the `numberOfRunsUntilHostReboot` property in your `cilicon.yml` file.
-
-If you're using this feature you may want to consider disabling the macOS boot chime ("Play sound on startup" in system settings)
-
-### Image provisioning via external drive
-Cilicon supports interactionless copying of VM images from external drives to the Host OS. This feature can be enabled by setting the `autoTransferImageVolume` in your `cilicon.yml` file. The bundle must be on the root of the drive and named `VM.bundle`.
-
-The Host machine will notify start and finish of the process by playing system sounds and unmount the volume after copying is complete.
-The new image will be be used after the next run.
-
-If the Guest VM is shut down while Cilicon is copying a bundle, it will wait for it to complete copying before restarting the image.
-
-Due to the new Accessory Security features in Ventura, macOS will require explicit consent for USB drives to be mounted and for Cilicon to access the drive. Once you have accepted these prompts for the first time, you should be able to run the process without any interaction on the device.
 
 ## 🔮 Ideas for the Future
 
@@ -196,16 +113,16 @@ Due to the new Accessory Security features in Ventura, macOS will require explic
 We use GitHub Actions for our iOS builds at [Trade Republic](https://traderepublic.com) but would love to see Cilicon being used for other CI services as well.
 Implementing support for more services should be easy by building on top of the `Provisioner` protocol.
 
-### Automated Bundle provisioning over the network
-Updating an image on your Host machines is simple and depending on your image size and transfer medium it's also relatively fast.
-In the future Cilicon could automatically fetch new images from a defined server on the local network.
+### Running 2 VMs in parallel
+Xcode builds often don't use all of the compute resources available. Therefore running 2 VMs im parallel (more are not possible due to a limitation of the Virtualization framework) would be a welcome addition.
 
 ### Monitoring
 A logging or monitoring concept would greatly improve identifying and troubleshooting any potential issues and provide the ability to notify the team in real time.
 
-### Setup Scripts
-A lot of the setup of both Host and Guest OS can be scripted. Providing scripts for common setups would greatly increase the time to get started with Cilicon.
-
 ## 👩‍💻 Join Us!
 
 At [Trade Republic](https://traderepublic.com/), we are on a mission to democratize wealth. We set up millions of Europeans for wealth with fast, easy, and free access to capital markets. With over one million customers we are one of the largest savings platforms in Europe, with users holding over €6 billion on our platform. [Join us](https://traderepublic.com/careers?department=4026464003) to build the FinTech of the future.
+
+
+
+> *Disclaimer*: Trade Republic is not affiliated with Cirrus Labs or their tart product

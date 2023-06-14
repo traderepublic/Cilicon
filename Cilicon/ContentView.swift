@@ -7,24 +7,48 @@ struct ContentView: View {
     var vmManager: VMManager
     let title: String
     let config: Config
+    let progressFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .percent
+        numberFormatter.minimumFractionDigits = 2
+        return numberFormatter
+    }()
+    @ObservedObject
+    var logger = SSHLogger.shared
     
     init(config: Config) {
         self.vmManager = VMManager(config: config)
         self.config = config
         if config.editorMode {
-            self.title = "Cilicon (Editor Mode) - \(config.vmBundlePath)"
+            self.title = "Cilicon (Editor Mode)"
         } else {
             self.title = "Cilicon"
         }
     }
     
     var body: some View {
-        HStack {
+        VStack {
             switch vmManager.vmState {
             case .running(let vm):
                 VirtualMachineView(virtualMachine: vm).onAppear {
                     Task.detached {
                         try await vmManager.start(vm: vm)
+                    }
+                }
+                if !config.editorMode {
+                    ScrollViewReader { scrollViewProxy in
+                        ScrollView(.vertical) {
+                            LazyVStack {
+                                ForEach([logger], id: \.combinedLog) {
+                                    Text($0.attributedLog)
+                                        .frame(width: 800, alignment: .leading)
+                                }
+                            }
+                            .textSelection(.enabled)
+                            .onReceive(logger.log.publisher) { _ in
+                                scrollViewProxy.scrollTo(logger.combinedLog, anchor: .bottom)
+                            }
+                        }
                     }
                 }
             case .failed(let errorDescription):
@@ -37,16 +61,28 @@ struct ContentView: View {
                 Text("Provisioning Image")
             case .copyingFromVolume:
                 Text("Copying image from external volume")
+            case .downloading(let text, let progress):
+                let fProgress = self.progressFormatter.string(from: NSNumber(value: progress))!
+                VStack {
+                    Text("Downloading \(text) - \(fProgress)")
+                    ProgressView(value: progress).frame(width: 500, alignment: .center)
+                }
+            case .legacyWarning:
+                Text("The Bundle you have selected is in the legacy format. Do you want to convert it?")
+                Button("Yes Please", action: vmManager.upgradeImageFromLegacy)
+            case .legacyUpgradeFailed:
+                Text("Upgrade from legacy VM failed")
             }
+            
         }
-        .navigationTitle(title)
-        .onAppear(perform: onAppear)
+        .navigationTitle(title + " - " + vmManager.ip)
+        .onAppear(perform: start)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification), perform: { [vmManager] _ in
-            try? vmManager.removeBundleIfExists()
+            try? vmManager.cleanup()
         })
     }
     
-    func onAppear() {
+    func start() {
         Task.detached {
             try await vmManager.setupAndRunVM()
         }
