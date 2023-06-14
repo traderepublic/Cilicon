@@ -67,7 +67,7 @@ struct Config: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.provisioner = try container.decode(ProvisionerConfig.self, forKey: .provisioner)
-        self.hardware = try container.decode(HardwareConfig.self, forKey: .hardware)
+        self.hardware = try container.decodeIfPresent(HardwareConfig.self, forKey: .hardware) ?? .default
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
         self.source = try container.decode(VMSource.self, forKey: .source)
         self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
@@ -76,14 +76,14 @@ struct Config: Codable {
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
         self.autoTransferImageVolume = try container.decodeIfPresent(String.self, forKey: .autoTransferImageVolume)
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
-        self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .init(username: "admin", password: "admin")
+        self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .default
         self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)
         self.postRun = try container.decodeIfPresent(String.self, forKey: .postRun)
     }
 }
 
-
 struct SSHCredentials: Codable {
+    static var `default` = Self.init(username: "admin", password: "admin")
     let username: String
     let password: String
 }

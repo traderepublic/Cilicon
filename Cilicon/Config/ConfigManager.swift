@@ -3,6 +3,9 @@ import Yams
 
 class ConfigManager {
     static let path = NSHomeDirectory() + "/cilicon.yml"
+    static var fileExists: Bool {
+        FileManager.default.fileExists(atPath: path)
+    }
     let config: Config
     
     init() throws {

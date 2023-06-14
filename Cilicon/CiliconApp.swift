@@ -6,11 +6,17 @@ struct CiliconApp: App {
     
     var body: some Scene {
         Window("Cilicon", id: "cihost") {
-            switch Result { try ConfigManager().config } {
-            case .success(let config):
-                let contentView = ContentView(config: config)
-                AnyView(contentView)
-            case .failure(_):
+            
+            if ConfigManager.fileExists {
+                switch Result(catching: { try ConfigManager().config }) {
+                case .success(let config):
+                    let contentView = ContentView(config: config)
+                    AnyView(contentView)
+                case .failure(let error):
+                    Text(String(describing: error))
+                }
+                
+            } else {
                 Text("No Config found.\n\nTo create one, enter the path or an OCI image starting with oci:// below and press return")
                     .multilineTextAlignment(.center)
                 TextField(

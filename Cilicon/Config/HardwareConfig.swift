@@ -1,6 +1,14 @@
 import Foundation
 
 struct HardwareConfig: Codable {
+    static var `default`: HardwareConfig {
+        let ramAvailable = ProcessInfo.processInfo.physicalMemory / UInt64(1024 * 1024 * 1024)
+        return Self.init(ramGigabytes: ramAvailable,
+                         display: .default,
+                         connectsToAudioDevice: true)
+        
+    }
+    
     internal init(ramGigabytes: UInt64, cpuCores: Int? = nil, display: HardwareConfig.DisplayConfig, connectsToAudioDevice: Bool) {
         self.ramGigabytes = ramGigabytes
         self.cpuCores = cpuCores
@@ -29,7 +37,7 @@ struct HardwareConfig: Codable {
         self.ramGigabytes = try container.decode(UInt64.self, forKey: .ramGigabytes)
         self.cpuCores = try container.decodeIfPresent(Int.self, forKey: .cpuCores)
         self.display = try container.decodeIfPresent(DisplayConfig.self, forKey: .display) ?? .default
-        self.connectsToAudioDevice = try container.decodeIfPresent(Bool.self, forKey: .connectsToAudioDevice) ?? true
+        self.connectsToAudioDevice = try container.decodeIfPresent(Bool.self, forKey: .connectsToAudioDevice) ?? false
     }
     
     struct DisplayConfig: Codable {
