@@ -5,12 +5,12 @@ enum ProvisionerConfig: Codable {
     case gitlab(GitLabProvisionerConfig)
     case buildkite(BuildkiteAgentProvisionerConfig)
     case script(ScriptProvisionerConfig)
-    
+
     enum CodingKeys: CodingKey {
         case type
         case config
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(ProvisionerType.self, forKey: .type)
@@ -29,18 +29,19 @@ enum ProvisionerConfig: Codable {
             self = .script(config)
         }
     }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .script(let config):
+        case let .script(config):
             try container.encode(ProvisionerType.script, forKey: .type)
             try container.encode(config, forKey: .config)
         default:
-            //don't need to encode anything else for now
+            // don't need to encode anything else for now
             break
         }
     }
-    
+
     enum ProvisionerType: String, Codable {
         case github
         case gitlab

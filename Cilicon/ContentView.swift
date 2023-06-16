@@ -1,5 +1,5 @@
-import SwiftUI
 import AppKit
+import SwiftUI
 import Virtualization
 
 struct ContentView: View {
@@ -13,9 +13,10 @@ struct ContentView: View {
         numberFormatter.minimumFractionDigits = 2
         return numberFormatter
     }()
+
     @ObservedObject
     var logger = SSHLogger.shared
-    
+
     init(config: Config) {
         self.vmManager = VMManager(config: config)
         self.config = config
@@ -25,11 +26,11 @@ struct ContentView: View {
             self.title = "Cilicon"
         }
     }
-    
+
     var body: some View {
         VStack {
             switch vmManager.vmState {
-            case .running(let vm):
+            case let .running(vm):
                 VirtualMachineView(virtualMachine: vm).onAppear {
                     Task.detached {
                         try await vmManager.start(vm: vm)
@@ -51,7 +52,7 @@ struct ContentView: View {
                         }
                     }
                 }
-            case .failed(let errorDescription):
+            case let .failed(errorDescription):
                 Text(errorDescription)
             case .initializing:
                 Text("Initializing")
@@ -61,7 +62,7 @@ struct ContentView: View {
                 Text("Provisioning Image")
             case .copyingFromVolume:
                 Text("Copying image from external volume")
-            case .downloading(let text, let progress):
+            case let .downloading(text, progress):
                 let fProgress = self.progressFormatter.string(from: NSNumber(value: progress))!
                 VStack {
                     Text("Downloading \(text) - \(fProgress)")
@@ -73,7 +74,6 @@ struct ContentView: View {
             case .legacyUpgradeFailed:
                 Text("Upgrade from legacy VM failed")
             }
-            
         }
         .navigationTitle(title + " - " + vmManager.ip)
         .onAppear(perform: start)
@@ -81,7 +81,7 @@ struct ContentView: View {
             try? vmManager.cleanup()
         })
     }
-    
+
     func start() {
         Task.detached {
             try await vmManager.setupAndRunVM()

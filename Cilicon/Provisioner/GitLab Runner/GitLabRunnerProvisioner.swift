@@ -1,44 +1,48 @@
-import Foundation
 import Citadel
+import Foundation
 
 class GitLabRunnerProvisioner: Provisioner {
     let config: Config
     let runnerConfig: GitLabProvisionerConfig
     let service: GitLabService
     let fileManager: FileManager
-    
+
     private var runnerToken: String?
-    
+
     init(config: Config, gitLabConfig: GitLabProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
         self.runnerConfig = gitLabConfig
         self.service = GitLabService(config: gitLabConfig)
         self.fileManager = fileManager
     }
-    
+
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         var block = """
         sudo curl --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-darwin-arm64
         sudo chmod +x /usr/local/bin/gitlab-runner
-        
-        /usr/local/bin/gitlab-runner run-single -u \(runnerConfig.url.absoluteString) -t \(runnerConfig.registrationToken) --executor shell --max-builds 1
+
+        /usr/local/bin/gitlab-runner run-single \
+            -u \(runnerConfig.url.absoluteString) \
+            -t \(runnerConfig.registrationToken) \
+            --executor shell \
+            --max-builds 1
         """
-        
+
         if let name = runnerConfig.name ?? Host.current().localizedName {
             block.append(" --name '\(name)'")
         }
-        
+
         let streamOutput = try await sshClient.executeCommandStream(block, inShell: true)
         for try await blob in streamOutput {
             switch blob {
-            case .stdout(let stdout):
+            case let .stdout(stdout):
                 await SSHLogger.shared.log(string: String(buffer: stdout))
-            case .stderr(let stderr):
+            case let .stderr(stderr):
                 await SSHLogger.shared.log(string: String(buffer: stderr))
             }
         }
     }
-    
+
     func deprovision(bundle: VMBundle, sshClient: SSHClient) async throws {
         if let runnerToken {
             try await service.deregisterRunner(runnerToken: runnerToken)
@@ -47,7 +51,7 @@ class GitLabRunnerProvisioner: Provisioner {
         }
         return
     }
-    
+
     private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
 //        let tokenPath = bundle.runnerEndpointURL.relativePath
 //        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {

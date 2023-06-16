@@ -13,11 +13,11 @@ struct GitHubProvisionerConfig: Decodable {
     let extraLabels: [String]?
     /// Default: `true`
     let downloadLatest: Bool
-    
+
     let runnerGroup: String?
-    
+
     let organizationURL: URL
-    
+
     enum CodingKeys: CodingKey {
         case apiURL
         case appId
@@ -28,7 +28,7 @@ struct GitHubProvisionerConfig: Decodable {
         case organizationURL
         case downloadLatest
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.apiURL = try container.decodeIfPresent(URL.self, forKey: .apiURL)
@@ -40,5 +40,4 @@ struct GitHubProvisionerConfig: Decodable {
         self.organizationURL = try container.decodeIfPresent(URL.self, forKey: .organizationURL) ?? URL(string: "https://github.com/\(organization)")!
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
     }
-    
 }

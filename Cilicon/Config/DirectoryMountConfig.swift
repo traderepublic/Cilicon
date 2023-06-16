@@ -7,14 +7,14 @@ struct DirectoryMountConfig: Codable {
     let guestFolder: String
     /// Mount the folder as a read only volume.
     let readOnly: Bool
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hostPath = (try container.decode(String.self, forKey: .hostPath) as NSString).standardizingPath
         self.guestFolder = try container.decode(String.self, forKey: .guestFolder)
         self.readOnly = try container.decodeIfPresent(Bool.self, forKey: .readOnly) ?? false
     }
-    
+
     enum CodingKeys: CodingKey {
         case hostPath
         case guestFolder

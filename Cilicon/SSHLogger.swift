@@ -8,12 +8,11 @@ final class SSHLogger: ObservableObject {
 
     @Published
     var log: [LogChunk] = []
-    
-    
+
     var attributedLog: AttributedString {
         return ANSIParser.parse(combinedLog)
     }
-    
+
     var combinedLog: String {
         var outString = String()
         log.forEach {
@@ -33,7 +32,7 @@ final class SSHLogger: ObservableObject {
         let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
         for (index, line) in lines.enumerated() {
             if index == 0 {
-                log[log.count-1].text.append(contentsOf: line)
+                log[log.count - 1].text.append(contentsOf: line)
             } else {
                 if log.count >= 500 {
                     log.remove(at: 0)
@@ -41,7 +40,6 @@ final class SSHLogger: ObservableObject {
                 log.append(LogChunk(text: String(line)))
             }
         }
-        
     }
 
     struct LogChunk: Identifiable, Hashable {
