@@ -296,6 +296,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9728DE02918F79100342A77 /* Build configuration list for PBXNativeTarget "Cilicon" */;
 			buildPhases = (
+				622F3F2C2A3CB696007506AF /* SwiftFormat */,
 				A9728DCD2918F79000342A77 /* Sources */,
 				A9728DCE2918F79000342A77 /* Frameworks */,
 				A9728DCF2918F79000342A77 /* Resources */,
@@ -392,6 +393,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		622F3F2C2A3CB696007506AF /* SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftFormat;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftformat >/dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A9728DCD2918F79000342A77 /* Sources */ = {

@@ -1,0 +1,11 @@
+--swiftversion 5.8
+--xcodeindentation enabled
+--disable unusedArguments, redundantReturn, redundantSelf, trailingCommas, trailingClosures, wrapArguments, wrapMultilineStatementBraces
+--enable blockComments, isEmpty
+--emptybraces spaced
+--ifdef no-indent
+--importgrouping testable-first
+--maxwidth 150
+--wraparguments before-first
+--wrapcollections before-first
+--exclude Carthage, vendor, **/*.generated.swift
