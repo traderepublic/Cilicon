@@ -6,8 +6,9 @@ class ConfigManager {
     static var fileExists: Bool {
         FileManager.default.fileExists(atPath: path)
     }
+
     let config: Config
-    
+
     init() throws {
         let decoder = YAMLDecoder()
         guard let data = FileManager.default.contents(atPath: Self.path) else {
@@ -15,7 +16,6 @@ class ConfigManager {
         }
         self.config = try decoder.decode(Config.self, from: data)
     }
-    
 }
 
 enum ConfigManagerError: Error {

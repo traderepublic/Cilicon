@@ -1,8 +1,8 @@
-import Foundation
-import Virtualization
 import Citadel
-import OCI
 import Compression
+import Foundation
+import OCI
+import Virtualization
 
 class VMManager: NSObject, ObservableObject {
     let config: Config
@@ -13,30 +13,30 @@ class VMManager: NSObject, ObservableObject {
     var runCounter: Int = 0
     var sshOutput: [String] = []
     var ip: String = ""
-    
+
     var activeBundle: VMBundle {
         config.editorMode ? masterBundle : clonedBundle
     }
-    
+
     @Published
     var vmState: VMState = .initializing
-    
+
     init(config: Config) {
         switch config.provisioner {
-        case .github(let gitHubConfig):
+        case let .github(gitHubConfig):
             self.provisioner = GitHubActionsProvisioner(config: config, gitHubConfig: gitHubConfig)
-        case .gitlab(let gitLabConfig):
+        case let .gitlab(gitLabConfig):
             self.provisioner = GitLabRunnerProvisioner(config: config, gitLabConfig: gitLabConfig)
-        case .buildkite(let buildkiteConfig):
+        case let .buildkite(buildkiteConfig):
             self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
-        case .script(let scriptConfig):
+        case let .script(scriptConfig):
             self.provisioner = ScriptProvisioner(runBlock: scriptConfig.run)
         }
         self.config = config
         self.masterBundle = VMBundle(url: URL(filePath: config.source.localPath))
         self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
     }
-    
+
     @MainActor
     func setupAndRunVM() async throws {
         do {
@@ -45,7 +45,7 @@ class VMManager: NSObject, ObservableObject {
                 vmState = .legacyWarning(path: masterBundle.url.path)
                 return
             }
-            
+
             if case let .OCI(ociURL) = config.source {
                 let resolvedPath = masterBundle.url.resolvingSymlinksInPath().path
                 if try fileManager.fileExists(atPath: resolvedPath) && !isBundleComplete() {
@@ -58,23 +58,21 @@ class VMManager: NSObject, ObservableObject {
                         try? fileManager.removeItem(atPath: resolvedPath)
                     })
                 }
-                
             }
             try await setupAndRunVirtualMachine()
-        }
-        catch {
+        } catch {
             vmState = .failed(error.localizedDescription)
             try await Task.sleep(for: .seconds(config.retryDelay))
             try await setupAndRunVM()
         }
     }
-    
+
     @MainActor
     func start(vm: VZVirtualMachine) async throws {
         runCounter += 1
         try await vm.start()
     }
-    
+
     @MainActor
     private func cloneBundle() async throws {
         vmState = .copying
@@ -83,8 +81,7 @@ class VMManager: NSObject, ObservableObject {
             try fileManager.copyItem(at: masterBundle.url.resolvingSymlinksInPath(), to: clonedBundle.url)
         }.value
     }
-    
-    
+
     private func setupAndRunVirtualMachine() async throws {
         if !config.editorMode {
             try await cloneBundle()
@@ -93,7 +90,7 @@ class VMManager: NSObject, ObservableObject {
         let vmConfig = try vmHelper.computeRunConfiguration(config: config)
         let virtualMachine = VZVirtualMachine(configuration: vmConfig)
         virtualMachine.delegate = self
-        
+
         Task { @MainActor in
             vmState = .running(virtualMachine)
             try await virtualMachine.start()
@@ -106,48 +103,47 @@ class VMManager: NSObject, ObservableObject {
             return
         }
         self.ip = ip
-        
+
         let client = try await SSHClient.connect(
             host: ip,
             authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
             hostKeyValidator: .acceptAnything(),
             reconnect: .always
         )
-        
+
         print("IP Address: \(ip)")
         if let preRun = config.preRun {
             let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
             for try await blob in streamOutput {
                 switch blob {
-                case .stdout(let stdout):
+                case let .stdout(stdout):
                     await SSHLogger.shared.log(string: String(buffer: stdout))
-                case .stderr(let stderr):
+                case let .stderr(stderr):
                     await SSHLogger.shared.log(string: String(buffer: stderr))
                 }
             }
         }
-        
-        if let provisioner = provisioner {
+
+        if let provisioner {
             do {
                 try await provisioner.provision(bundle: activeBundle, sshClient: client)
             } catch {
                 print(error.localizedDescription)
             }
-            
         }
-        
+
         if let postRun = config.postRun {
             let streamOutput = try await client.executeCommandStream(postRun, inShell: true)
             for try await blob in streamOutput {
                 switch blob {
-                case .stdout(let stdout):
+                case let .stdout(stdout):
                     await SSHLogger.shared.log(string: String(buffer: stdout))
-                case .stderr(let stderr):
+                case let .stderr(stderr):
                     await SSHLogger.shared.log(string: String(buffer: stderr))
                 }
             }
         }
-        
+
         await SSHLogger.shared.log(string: "---------- Shutting Down ----------\n")
         try await client.close()
 
@@ -156,19 +152,20 @@ class VMManager: NSObject, ObservableObject {
             try await handleStop()
         }
     }
-    
-    
+
     func isBundleComplete() throws -> Bool {
-        let filesExist = [masterBundle.diskImageURL,
-                          masterBundle.configURL,
-                          masterBundle.auxiliaryStorageURL]
+        let filesExist = [
+            masterBundle.diskImageURL,
+            masterBundle.configURL,
+            masterBundle.auxiliaryStorageURL
+        ]
             .map { $0.resolvingSymlinksInPath() }
             .reduce(into: false) { $0 = fileManager.fileExists(atPath: $1.path) }
         let notUnfinished = !fileManager.fileExists(atPath: masterBundle.unfinishedURL.path)
-        
+
         return filesExist && notUnfinished
-        
     }
+
     @MainActor
     func handleStop() async throws {
         if config.editorMode {
@@ -186,54 +183,54 @@ class VMManager: NSObject, ObservableObject {
             try await setupAndRunVirtualMachine()
         }
     }
-    
+
     func removeBundleIfExists() throws {
         if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
             try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
         }
     }
-    
+
     func cleanup() throws {
         try removeBundleIfExists()
     }
-    
+
     func downloadFromOCI(url: OCIURL) async throws {
         let client = OCI(url: url)
         let (digest, manifest) = try await client.fetchManifest()
         let path = URL(filePath: url.localPath).deletingLastPathComponent().appending(path: digest)
         try fileManager.createDirectory(at: path, withIntermediateDirectories: true)
-        
+
         if !fileManager.fileExists(atPath: url.localPath) {
             try fileManager.createSymbolicLink(at: URL(filePath: url.localPath), withDestinationURL: path)
         }
         fileManager.createFile(atPath: masterBundle.unfinishedURL.path, contents: nil)
         let bundleForPaths = VMBundle(url: path)
-        
+
         guard let configLayer = manifest.layers.first(where: { $0.mediaType == "application/vnd.cirruslabs.tart.config.v1" }) else {
             fatalError()
         }
-        
+
         Task { @MainActor in
             vmState = .downloading(text: "config.json", progress: 0)
         }
         let configData = try await client.pullBlobData(digest: configLayer.digest)
         try configData.write(to: bundleForPaths.configURL)
         // Fetching images
-        
+
         let totalSize = manifest.layers.map(\.size).reduce(into: Int64(0), +=)
-        
+
         let bufferSizeBytes = 64 * 1024 * 1024
-        
+
         let diskURL = bundleForPaths.diskImageURL
         fileManager.createFile(atPath: diskURL.path, contents: nil)
-        
+
         let disk = try FileHandle(forWritingTo: diskURL)
         let filter = try OutputFilter(.decompress, using: .lz4, bufferCapacity: bufferSizeBytes) { data in
-          if let data = data {
-            disk.write(data)
-          }
+            if let data {
+                disk.write(data)
+            }
         }
-        
+
         let imgLayers = manifest.layers.filter { $0.mediaType == "application/vnd.cirruslabs.tart.disk.v1" }
         var lastDataCount = 0
         var lastProgress: Double = -1
@@ -246,7 +243,7 @@ class VMManager: NSObject, ObservableObject {
                 if progress - lastProgress > 0.001 {
                     lastProgress = progress
                     Task { @MainActor in
-                        vmState = .downloading(text: "disk image layer \(index+1)/\(imgLayers.count)", progress: progress)
+                        vmState = .downloading(text: "disk image layer \(index + 1)/\(imgLayers.count)", progress: progress)
                     }
                 }
             }
@@ -321,4 +318,3 @@ enum VMState {
     case legacyWarning(path: String)
     case legacyUpgradeFailed
 }
-

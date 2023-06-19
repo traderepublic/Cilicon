@@ -10,14 +10,16 @@ struct GitHubAppAuthHelper {
         /// Expiration date
         let exp: Date
     }
-    
+
     static func generateJWTToken(pemPath: String, appId: Int) throws -> String {
         let now = Date().timeIntervalSince1970
         let floored = floor(now)
         let date = Date(timeIntervalSince1970: floored)
-        let myClaims = GHClaims(iss: String(appId),
-                                iat: date.addingTimeInterval(-10),
-                                exp: date.addingTimeInterval(60))
+        let myClaims = GHClaims(
+            iss: String(appId),
+            iat: date.addingTimeInterval(-10),
+            exp: date.addingTimeInterval(60)
+        )
         var myJWT = JWT(claims: myClaims)
         let privateKeyPath = URL(fileURLWithPath: pemPath)
         let privateKey: Data = try Data(contentsOf: privateKeyPath, options: .alwaysMapped)

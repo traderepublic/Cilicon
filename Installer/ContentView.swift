@@ -12,18 +12,19 @@ struct ContentView: View {
     private var bundlePath: String = NSHomeDirectory() + "/VM.bundle"
     @State
     private var selectingIPSW: Bool = false
-    
+
     let progressFormatter: NumberFormatter = {
         let numFormatter = NumberFormatter()
         numFormatter.numberStyle = .percent
         return numFormatter
     }()
+
     let throughputFormatter: MeasurementFormatter = {
         let formatter = MeasurementFormatter()
         formatter.numberFormatter.minimumFractionDigits = 2
         return formatter
     }()
-    
+
     var body: some View {
         VStack(spacing: 20) {
             switch installer.state {
@@ -39,10 +40,13 @@ struct ContentView: View {
                 HStack {
                     Button(action: { selectingIPSW = true }) {
                         Text("Install from IPSW file")
-                    }.fileImporter(isPresented: $selectingIPSW,
-                                   allowedContentTypes: [ipswType], allowsMultipleSelection: false) { result in
+                    }.fileImporter(
+                        isPresented: $selectingIPSW,
+                        allowedContentTypes: [ipswType],
+                        allowsMultipleSelection: false
+                    ) { result in
                         selectingIPSW = false
-                        if case .success(let fileURLs) = result, let fileURL = fileURLs.first  {
+                        if case let .success(fileURLs) = result, let fileURL = fileURLs.first {
                             handleInstall(ipswURL: fileURL)
                         }
                     }
@@ -55,17 +59,17 @@ struct ContentView: View {
                 Button(action: { NSApplication.shared.terminate(nil) }) {
                     Text("Quit")
                 }
-            case .error(let error):
+            case let .error(error):
                 Text("🧐 \(error)")
                 Button(action: { installer.state = .idle }) {
                     Text("Back")
                 }
-            case .downloading(let version, let progress):
+            case let .downloading(version, progress):
                 let formattedProgress = progressFormatter.string(from: progress as NSNumber)!
                 ProgressView(value: progress) {
                     Text("Downloading image \(version): \(formattedProgress)")
                 }
-            case .installing(let progress):
+            case let .installing(progress):
                 let formattedProgress = progressFormatter.string(from: progress as NSNumber)!
                 ProgressView(value: progress) {
                     Text("Installing image: \(formattedProgress)")
@@ -75,17 +79,17 @@ struct ContentView: View {
         .padding(.all, 20)
         .frame(width: 400, height: 150, alignment: .center)
     }
-    
+
     func handleDownload() {
         let mode: InstallMode = .downloadAndInstall(downloadFolder: URL(filePath: NSHomeDirectory() + "/Downloads"))
         startInstaller(mode: mode)
     }
-    
+
     func handleInstall(ipswURL: URL) {
         let mode: InstallMode = .installFromImage(restoreImage: ipswURL)
         startInstaller(mode: mode)
     }
-    
+
     func startInstaller(mode: InstallMode) {
         let bundle = VMBundle(url: URL(filePath: bundlePath))
         installer.run(mode: mode, bundle: bundle, diskSize: Int64(diskSize)!)

@@ -1,21 +1,21 @@
 import Foundation
 public struct OCI {
     let url: OCIURL
-    
+
     var baseURL: URL {
         URL(string: "https://\(url.registry)/v2\(url.repository)")!
     }
-    
+
     public init(url: OCIURL) {
         self.url = url
     }
-    
+
     let urlSession: URLSession = {
         let config = URLSessionConfiguration.default
         config.httpShouldSetCookies = false
         return URLSession(configuration: config)
     }()
-    
+
     public func fetchManifest(authentication: AuthenticationType = .none) async throws -> (String, Manifest) {
         let manifestURL = baseURL.appending(path: "manifests/\(url.tag)")
         let headers = [
@@ -26,41 +26,40 @@ public struct OCI {
         let jsonDecoder = JSONDecoder()
         return (contentDigest, try jsonDecoder.decode(Manifest.self, from: data))
     }
-    
+
     public func pullBlob(digest: String, authentication: AuthenticationType = .none) async throws -> URLSession.AsyncBytes {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
         let (data, _) = try await download(authentication: authentication, url: blobUrl)
         return data
     }
-    
+
     public func pullBlobData(digest: String, authentication: AuthenticationType = .none) async throws -> Data {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
         let (data, _) = try await request(authentication: authentication, url: blobUrl)
         return data
     }
-    
+
     func authenticate(data: WWWAuthenticate) async throws -> String {
         var url = URLComponents(string: data.realm)!
         url.queryItems = [
             URLQueryItem(name: "service", value: data.service),
             URLQueryItem(name: "scope", value: data.scope)
-            ]
+        ]
         let (data, _) = try await urlSession.data(from: url.url!)
         let jsonDecoder = JSONDecoder()
         let token = try jsonDecoder.decode(AuthResponse.self, from: data)
         return token.token
     }
-    
-    
+
     func request(authentication: AuthenticationType, url: URL, headers: [String: String] = [:]) async throws -> (Data, HTTPURLResponse) {
         var request = URLRequest(url: url)
         for (headerName, headerValue) in headers {
             request.setValue(headerValue, forHTTPHeaderField: headerName)
         }
-        
+
         switch authentication {
         case let .basic(username, password):
-            let credentials =  Data("\(username):\(password)".utf8).base64EncodedString()
+            let credentials = Data("\(username):\(password)".utf8).base64EncodedString()
             request.setValue("Basic \(credentials)", forHTTPHeaderField: "Authorization")
         case let .bearer(token):
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -81,8 +80,12 @@ public struct OCI {
         }
         return (data, httpResp)
     }
-    
-    func download(authentication: AuthenticationType, url: URL, headers: [String: String] = [:]) async throws -> (URLSession.AsyncBytes, HTTPURLResponse) {
+
+    func download(
+        authentication: AuthenticationType,
+        url: URL,
+        headers: [String: String] = [:]
+    ) async throws -> (URLSession.AsyncBytes, HTTPURLResponse) {
         var request = URLRequest(url: url)
         for (headerName, headerValue) in headers {
             request.setValue(headerValue, forHTTPHeaderField: headerName)
@@ -104,7 +107,7 @@ public struct OCI {
         }
         return (data, httpResp)
     }
-    
+
     public enum AuthenticationType {
         case none
         case basic(username: String, password: String)
@@ -115,7 +118,6 @@ public struct OCI {
 struct AuthResponse: Decodable {
     let token: String
 }
-
 
 enum OCIError: Error {
     case generic

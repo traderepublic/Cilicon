@@ -7,19 +7,19 @@ struct LegacyVMBundle {
     var diskImageURL: URL {
         url.appending(component: "Disk.img")
     }
-    
+
     var auxiliaryStorageURL: URL {
         url.appending(component: "AuxiliaryStorage")
     }
-    
+
     var machineIdentifierURL: URL {
         url.appending(component: "MachineIdentifier")
     }
-    
+
     var hardwareModelURL: URL {
         url.appending(component: "HardwareModel")
     }
-    
+
     func upgrade() throws {
         let fileManager = FileManager.default
         let newBundle = VMBundle(url: url)
@@ -31,11 +31,13 @@ struct LegacyVMBundle {
               let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
             fatalError()
         }
-        let config = VMConfig(arch: .arm64,
-                              os: .darwin,
-                              hardwareModel: hardwareModel,
-                              ecid: machineIdentifier,
-                              macAddress: VZMACAddress.randomLocallyAdministered())
+        let config = VMConfig(
+            arch: .arm64,
+            os: .darwin,
+            hardwareModel: hardwareModel,
+            ecid: machineIdentifier,
+            macAddress: VZMACAddress.randomLocallyAdministered()
+        )
         try JSONEncoder().encode(config).write(to: newBundle.configURL)
     }
 }

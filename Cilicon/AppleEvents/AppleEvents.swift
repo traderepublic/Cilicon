@@ -1,6 +1,6 @@
+import CoreServices
 // From https://github.com/soffes/spotlight-tools/tree/master/UtilityKit
 import Foundation
-import CoreServices
 
 public enum AppleEvent {
     case restart

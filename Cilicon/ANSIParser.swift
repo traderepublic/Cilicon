@@ -4,7 +4,7 @@ struct ANSIParser {
     typealias Color = NSColor
     typealias Font = NSFont
     static let fontName = "Andale Mono"
-    
+
     static let defaultFont = Font.monospacedSystemFont(ofSize: Font.systemFontSize, weight: .regular)
     static let defaultAttributes: [NSAttributedString.Key: Any] = [
         .font: defaultFont as Any
@@ -37,9 +37,7 @@ struct ANSIParser {
         return result
     }
 
-
     private static func attributesFor(ansiCode: String) -> [NSAttributedString.Key: Any] {
-        
         var attributes: [NSAttributedString.Key: Any] = Self.defaultAttributes
         attributes[.font] = defaultFont
         let codes = ansiCode

@@ -1,7 +1,21 @@
 import Foundation
 
 struct Config: Codable {
-    internal init(provisioner: ProvisionerConfig, hardware: HardwareConfig, directoryMounts: [DirectoryMountConfig], source: VMSource, vmClonePath: String, numberOfRunsUntilHostReboot: Int? = nil, runnerName: String? = nil, editorMode: Bool, autoTransferImageVolume: String? = nil, retryDelay: Int, sshCredentials: SSHCredentials, preRun: String? = nil, postRun: String? = nil) {
+    internal init(
+        provisioner: ProvisionerConfig,
+        hardware: HardwareConfig,
+        directoryMounts: [DirectoryMountConfig],
+        source: VMSource,
+        vmClonePath: String,
+        numberOfRunsUntilHostReboot: Int? = nil,
+        runnerName: String? = nil,
+        editorMode: Bool,
+        autoTransferImageVolume: String? = nil,
+        retryDelay: Int,
+        sshCredentials: SSHCredentials,
+        preRun: String? = nil,
+        postRun: String? = nil
+    ) {
         self.provisioner = provisioner
         self.hardware = hardware
         self.directoryMounts = directoryMounts
@@ -15,7 +29,7 @@ struct Config: Codable {
         self.preRun = preRun
         self.postRun = postRun
     }
-    
+
     /// Provisioner Configuration.
     let provisioner: ProvisionerConfig
     /// Hardware Configuration.
@@ -42,7 +56,7 @@ struct Config: Codable {
     let preRun: String?
     /// A command to run after the provisioning commands are run.
     let postRun: String?
-    
+
     enum CodingKeys: CodingKey {
         case provisioner
         case hardware
@@ -57,14 +71,16 @@ struct Config: Codable {
         case preRun
         case postRun
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.provisioner = try container.decode(ProvisionerConfig.self, forKey: .provisioner)
         self.hardware = try container.decodeIfPresent(HardwareConfig.self, forKey: .hardware) ?? .default
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
         self.source = try container.decode(VMSource.self, forKey: .source)
-        self.vmClonePath = (try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
+        self.vmClonePath = (
+            try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }
+        ) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
@@ -76,8 +92,7 @@ struct Config: Codable {
 }
 
 struct SSHCredentials: Codable {
-    static var `default` = Self.init(username: "admin", password: "admin")
+    static var `default` = Self(username: "admin", password: "admin")
     let username: String
     let password: String
 }
-

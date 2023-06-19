@@ -4,7 +4,7 @@ import OCI
 enum VMSource: Codable {
     case OCI(OCIURL)
     case local(URL)
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self)
@@ -13,18 +13,17 @@ enum VMSource: Codable {
         }
         self = parsed
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .OCI(let url):
+        case let .OCI(url):
             try container.encode(url)
-        case .local(let url):
+        case let .local(url):
             try container.encode(url.path)
         }
-        
     }
-    
+
     init?(string: String) {
         guard let components = URLComponents(string: string), let url = components.url else {
             return nil
@@ -39,7 +38,7 @@ enum VMSource: Codable {
             self = .local(url)
         }
     }
-    
+
     var localPath: String {
         switch self {
         case let .local(url):
@@ -49,11 +48,10 @@ enum VMSource: Codable {
             return ociURL.localPath
         }
     }
-    
+
     enum VMSourceError: LocalizedError {
         case invalidPath
-        
-        
+
         var errorDescription: String? {
             return "Invalid URL. Make sure it starts with a `oci://` or `file://` scheme"
         }

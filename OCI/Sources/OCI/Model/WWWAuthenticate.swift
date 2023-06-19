@@ -12,7 +12,7 @@ struct WWWAuthenticate {
         let components = header
             .trimmingCharacters(in: .whitespaces)
             .split(separator: " ", maxSplits: 1)
-            
+
         guard components.count == 2 else { return nil }
         self.authMode = String(components[0])
         let items = components[1].split(separator: ",")
@@ -20,7 +20,7 @@ struct WWWAuthenticate {
             let keyVal = $1.split(separator: "=", maxSplits: 1)
             $0[String(keyVal[0])] = String(keyVal[1]).replacingOccurrences(of: "\"", with: "")
         }
-        
+
         guard let realm = dictionary["realm"],
               let service = dictionary["service"],
               let scope = dictionary["scope"] else { return nil }
