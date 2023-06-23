@@ -18,6 +18,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 <ul>
         <li>The config file schema has changed slightly. In most cases renaming the <code>vmBundlePath</code> property to <code>source</code> should suffice.</li>
         <li>When Cilicon detects a 1.0 image it will offer you to automatically convert it to the new format for you.</li>
+	<li>When converting an image from the 1.0 format, you must enable SSH and set the respective credentials in the config (or use the default <code>admin:admin</code>).</li>
 </ul>
 </details>
 
