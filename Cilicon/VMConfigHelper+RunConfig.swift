@@ -16,14 +16,14 @@ extension VMConfigHelper {
                 ppi: dispConfig.pixelsPerInch
             )
         ]
-        virtualMachineConfiguration.storageDevices = [try createBlockDeviceConfiguration()]
+        virtualMachineConfiguration.storageDevices = try [createBlockDeviceConfiguration()]
         virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: vmBundle.configuration.macAddress)]
         virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [VZUSBKeyboardConfiguration()]
         if config.hardware.connectsToAudioDevice {
             virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
         }
-        virtualMachineConfiguration.directorySharingDevices = [try createDirectorySharingConfiguration(config: config)]
+        virtualMachineConfiguration.directorySharingDevices = try [createDirectorySharingConfiguration(config: config)]
         try virtualMachineConfiguration.validate()
 
         return virtualMachineConfiguration

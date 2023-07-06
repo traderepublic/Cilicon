@@ -34,7 +34,7 @@ struct GitHubProvisionerConfig: Decodable {
         self.apiURL = try container.decodeIfPresent(URL.self, forKey: .apiURL)
         self.appId = try container.decode(Int.self, forKey: .appId)
         self.organization = try container.decode(String.self, forKey: .organization)
-        self.privateKeyPath = (try container.decode(String.self, forKey: .privateKeyPath) as NSString).standardizingPath
+        self.privateKeyPath = try (container.decode(String.self, forKey: .privateKeyPath) as NSString).standardizingPath
         self.extraLabels = try container.decodeIfPresent([String].self, forKey: .extraLabels)
         self.runnerGroup = try container.decodeIfPresent(String.self, forKey: .runnerGroup)
         self.organizationURL = try container.decodeIfPresent(URL.self, forKey: .organizationURL) ?? URL(string: "https://github.com/\(organization)")!

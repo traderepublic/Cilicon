@@ -24,7 +24,7 @@ public struct OCI {
         let (data, response) = try await request(authentication: authentication, url: manifestURL, headers: headers)
         let contentDigest = response.value(forHTTPHeaderField: "docker-content-digest")!
         let jsonDecoder = JSONDecoder()
-        return (contentDigest, try jsonDecoder.decode(Manifest.self, from: data))
+        return try (contentDigest, jsonDecoder.decode(Manifest.self, from: data))
     }
 
     public func pullBlob(digest: String, authentication: AuthenticationType = .none) async throws -> URLSession.AsyncBytes {
