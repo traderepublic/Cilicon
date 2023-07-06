@@ -24,7 +24,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. It currently supports Github Actions, Buildkite Agent and arbitrary scripts (GitLab coming soon). Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. It currently supports Github Actions, Buildkite Agent, GitLab Runner and arbitrary scripts. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀
 
 Cilicon operates in a very simple cycle described below:
 
@@ -76,6 +76,36 @@ provisioner:
     organization: <ORGANIZATION_SLUG>
     privateKeyPath: ~/github.pem
 ```
+#### GitLab Runner
+
+To use the GitLab Runner provisioner you will need to [create a runner with an authentication token](https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-shared-runner-with-an-authentication-token).
+
+Minimal example:
+
+``` yml
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+provisioner:
+  type: gitlab
+  config:
+    gitlabURL: <GITLAB_INSTANCE_URL>
+    runnerToken: <RUNNER_TOKEN>
+```
+
+Full configuration:
+
+``` yml
+source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+provisioner:
+  type: gitlab
+  config:
+    gitlabURL: <GITLAB_INSTANCE_URL>
+    runnerToken: <RUNNER_TOKEN>
+    executor: <EXECUTOR> # defaults to 'shell'
+    maxNumberOfBuilds: <MAX_BUILDS> # defaults to '1'
+    downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'
+    downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
+```
+
 #### Buildkite Agent
 
 To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
