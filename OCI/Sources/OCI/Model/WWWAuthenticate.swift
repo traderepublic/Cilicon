@@ -5,10 +5,8 @@ struct WWWAuthenticate {
     let realm: String
     let service: String
     let scope: String
-    init?(response: HTTPURLResponse) {
-        guard let header = response.value(forHTTPHeaderField: "www-authenticate") else {
-            return nil
-        }
+
+    init?(authenticateHeaderField header: String) {
         let components = header
             .trimmingCharacters(in: .whitespaces)
             .split(separator: " ", maxSplits: 1)
@@ -27,5 +25,12 @@ struct WWWAuthenticate {
         self.realm = realm
         self.service = service
         self.scope = scope
+    }
+
+    init?(response: HTTPURLResponse) {
+        guard let header = response.value(forHTTPHeaderField: "www-authenticate") else {
+            return nil
+        }
+        self.init(authenticateHeaderField: header)
     }
 }

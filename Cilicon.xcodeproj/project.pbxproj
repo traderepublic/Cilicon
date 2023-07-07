@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E871E9A2A5812FB00CB561C /* AsyncHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = 0E871E992A5812FB00CB561C /* AsyncHTTPClient */; };
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
 		629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EA1322A05A6BC00899D73 /* ANSIParser.swift */; };
@@ -113,6 +114,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */,
+				0E871E9A2A5812FB00CB561C /* AsyncHTTPClient in Frameworks */,
 				A9FA15D42A273B0B0085A676 /* Citadel in Frameworks */,
 				A9FC3D0E2A0D4FBB00535E9C /* OCI in Frameworks */,
 				A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */,
@@ -308,6 +310,7 @@
 				A9FDAB2029375D0200B8CA1F /* Yams */,
 				A9FC3D0D2A0D4FBB00535E9C /* OCI */,
 				A9FA15D32A273B0B0085A676 /* Citadel */,
+				0E871E992A5812FB00CB561C /* AsyncHTTPClient */,
 			);
 			productName = Cilicon;
 			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
@@ -361,6 +364,7 @@
 				A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
 				A9FDAB1F29375D0200B8CA1F /* XCRemoteSwiftPackageReference "Yams" */,
 				A9FA15D22A273B0B0085A676 /* XCRemoteSwiftPackageReference "Citadel" */,
+				0E871E982A5812FB00CB561C /* XCRemoteSwiftPackageReference "async-http-client" */,
 			);
 			productRefGroup = A9728DD22918F79000342A77 /* Products */;
 			projectDirPath = "";
@@ -753,6 +757,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0E871E982A5812FB00CB561C /* XCRemoteSwiftPackageReference "async-http-client" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swift-server/async-http-client.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Kitura/Swift-JWT";
@@ -780,6 +792,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0E871E992A5812FB00CB561C /* AsyncHTTPClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0E871E982A5812FB00CB561C /* XCRemoteSwiftPackageReference "async-http-client" */;
+			productName = AsyncHTTPClient;
+		};
 		A9728E0E2918FA2300342A77 /* SwiftJWT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A9728E0D2918FA2300342A77 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
