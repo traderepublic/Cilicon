@@ -121,7 +121,6 @@ public struct OCI {
         onProgress: @escaping (Int) -> Void,
         headers: [String: String] = [:]
     ) async throws {
-        print("STARTING \(url.absoluteString)")
         let client = HTTPClient(eventLoopGroupProvider: .createNew)
         var request = try HTTPClient.Request(url: url.absoluteString)
         for (headerName, headerValue) in headers {
@@ -131,40 +130,37 @@ public struct OCI {
             request.headers.replaceOrAdd(name: "Authorization", value: "Bearer \(token)")
         }
 
-        var receivedHead: HTTPResponseHead?
-        var headError: Error?
+        var receivedResponseHead: HTTPResponseHead?
+        var responseHeadError: Error?
 
         let delegate = try FileDownloadDelegate(path: targetURL.path, reportHead: { head in
-            receivedHead = head
-            guard head.status.code != 401 else {
-                headError = OCIError.authenticationRequired
-                return
-            }
-            guard head.status.code == 200 else {
-                print(head.status.code)
-                headError = OCIError.generic
-                return
+            receivedResponseHead = head
+            switch head.status.code {
+            case 401:
+                responseHeadError = OCIError.authenticationRequired
+            default:
+                responseHeadError = OCIError.generic
             }
         }, reportProgress: {
             onProgress($0.receivedBytes)
         })
 
-        print("Execute request")
         do {
-            let response = try! await client.execute(request: request, delegate: delegate).get()
-            if let headError {
-                throw headError
+            _ = try! await client.execute(request: request, delegate: delegate).get()
+            if let responseHeadError {
+                throw responseHeadError
             }
-            print("HTTP head", response)
         } catch let error as OCIError {
-            print("RECEIVED ERROR")
-            if case error = OCIError.authenticationRequired,
-               let authHeader = receivedHead?.headers.first(name: "www-authenticate") {
-                print("RETRYING \(url.absoluteString)")
-                print(authHeader)
-                guard let auth = WWWAuthenticate(authenticateHeaderField: authHeader) else { fatalError() }
+            if case .authenticationRequired = error,
+               let authHeader = receivedResponseHead?.headers.first(name: "www-authenticate") {
+                // Retry with authentication
+                guard let auth = WWWAuthenticate(authenticateHeaderField: authHeader) else {
+                    fatalError("Could not create auth header from response")
+                }
                 let token = try! await authenticate(data: auth)
                 try! await self.streamDownload(authentication: .bearer(token: token), from: url, to: targetURL, onProgress: onProgress)
+            } else {
+                fatalError(error.localizedDescription)
             }
         }
 
