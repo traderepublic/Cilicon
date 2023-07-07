@@ -22,6 +22,8 @@ class VMManager: NSObject, ObservableObject {
     @Published
     var vmState: VMState = .initializing
 
+    @MainActor private var progresses: [Double] = []
+
     init(config: Config) {
         switch config.provisioner {
         case let .github(gitHubConfig):
@@ -195,8 +197,6 @@ class VMManager: NSObject, ObservableObject {
         try removeBundleIfExists()
     }
 
-    @MainActor var progresses: [Double] = []
-
     func downloadFromOCI(url: OCIURL) async throws {
         let client = OCI(url: url)
         let (digest, manifest) = try await client.fetchManifest()
@@ -245,13 +245,13 @@ class VMManager: NSObject, ObservableObject {
     }
 
     @discardableResult
-    fileprivate func resetProgressCounter(itemCount: Int) -> Task<Void, Never> {
+    private func resetProgressCounter(itemCount: Int) -> Task<Void, Never> {
         return Task { @MainActor in
             progresses = Array(repeating: 0.0, count: itemCount)
         }
     }
 
-    fileprivate func downloadAllLayers(_ imgLayers: [Descriptor], to baseURL: URL, using client: OCI) async throws {
+    private func downloadAllLayers(_ imgLayers: [Descriptor], to baseURL: URL, using client: OCI) async throws {
         let taskLimitSemaphore = Semaphore(limit: 5)
 
         // We use a task group to parallelize the download of separate chunks
@@ -296,7 +296,7 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
-    fileprivate func combineChunks(at chunkBaseURL: URL, into combinedChunksURL: URL) async throws {
+    private func combineChunks(at chunkBaseURL: URL, into combinedChunksURL: URL) async throws {
         let bufferSizeBytes = 64 * 1024 * 1024
 
         fileManager.createFile(atPath: combinedChunksURL.path, contents: nil)
