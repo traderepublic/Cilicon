@@ -2,16 +2,18 @@ import Foundation
 import Yams
 
 class ConfigManager {
-    static let path = NSHomeDirectory() + "/cilicon.yml"
+    static let configPaths = ["/cilicon.yml", "/.cilicon.yml"]
+        .map { NSHomeDirectory() + $0 }
+
     static var fileExists: Bool {
-        FileManager.default.fileExists(atPath: path)
+        configPaths.compactMap(FileManager.default.fileExists).contains(true)
     }
 
     let config: Config
 
     init() throws {
         let decoder = YAMLDecoder()
-        guard let data = FileManager.default.contents(atPath: Self.path) else {
+        guard let data = Self.configPaths.compactMap(FileManager.default.contents).first else {
             throw ConfigManagerError.fileCouldNotBeRead
         }
         self.config = try decoder.decode(Config.self, from: data)
