@@ -112,8 +112,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "2d8e6ca36fe3e8ed74b0883f593757a45463c34d",
-        "version" : "2.53.0"
+        "revision" : "324bc65a28323660fad8a36a7a37f0c2c78eeb9a",
+        "version" : "2.55.0"
       }
     },
     {
@@ -130,8 +130,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jpsim/Yams",
       "state" : {
-        "revision" : "f47ba4838c30dbd59998a4e4c87ab620ff959e8a",
-        "version" : "5.0.5"
+        "revision" : "0d9ee7ea8c4ebd4a489ad7a73d5c6cad55d6fed3",
+        "version" : "5.0.6"
       }
     }
   ],

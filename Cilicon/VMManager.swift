@@ -26,7 +26,7 @@ class VMManager: NSObject, ObservableObject {
         case let .github(gitHubConfig):
             self.provisioner = GitHubActionsProvisioner(config: config, gitHubConfig: gitHubConfig)
         case let .gitlab(gitLabConfig):
-            self.provisioner = GitLabRunnerProvisioner(config: config, gitLabConfig: gitLabConfig)
+            self.provisioner = GitLabRunnerProvisioner(config: gitLabConfig)
         case let .buildkite(buildkiteConfig):
             self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
         case let .script(scriptConfig):

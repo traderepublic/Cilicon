@@ -2,37 +2,35 @@ import Citadel
 import Foundation
 
 class GitLabRunnerProvisioner: Provisioner {
-    let config: Config
-    let runnerConfig: GitLabProvisionerConfig
-    let service: GitLabService
-    let fileManager: FileManager
+    let config: GitLabProvisionerConfig
 
-    private var runnerToken: String?
-
-    init(config: Config, gitLabConfig: GitLabProvisionerConfig, fileManager: FileManager = .default) {
+    init(config: GitLabProvisionerConfig) {
         self.config = config
-        self.runnerConfig = gitLabConfig
-        self.service = GitLabService(config: gitLabConfig)
-        self.fileManager = fileManager
     }
 
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        var block = """
-        sudo curl --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-darwin-arm64
-        sudo chmod +x /usr/local/bin/gitlab-runner
+        var downloadCommands: [String] = []
 
-        /usr/local/bin/gitlab-runner run-single \
-            -u \(runnerConfig.url.absoluteString) \
-            -t \(runnerConfig.registrationToken) \
-            --executor shell \
-            --max-builds 1
-        """
-
-        if let name = runnerConfig.name ?? Host.current().localizedName {
-            block.append(" --name '\(name)'")
+        if config.downloadLatest {
+            await SSHLogger.shared.log(string: "[1;35mDownloading GitLab Runner Binary from Source[0m\n")
+            downloadCommands = [
+                "rm -rf gitlab-runner",
+                "curl -o gitlab-runner \(config.downloadURL)",
+                "sudo chmod +x gitlab-runner"
+            ]
         }
 
-        let streamOutput = try await sshClient.executeCommandStream(block, inShell: true)
+        let runCommand = """
+            gitlab-runner run-single \
+                -u \(config.gitlabURL.absoluteString) \
+                -t \(config.runnerToken) \
+                --executor \(config.executor) \
+                --max-builds \(config.maxNumberOfBuilds)
+        """
+
+        let command = (downloadCommands + [runCommand]).joined(separator: " && ")
+
+        let streamOutput = try await sshClient.executeCommandStream(command, inShell: true)
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
@@ -40,50 +38,6 @@ class GitLabRunnerProvisioner: Provisioner {
             case let .stderr(stderr):
                 await SSHLogger.shared.log(string: String(buffer: stderr))
             }
-        }
-    }
-
-    func deprovision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        if let runnerToken {
-            try await service.deregisterRunner(runnerToken: runnerToken)
-        } else {
-            print("Nothing to deregister, skipping...")
-        }
-        return
-    }
-
-    private func setRunnerEndpointURL(bundle: VMBundle, url: URL) throws {
-//        let tokenPath = bundle.runnerEndpointURL.relativePath
-//        guard fileManager.createFile(atPath: tokenPath, contents: url.absoluteString.data(using: .utf8)) else {
-//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-//        }
-    }
-
-    private func setRunnerToken(bundle: VMBundle, token: String) throws {
-//        let tokenPath = bundle.runnerTokenURL.relativePath
-//        guard fileManager.createFile(atPath: tokenPath, contents: token.data(using: .utf8)) else {
-//            throw GitLabRunnerProvisioner.Error.couldNotCreateRunnerTokenFile(path: tokenPath)
-//        }
-    }
-}
-
-extension GitLabRunnerProvisioner {
-    enum Error: Swift.Error {
-        case couldNotCreateRunnerTokenFile(path: String)
-        case couldNotCreateRunnerEndpointFile(path: String)
-        case invalidConfiguration(reason: String)
-    }
-}
-
-extension GitLabRunnerProvisioner.Error: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case let .couldNotCreateRunnerTokenFile(path):
-            return "Could not create Runner Token File at \(path)"
-        case let .couldNotCreateRunnerEndpointFile(path):
-            return "Could not create Runner Endpoint File at \(path)"
-        case let .invalidConfiguration(reason):
-            return "Configuration invalid: \(reason)"
         }
     }
 }

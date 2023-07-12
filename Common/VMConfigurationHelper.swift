@@ -24,7 +24,7 @@ class VMConfigHelper {
         virtualMachineConfiguration.bootLoader = VZMacOSBootLoader()
         virtualMachineConfiguration.graphicsDevices = [createGraphicsDeviceConfiguration(width: 1080, height: 920, ppi: 80)]
 
-        virtualMachineConfiguration.storageDevices = [try createBlockDeviceConfiguration()]
+        virtualMachineConfiguration.storageDevices = try [createBlockDeviceConfiguration()]
 
         virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: vmBundle.configuration.macAddress)]
         virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]

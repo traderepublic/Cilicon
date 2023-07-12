@@ -78,8 +78,8 @@ struct Config: Codable {
         self.hardware = try container.decodeIfPresent(HardwareConfig.self, forKey: .hardware) ?? .default
         self.directoryMounts = try container.decodeIfPresent([DirectoryMountConfig].self, forKey: .directoryMounts) ?? []
         self.source = try container.decode(VMSource.self, forKey: .source)
-        self.vmClonePath = (
-            try container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }
+        self.vmClonePath = try (
+            container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }
         ) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
