@@ -6,7 +6,7 @@ class ConfigManager {
         .map { NSHomeDirectory() + $0 }
 
     static var fileExists: Bool {
-        configPaths.compactMap(FileManager.default.fileExists).contains(true)
+        configPaths.map(FileManager.default.fileExists).contains(true)
     }
 
     let config: Config
