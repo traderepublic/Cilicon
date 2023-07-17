@@ -19,12 +19,8 @@ class GitHubActionsProvisioner: Provisioner {
     }
 
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        let org = gitHubConfig.organization
-        let appId = gitHubConfig.appId
         await SSHLogger.shared.log(string: "[1;35mFetching Github Runner Token[0m\n")
-        guard let installation = try await service.getInstallations().first(where: { $0.account.login == gitHubConfig.organization }) else {
-            throw GitHubActionsProvisionerError.githubAppNotInstalled(appID: appId, org: org)
-        }
+        let installation = try await service.getInstallation()
         let authToken = try await service.getInstallationToken(installation: installation)
         let token = try await service.createRunnerToken(token: authToken.token)
 
@@ -47,7 +43,7 @@ class GitHubActionsProvisioner: Provisioner {
 
         var configCommandComponents = [
             "~/actions-runner/config.sh",
-            "--url \(gitHubConfig.organizationURL)",
+            "--url \(gitHubConfig.url)",
             "--name '\(runnerName)'",
             "--token \(token.token)",
             "--replace",

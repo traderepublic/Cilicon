@@ -7,6 +7,8 @@ struct GitHubProvisionerConfig: Decodable {
     let appId: Int
     /// The organization slug
     let organization: String
+    /// The repository name
+    let repository: String?
     /// Path to the private key `.pem` file downloaded from the Github App page
     let privateKeyPath: String
     /// Extra labels to add to the runner
@@ -16,7 +18,7 @@ struct GitHubProvisionerConfig: Decodable {
 
     let runnerGroup: String?
 
-    let organizationURL: URL
+    let url: URL
 
     enum CodingKeys: CodingKey {
         case apiURL
@@ -25,8 +27,9 @@ struct GitHubProvisionerConfig: Decodable {
         case privateKeyPath
         case extraLabels
         case runnerGroup
-        case organizationURL
+        case url
         case downloadLatest
+        case repository
     }
 
     init(from decoder: Decoder) throws {
@@ -34,10 +37,15 @@ struct GitHubProvisionerConfig: Decodable {
         self.apiURL = try container.decodeIfPresent(URL.self, forKey: .apiURL)
         self.appId = try container.decode(Int.self, forKey: .appId)
         self.organization = try container.decode(String.self, forKey: .organization)
+        self.repository = try container.decodeIfPresent(String.self, forKey: .repository)
         self.privateKeyPath = try (container.decode(String.self, forKey: .privateKeyPath) as NSString).standardizingPath
         self.extraLabels = try container.decodeIfPresent([String].self, forKey: .extraLabels)
         self.runnerGroup = try container.decodeIfPresent(String.self, forKey: .runnerGroup)
-        self.organizationURL = try container.decodeIfPresent(URL.self, forKey: .organizationURL) ?? URL(string: "https://github.com/\(organization)")!
+        var fallbackURL = URL(string: "https://github.com/\(organization)")!
+        if let repo = self.repository {
+            fallbackURL.appendPathComponent(repo)
+        }
+        self.url = try container.decodeIfPresent(URL.self, forKey: .url) ?? fallbackURL
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
     }
 }
