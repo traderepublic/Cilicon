@@ -24,19 +24,44 @@ class GitHubService {
         self.urlSession = URLSession(configuration: config)
     }
 
-    func installationsURL() -> URL {
+    private var orgInstallationURL: URL {
         baseURL
-            .appendingPathComponent("app")
-            .appendingPathComponent("installations")
+            .appendingPathComponent("orgs")
+            .appendingPathComponent(config.organization)
+            .appendingPathComponent("installation")
+    }
+
+    private func repoInstallationURL(repo: String) -> URL {
+        baseURL
+            .appendingPathComponent("repos")
+            .appendingPathComponent(config.organization)
+            .appendingPathComponent(repo)
+            .appendingPathComponent("installation")
+    }
+
+    var installationURL: URL {
+        if let repo = config.repository {
+            return repoInstallationURL(repo: repo)
+        }
+        return orgInstallationURL
     }
 
     func installationFetchURL(installationId: Int) -> URL {
-        installationsURL()
+        baseURL
+            .appendingPathComponent("app")
+            .appendingPathComponent("installations")
             .appendingPathComponent(String(installationId))
             .appendingPathComponent("access_tokens")
     }
 
-    func actionsURL() -> URL {
+    var actionsURL: URL {
+        if let repo = config.repository {
+            return repoActionsURL(repo: repo)
+        }
+        return orgActionsURL
+    }
+
+    private var orgActionsURL: URL {
         baseURL
             .appendingPathComponent("orgs")
             .appendingPathComponent(config.organization)
@@ -44,25 +69,34 @@ class GitHubService {
             .appendingPathComponent("runners")
     }
 
+    private func repoActionsURL(repo: String) -> URL {
+        baseURL
+            .appendingPathComponent("repos")
+            .appendingPathComponent(config.organization)
+            .appendingPathComponent(repo)
+            .appendingPathComponent("actions")
+            .appendingPathComponent("runners")
+    }
+
     func runnerTokenURL() -> URL {
-        actionsURL()
+        actionsURL
             .appendingPathComponent("registration-token")
     }
 
     func runnerDownloadsURL() -> URL {
-        actionsURL()
+        actionsURL
             .appendingPathComponent("downloads")
     }
 
-    func getInstallations() async throws -> [Installation] {
+    func getInstallation() async throws -> Installation {
         let jwtToken = try GitHubAppAuthHelper.generateJWTToken(pemPath: config.privateKeyPath, appId: config.appId)
         let (data, _) = try await authenticatedRequest(
-            url: installationsURL(),
+            url: installationURL,
             method: "GET",
             token: jwtToken
         )
-        let installations = try decoder.decode([Installation].self, from: data)
-        return installations
+        let installation = try decoder.decode(Installation.self, from: data)
+        return installation
     }
 
     func getInstallationToken(installation: Installation) async throws -> AccessToken {

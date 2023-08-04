@@ -43,7 +43,7 @@ struct CiliconApp: App {
                         sshCredentials: .init(username: "admin", password: "admin")
                     )
 
-                    try? YAMLEncoder().encode(config).write(toFile: ConfigManager.path, atomically: true, encoding: .utf8)
+                    try? YAMLEncoder().encode(config).write(toFile: ConfigManager.configPaths[0], atomically: true, encoding: .utf8)
                     restart()
                 }
             }
