@@ -51,8 +51,12 @@ class VMManager: NSObject, ObservableObject {
 
             if case let .OCI(ociURL) = config.source {
                 let resolvedPath = masterBundle.url.resolvingSymlinksInPath().appendingPathComponent("disk").appendingPathExtension("img").path
-                if try fileManager.fileExists(atPath: resolvedPath) && !isBundleComplete() {
-                    try fileManager.removeItem(atPath: resolvedPath)
+                if fileManager.fileExists(atPath: resolvedPath) {
+                    if isBundleComplete() {
+                        removeDownloadedChunks()
+                    } else {
+                        try fileManager.removeItem(atPath: resolvedPath)
+                    }
                 }
                 if !fileManager.fileExists(atPath: resolvedPath) {
                     try await withTaskCancellationHandler(operation: {
@@ -156,7 +160,7 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
-    func isBundleComplete() throws -> Bool {
+    func isBundleComplete() -> Bool {
         let filesExist = [
             masterBundle.diskImageURL,
             masterBundle.configURL,
@@ -191,6 +195,11 @@ class VMManager: NSObject, ObservableObject {
         if fileManager.fileExists(atPath: clonedBundle.url.relativePath) {
             try fileManager.removeItem(atPath: clonedBundle.url.relativePath)
         }
+    }
+
+    func removeDownloadedChunks() {
+        let chunksPath = masterBundle.url.resolvingSymlinksInPath().appendingPathComponent("chunks")
+        try? fileManager.removeItem(at: chunksPath)
     }
 
     func cleanup() throws {
