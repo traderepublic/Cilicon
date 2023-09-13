@@ -250,8 +250,6 @@ class VMManager: NSObject, ObservableObject {
         try await downloadAllLayers(imgLayers, to: chunkBasePath, using: client)
         try await combineChunks(at: chunkBasePath, into: bundleForPaths.diskImageURL)
 
-        // TODO: Remove chunks from disk
-
         try fileManager.removeItem(at: masterBundle.unfinishedURL)
     }
 
