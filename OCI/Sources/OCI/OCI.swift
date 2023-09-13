@@ -121,7 +121,11 @@ public struct OCI {
         onProgress: @escaping (Int) -> Void,
         headers: [String: String] = [:]
     ) async throws {
-        let client = HTTPClient(eventLoopGroupProvider: .createNew)
+        let client = HTTPClient(eventLoopGroupProvider: .singleton)
+        defer {
+            _ = client.shutdown()
+        }
+
         var request = try HTTPClient.Request(url: url.absoluteString)
         for (headerName, headerValue) in headers {
             request.headers.replaceOrAdd(name: headerName, value: headerValue)
@@ -157,14 +161,12 @@ public struct OCI {
                 guard let auth = WWWAuthenticate(authenticateHeaderField: authHeader) else {
                     fatalError("Could not create auth header from response")
                 }
-                let token = try! await authenticate(data: auth)
-                try! await self.streamDownload(authentication: .bearer(token: token), from: url, to: targetURL, onProgress: onProgress)
+                let token = try await authenticate(data: auth)
+                try await self.streamDownload(authentication: .bearer(token: token), from: url, to: targetURL, onProgress: onProgress)
             } else {
-                fatalError(error.localizedDescription)
+                throw error
             }
         }
-
-        try await client.shutdown()
     }
 
     public enum AuthenticationType {
