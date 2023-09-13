@@ -64,10 +64,18 @@ struct ContentView: View {
                 Text("Copying image from external volume")
             case let .downloading(text, progress):
                 let fProgress = self.progressFormatter.string(from: NSNumber(value: progress))!
-                VStack {
+                ProgressView(value: progress) {
                     Text("Downloading \(text) - \(fProgress)")
-                    ProgressView(value: progress).frame(width: 500, alignment: .center)
                 }
+                .font(Font.system(.body).monospacedDigit())
+                .frame(width: 500, alignment: .center)
+            case let .decompressing(progress):
+                let fProgress = self.progressFormatter.string(from: NSNumber(value: progress))!
+                ProgressView(value: progress) {
+                    Text("Decompressing - \(fProgress)")
+                }
+                .font(Font.system(.body).monospacedDigit())
+                .frame(width: 500, alignment: .center)
             case .legacyWarning:
                 Text("The Bundle you have selected is in the legacy format. Do you want to convert it?")
                 Button("Yes Please", action: vmManager.upgradeImageFromLegacy)

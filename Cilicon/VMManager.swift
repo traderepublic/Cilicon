@@ -331,7 +331,10 @@ class VMManager: NSObject, ObservableObject {
 
         var buffer = [UInt8](repeating: 0, count: bufferSizeBytes)
 
-        for chunkFile in sortedChunkFiles {
+        for (index, chunkFile) in sortedChunkFiles.enumerated() {
+            DispatchQueue.main.async {
+                self.vmState = .decompressing(progress: Double(index) / Double(sortedChunkFiles.count))
+            }
             if let inputStream = InputStream(url: chunkFile) {
                 inputStream.open()
 
@@ -402,6 +405,7 @@ enum VMState {
     case provisioning
     case running(VZVirtualMachine)
     case downloading(text: String, progress: Double)
+    case decompressing(progress: Double)
     case legacyWarning(path: String)
     case legacyUpgradeFailed
 }
