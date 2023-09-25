@@ -11,7 +11,7 @@ class GitLabRunnerProvisioner: Provisioner {
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         var downloadCommands: [String] = []
 
-        await SSHLogger.shared.log(string: "Copying config.toml to VM".magentaBold)
+        await SSHLogger.shared.log(string: "Configuring GitLab Runner...".magentaBold)
         let copyConfigTomlCommand = """
         mkdir -p ~/.gitlab-runner
         rm -rf ~/.gitlab-runner/config.toml
@@ -25,13 +25,8 @@ class GitLabRunnerProvisioner: Provisioner {
         EOF
         exit 1
         """
-
-        do {
-            try await executeCommand(command: copyConfigTomlCommand, sshClient: sshClient)
-        } catch {
-            fatalError(error.localizedDescription)
-        }
-        await SSHLogger.shared.log(string: "Copied config.toml successfully".greenBold)
+        try await executeCommand(command: copyConfigTomlCommand, sshClient: sshClient)
+        await SSHLogger.shared.log(string: "Successfully configured GitLab Runner".greenBold)
 
         if config.downloadLatest {
             await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary from Source".magentaBold)
