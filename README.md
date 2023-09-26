@@ -104,6 +104,8 @@ provisioner:
     maxNumberOfBuilds: <MAX_BUILDS> # defaults to '1'
     downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'
     downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
+    configToml: > # Advanced config as custom config.toml file to be appended to the basic config and copied to the runner.
+      <CONFIG_TOML>
 ```
 
 #### Buildkite Agent
