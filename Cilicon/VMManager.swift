@@ -173,8 +173,10 @@ class VMManager: NSObject, ObservableObject {
             NSApplication.shared.terminate(nil)
             return
         }
-        if let runsTilReboot = config.numberOfRunsUntilHostReboot, runCounter >= runsTilReboot {
-            AppleEvent.restart.perform()
+        if let runsTilExit = config.exitBehavior?.numberOfRuns, runCounter >= runsTilExit {
+            if let rebootAfterExit = config.exitBehavior?.reboot, rebootAfterExit {
+                AppleEvent.restart.perform()
+            }
             NSApplication.shared.terminate(nil)
             return
         }
