@@ -1,8 +1,11 @@
 import Foundation
+import os.log
 
 @MainActor
 final class SSHLogger: ObservableObject {
     static let shared = SSHLogger()
+
+    private let osLogger = Logger(category: "SSH")
 
     private init() { }
 
@@ -25,6 +28,9 @@ final class SSHLogger: ObservableObject {
     func log(string: String) {
         /// Skip empty logs
         guard string.isNotBlank else { return }
+
+        osLogger.notice("\(ANSIParser.stripped(string), privacy: .public)")
+
         if log.isEmpty {
             log = [LogChunk(text: string)]
             return

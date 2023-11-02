@@ -56,6 +56,7 @@
 		A9FDAB2129375D0200B8CA1F /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = A9FDAB2029375D0200B8CA1F /* Yams */; };
 		A9FDAB2329375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */; };
 		A9FDAB2429375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */; };
+		F91B8E952AF3D1B30094E352 /* Logger+Cilicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91B8E942AF3D1B30094E352 /* Logger+Cilicon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,6 +106,7 @@
 		A9FDAB0F292E33F800B8CA1F /* Installer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Installer.entitlements; sourceTree = "<group>"; };
 		A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSound+SystemSounds.swift"; sourceTree = "<group>"; };
 		A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryMountConfig.swift; sourceTree = "<group>"; };
+		F91B8E942AF3D1B30094E352 /* Logger+Cilicon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Cilicon.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,13 +203,13 @@
 				A9728DD42918F79000342A77 /* CiliconApp.swift */,
 				A9FC3D0F2A127BE900535E9C /* VMSource.swift */,
 				A9728DD62918F79000342A77 /* ContentView.swift */,
-				A97080732A03F688006E044D /* SSHLogger.swift */,
 				629EA1322A05A6BC00899D73 /* ANSIParser.swift */,
 				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
 				A9728DE72918F7D000342A77 /* VMManager.swift */,
 				A9728E022918F9A800342A77 /* Provisioner */,
 				A9728E0C2918F9CF00342A77 /* AppleEvents */,
 				A9728DF52918F98500342A77 /* Config */,
+				F91B8E962AF3D1BE0094E352 /* Logging */,
 				A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */,
 				A970806E2A03B999006E044D /* LeaseParser.swift */,
 				A9728DD82918F79100342A77 /* Assets.xcassets */,
@@ -284,6 +286,15 @@
 				A9FDAB0F292E33F800B8CA1F /* Installer.entitlements */,
 			);
 			path = Installer;
+			sourceTree = "<group>";
+		};
+		F91B8E962AF3D1BE0094E352 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				A97080732A03F688006E044D /* SSHLogger.swift */,
+				F91B8E942AF3D1B30094E352 /* Logger+Cilicon.swift */,
+			);
+			path = Logging;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -444,6 +455,7 @@
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
 				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
 				A9728E092918F9C600342A77 /* GitHubService.swift in Sources */,
+				F91B8E952AF3D1B30094E352 /* Logger+Cilicon.swift in Sources */,
 				0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,

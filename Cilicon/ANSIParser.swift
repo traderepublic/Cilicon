@@ -4,6 +4,7 @@ struct ANSIParser {
     typealias Color = NSColor
     typealias Font = NSFont
     static let fontName = "Andale Mono"
+    private static let regex = /\[[0-9;]+m/
 
     static let defaultFont = Font.monospacedSystemFont(ofSize: Font.systemFontSize, weight: .regular)
     static let defaultAttributes: [NSAttributedString.Key: Any] = [
@@ -11,7 +12,6 @@ struct ANSIParser {
     ]
 
     static func parse(_ log: String) -> AttributedString {
-        guard let regex = try? Regex(#"\[[0-9;]+m"#) else { return .init(log) }
         var result = AttributedString()
         let ranges = log.ranges(of: regex)
         /// Create copy of ranges offset by 1, playing a role of next
@@ -31,10 +31,15 @@ struct ANSIParser {
 
         /// Fallback in case failed to parse
         if result.characters.isEmpty {
-            result.append(AttributedString(log.replacing(regex, with: { _ in "" }), attributes: .init(Self.defaultAttributes)))
+            result.append(AttributedString(log.replacing(regex, with: ""), attributes: .init(Self.defaultAttributes)))
         }
 
         return result
+    }
+
+    /// Strips ANSI codes from the log
+    static func stripped(_ log: String) -> String {
+        log.replacing(regex, with: "")
     }
 
     private static func attributesFor(ansiCode: String) -> [NSAttributedString.Key: Any] {
