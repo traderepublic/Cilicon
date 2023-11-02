@@ -2,6 +2,7 @@ import Citadel
 import Compression
 import Foundation
 import OCI
+import os.log
 import Virtualization
 
 class VMManager: NSObject, ObservableObject {
@@ -17,6 +18,8 @@ class VMManager: NSObject, ObservableObject {
     var activeBundle: VMBundle {
         config.editorMode ? masterBundle : clonedBundle
     }
+
+    private let osLogger = Logger(category: "VMManager")
 
     @Published
     var vmState: VMState = .initializing
@@ -61,6 +64,7 @@ class VMManager: NSObject, ObservableObject {
             }
             try await setupAndRunVirtualMachine()
         } catch {
+            osLogger.error("\(error, privacy: .public)")
             vmState = .failed(error.localizedDescription)
             try await Task.sleep(for: .seconds(config.retryDelay))
             try await setupAndRunVM()
@@ -111,7 +115,8 @@ class VMManager: NSObject, ObservableObject {
             reconnect: .always
         )
 
-        print("IP Address: \(ip)")
+        osLogger.debug("IP Address: \(ip, privacy: .public)")
+
         if let preRun = config.preRun {
             let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
             for try await blob in streamOutput {
@@ -128,7 +133,7 @@ class VMManager: NSObject, ObservableObject {
             do {
                 try await provisioner.provision(bundle: activeBundle, sshClient: client)
             } catch {
-                print(error.localizedDescription)
+                osLogger.error("\(error, privacy: .public)")
             }
         }
 
@@ -267,14 +272,14 @@ class VMManager: NSObject, ObservableObject {
 
 extension VMManager: VZVirtualMachineDelegate {
     func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: Error) {
-        print("Virtual machine did stop with error: \(error.localizedDescription)")
+        osLogger.error("Virtual machine did stop with error: \(error, privacy: .public)")
         Task {
             try await self.handleStop()
         }
     }
 
     func guestDidStop(_ virtualMachine: VZVirtualMachine) {
-        print("Guest did stop virtual machine.")
+        osLogger.info("Guest did stop virtual machine.")
         Task {
             try await self.handleStop()
         }
