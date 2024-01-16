@@ -15,7 +15,13 @@ class LayerV2Downloader: Downloader {
         if !FileManager.default.createFile(atPath: diskURL.path, contents: nil) {
             fatalError("failed to create file at path \(diskURL.path)")
         }
-        var uncompressedDiskSize: UInt64 = 0
+
+        var uncompressedDiskSize: UInt64 = diskLayers.reduce(0) {
+            guard let uncompressed = $1.uncompressedSize else {
+                fatalError()
+            }
+            return $0 + uncompressed
+        }
 
         for layer in diskLayers {
             guard let uncompressedLayerSize = layer.uncompressedSize else {
