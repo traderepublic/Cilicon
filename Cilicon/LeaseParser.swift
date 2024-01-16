@@ -1,15 +1,18 @@
 import Foundation
 
-struct LeaseParser {
-    static func parseLeases() -> [Lease] {
+enum LeaseParser {
+    static func parseLeases() throws -> [Lease] {
         let fileName = "/var/db/dhcpd_leases"
-        let leasesString = try! String(contentsOfFile: fileName)
+        let leasesString = try String(contentsOfFile: fileName)
         let leases = leasesString.split(separator: "}\n")
         return leases.compactMap { Lease(from: String($0)) }
     }
 
-    static func leaseForMacAddress(mac: String) -> Lease? {
-        return parseLeases().first(where: { $0.hwAddress == mac })
+    static func leaseForMacAddress(mac: String) throws -> Lease {
+        guard let lease = try parseLeases().first(where: { $0.hwAddress == mac }) else {
+            throw Error.leaseNotFound(mac: mac)
+        }
+        return lease
     }
 
     struct Lease {
@@ -44,9 +47,18 @@ struct LeaseParser {
             self.hwAddress = macAddress
         }
     }
-}
 
-import Foundation
+    enum Error: Swift.Error, LocalizedError {
+        case leaseNotFound(mac: String)
+
+        var errorDescription: String? {
+            switch self {
+            case let .leaseNotFound(mac):
+                return "Could not find lease for mac address \(mac)"
+            }
+        }
+    }
+}
 
 struct MACAddress: Equatable, Hashable, CustomStringConvertible {
     var mac: [UInt8] = Array(repeating: 0, count: 6)

@@ -1,7 +1,7 @@
 import Foundation
 
 struct Config: Codable {
-    internal init(
+    init(
         provisioner: ProvisionerConfig,
         hardware: HardwareConfig,
         directoryMounts: [DirectoryMountConfig],

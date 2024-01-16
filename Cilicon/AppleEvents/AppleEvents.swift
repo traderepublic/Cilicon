@@ -1,4 +1,5 @@
 import CoreServices
+
 // From https://github.com/soffes/spotlight-tools/tree/master/UtilityKit
 import Foundation
 

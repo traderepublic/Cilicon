@@ -1,6 +1,6 @@
 import AppKit
 
-struct ANSIParser {
+enum ANSIParser {
     typealias Color = NSColor
     typealias Font = NSFont
     static let fontName = "Andale Mono"
