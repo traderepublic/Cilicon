@@ -37,6 +37,10 @@
 		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
 		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
+		A9CBD4142AD6C06900C6D47F /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBD4132AD6C06900C6D47F /* Downloader.swift */; };
+		A9CCFAA82B4C31FD002631F4 /* Descriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */; };
+		A9CCFAAB2B4C32C3002631F4 /* LayerV1Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */; };
+		A9CCFAAD2B4C32D3002631F4 /* LayerV2Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */; };
 		A9FA15C82A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */; };
 		A9FA15C92A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */; };
 		A9FA15CA2A1CA7ED0085A676 /* VMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* VMConfig.swift */; };
@@ -95,6 +99,10 @@
 		A9728E122918FA4700342A77 /* AppleEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleEvents.swift; sourceTree = "<group>"; };
 		A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cilicon-Bridging-Header.h"; sourceTree = "<group>"; };
 		A98EEC3D2A0BB17200442399 /* OCI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = OCI; sourceTree = "<group>"; };
+		A9CBD4132AD6C06900C6D47F /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Descriptor+Extensions.swift"; sourceTree = "<group>"; };
+		A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerV1Downloader.swift; sourceTree = "<group>"; };
+		A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerV2Downloader.swift; sourceTree = "<group>"; };
 		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
 		A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVMBundle.swift; sourceTree = "<group>"; };
 		A9FC3D0F2A127BE900535E9C /* VMSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMSource.swift; sourceTree = "<group>"; };
@@ -205,6 +213,7 @@
 				629EA1322A05A6BC00899D73 /* ANSIParser.swift */,
 				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
 				A9728DE72918F7D000342A77 /* VMManager.swift */,
+				A9CCFAA92B4C32AE002631F4 /* Downloader */,
 				A9728E022918F9A800342A77 /* Provisioner */,
 				A9728E0C2918F9CF00342A77 /* AppleEvents */,
 				A9728DF52918F98500342A77 /* Config */,
@@ -212,6 +221,7 @@
 				A970806E2A03B999006E044D /* LeaseParser.swift */,
 				A9728DD82918F79100342A77 /* Assets.xcassets */,
 				A9728DDD2918F79100342A77 /* Cilicon.entitlements */,
+				A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */,
 			);
 			path = Cilicon;
 			sourceTree = "<group>";
@@ -271,6 +281,16 @@
 				A98EEC3D2A0BB17200442399 /* OCI */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		A9CCFAA92B4C32AE002631F4 /* Downloader */ = {
+			isa = PBXGroup;
+			children = (
+				A9CBD4132AD6C06900C6D47F /* Downloader.swift */,
+				A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */,
+				A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */,
+			);
+			path = Downloader;
 			sourceTree = "<group>";
 		};
 		A9FDAB05292E33F700B8CA1F /* Installer */ = {
@@ -338,7 +358,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -409,7 +429,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftformat >/dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = "exit 0\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftformat >/dev/null; then\n swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -423,11 +443,13 @@
 				A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */,
 				A9FA15C82A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */,
 				629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */,
+				A9CCFAA82B4C31FD002631F4 /* Descriptor+Extensions.swift in Sources */,
 				A961960729DC3A0B0095CAEC /* VMConfig.swift in Sources */,
 				A9728DD52918F79000342A77 /* CiliconApp.swift in Sources */,
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
 				A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */,
 				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
+				A9CBD4142AD6C06900C6D47F /* Downloader.swift in Sources */,
 				A97080792A041628006E044D /* BuildkiteAgentProvisionerConfig.swift in Sources */,
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
@@ -440,12 +462,14 @@
 				A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */,
 				A9728DFF2918F9A000342A77 /* Config.swift in Sources */,
 				A9728DE82918F7D000342A77 /* VMManager.swift in Sources */,
+				A9CCFAAB2B4C32C3002631F4 /* LayerV1Downloader.swift in Sources */,
 				A9FC3D102A127BE900535E9C /* VMSource.swift in Sources */,
 				A9728E052918F9BF00342A77 /* Provisioner.swift in Sources */,
 				A9FDAB1D292E5A2E00B8CA1F /* NSSound+SystemSounds.swift in Sources */,
 				A9728E092918F9C600342A77 /* GitHubService.swift in Sources */,
 				0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
+				A9CCFAAD2B4C32D3002631F4 /* LayerV2Downloader.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,
 				A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */,
 				A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */,
@@ -478,6 +502,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -540,6 +565,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -573,6 +599,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -613,7 +640,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -646,7 +673,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -679,7 +706,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -711,7 +738,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.traderepublic.cilicon-installer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

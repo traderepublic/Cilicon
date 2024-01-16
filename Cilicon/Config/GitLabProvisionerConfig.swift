@@ -17,8 +17,10 @@ struct GitLabProvisionerConfig: Decodable {
     /// Only used if `downloadLatest` is set to `true`
     /// Defaults to the latest macOS binary from GitLab's S3 bucket
     let downloadURL: String
-    /// Optional advanced configuration for the GitLab Runner, will be appended to the `config.toml` file after the preconfigured `[[runners]]` section.
-    /// The values for `url`, `token`, `executor` and `limit` are already configured using the values specified in the Cilicon configuration file and should not be duplicated in this field.
+    /// Optional advanced configuration for the GitLab Runner, will be appended to the `config.toml` file after the preconfigured `[[runners]]`
+    /// section.
+    /// The values for `url`, `token`, `executor` and `limit` are already configured using the values specified in the Cilicon configuration file and
+    /// should not be duplicated in this field.
     /// - seealso: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
     let configToml: String?
 

@@ -2,7 +2,7 @@ import Foundation
 import Virtualization
 
 struct VMConfig: Codable {
-    internal init(arch: VMConfig.Arch, os: VMConfig.OS, hardwareModel: VZMacHardwareModel, ecid: VZMacMachineIdentifier, macAddress: VZMACAddress) {
+    init(arch: VMConfig.Arch, os: VMConfig.OS, hardwareModel: VZMacHardwareModel, ecid: VZMacMachineIdentifier, macAddress: VZMACAddress) {
         self.arch = arch
         self.os = os
         self.hardwareModel = hardwareModel

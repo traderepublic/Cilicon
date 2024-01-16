@@ -1,4 +1,5 @@
 import Citadel
+import Combine
 import Compression
 import Foundation
 import OCI
@@ -208,7 +209,7 @@ class VMManager: NSObject, ObservableObject {
         }
 
         Task { @MainActor in
-            vmState = .downloading(text: "config.json", progress: 0)
+            vmState = .downloading(text: "config", progress: 0)
         }
         let configData = try await client.pullBlobData(digest: configLayer.digest)
         try configData.write(to: bundleForPaths.configURL)
@@ -216,39 +217,41 @@ class VMManager: NSObject, ObservableObject {
 
         let totalSize = manifest.layers.map(\.size).reduce(into: Int64(0), +=)
 
-        let bufferSizeBytes = 64 * 1024 * 1024
-
         let diskURL = bundleForPaths.diskImageURL
-        fileManager.createFile(atPath: diskURL.path, contents: nil)
 
-        let disk = try FileHandle(forWritingTo: diskURL)
-        let filter = try OutputFilter(.decompress, using: .lz4, bufferCapacity: bufferSizeBytes) { data in
-            if let data {
-                disk.write(data)
-            }
-        }
+        let imgLayers = manifest.layers.filter { $0.mediaType.starts(with: "application/vnd.cirruslabs.tart.disk.") }
 
-        let imgLayers = manifest.layers.filter { $0.mediaType == "application/vnd.cirruslabs.tart.disk.v1" }
-        var lastDataCount = 0
-        var lastProgress: Double = -1
-        for (index, layer) in imgLayers.enumerated() {
-            var data = Data()
-            data.reserveCapacity(Int(layer.size))
-            for try await byte in try await client.pullBlob(digest: layer.digest) {
-                data.append(byte)
-                let progress = Double(data.count + lastDataCount) / Double(totalSize)
-                if progress - lastProgress > 0.001 {
-                    lastProgress = progress
-                    Task { @MainActor in
-                        vmState = .downloading(text: "disk image layer \(index + 1)/\(imgLayers.count)", progress: progress)
-                    }
-                }
-            }
-            lastDataCount += data.count
-            try filter.write(data)
+        let prog = Progress()
+        prog.totalUnitCount = totalSize
+        let progCanc = prog
+            .publisher(for: \.fractionCompleted)
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { [weak self] in
+                self?.vmState = .downloading(text: "layers", progress: $0)
+            })
+        // trigger state update
+        prog.completedUnitCount = 0
+
+        switch imgLayers.first?.mediaType {
+        case "application/vnd.cirruslabs.tart.disk.v2":
+            try await LayerV2Downloader.pull(
+                registry: client,
+                diskLayers: imgLayers,
+                diskURL: diskURL,
+                concurrency: 4,
+                progress: prog
+            )
+        default:
+            try await LayerV1Downloader.pull(
+                registry: client,
+                diskLayers: imgLayers,
+                diskURL: diskURL,
+                concurrency: 0,
+                progress: prog
+            )
         }
-        try filter.finalize()
-        try disk.close()
+        progCanc.cancel()
+
         // Getting NVRAM
         Task { @MainActor in
             vmState = .downloading(text: "NVRAM", progress: 0)

@@ -10,7 +10,7 @@ struct HardwareConfig: Codable {
         )
     }
 
-    internal init(ramGigabytes: UInt64, cpuCores: Int? = nil, display: HardwareConfig.DisplayConfig, connectsToAudioDevice: Bool) {
+    init(ramGigabytes: UInt64, cpuCores: Int? = nil, display: HardwareConfig.DisplayConfig, connectsToAudioDevice: Bool) {
         self.ramGigabytes = ramGigabytes
         self.cpuCores = cpuCores
         self.display = display

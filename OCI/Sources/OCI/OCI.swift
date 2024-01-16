@@ -27,15 +27,9 @@ public struct OCI {
         return try (contentDigest, jsonDecoder.decode(Manifest.self, from: data))
     }
 
-    public func pullBlob(digest: String, authentication: AuthenticationType = .none) async throws -> URLSession.AsyncBytes {
-        let blobUrl = baseURL.appending(path: "blobs/\(digest)")
-        let (data, _) = try await download(authentication: authentication, url: blobUrl)
-        return data
-    }
-
     public func pullBlobData(digest: String, authentication: AuthenticationType = .none) async throws -> Data {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
-        let (data, _) = try await request(authentication: authentication, url: blobUrl)
+        let (data, _) = try await download(authentication: authentication, url: blobUrl)
         return data
     }
 
@@ -66,6 +60,7 @@ public struct OCI {
         case .none:
             break
         }
+
         let (data, response) = try await urlSession.data(for: request)
         guard let httpResp = response as? HTTPURLResponse else {
             throw OCIError.generic
@@ -85,7 +80,7 @@ public struct OCI {
         authentication: AuthenticationType,
         url: URL,
         headers: [String: String] = [:]
-    ) async throws -> (URLSession.AsyncBytes, HTTPURLResponse) {
+    ) async throws -> (Data, HTTPURLResponse) {
         var request = URLRequest(url: url)
         for (headerName, headerValue) in headers {
             request.setValue(headerValue, forHTTPHeaderField: headerName)
@@ -93,7 +88,10 @@ public struct OCI {
         if case let .bearer(token) = authentication {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        let (data, response) = try await urlSession.bytes(for: request)
+        let (fileURL, response) = try await urlSession.download(for: request)
+        let data = try Data(contentsOf: fileURL, options: .alwaysMapped)
+        try FileManager.default.removeItem(at: fileURL)
+
         guard let httpResp = response as? HTTPURLResponse else {
             fatalError() // not http
         }
