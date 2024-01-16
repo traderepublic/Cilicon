@@ -3,25 +3,27 @@ import Foundation
 import OCI
 
 class LayerV1Downloader: Downloader {
-    private static let bufferSizeBytes = 4 * 1024 * 1024
-    private static let layerLimitBytes = 500 * 1000 * 1000
-
     static func pull(registry: OCI,
                      diskLayers: [Descriptor],
                      diskURL: URL,
-                     concurrency: UInt,
+                     maxConcurrency: UInt,
                      progress: Progress) async throws {
-        if !FileManager.default.createFile(atPath: diskURL.path, contents: nil) {
-            fatalError()
+        let fm = FileManager.default
+        if fm.fileExists(atPath: diskURL.path) {
+            try fm.removeItem(at: diskURL)
         }
+        if !fm.createFile(atPath: diskURL.path, contents: nil) {
+            fatalError("failed to create file at path \(diskURL.path)")
+        }
+        let diskFileHandle = try FileHandle(forWritingTo: diskURL)
 
-        // Open the disk file
-        let disk = try FileHandle(forWritingTo: diskURL)
-
-        // Decompress the layers onto the disk in a single stream
-        let filter = try OutputFilter(.decompress, using: .lz4, bufferCapacity: Self.bufferSizeBytes) { data in
-            if let data {
-                disk.write(data)
+        let filter = try OutputFilter(
+            .decompress,
+            using: .lz4,
+            bufferCapacity: Self.filterBufferSize
+        ) {
+            if let decompressedData = $0 {
+                diskFileHandle.write(decompressedData)
             }
         }
 
@@ -32,6 +34,6 @@ class LayerV1Downloader: Downloader {
         }
 
         try filter.finalize()
-        try disk.close()
+        try diskFileHandle.close()
     }
 }

@@ -3,62 +3,64 @@ import Foundation
 import OCI
 
 class LayerV2Downloader: Downloader {
-    private static let bufferSizeBytes = 4 * 1024 * 1024
-    private static let layerLimitBytes = 500 * 1000 * 1000
-
     static func pull(registry: OCI,
                      diskLayers: [Descriptor],
                      diskURL: URL,
-                     concurrency: UInt,
+                     maxConcurrency: UInt,
                      progress: Progress) async throws {
-        if !FileManager.default.createFile(atPath: diskURL.path, contents: nil) {
-            fatalError()
+        let fm = FileManager.default
+        if fm.fileExists(atPath: diskURL.path) {
+            try fm.removeItem(at: diskURL)
         }
-        // Calculate the uncompressed disk size
+        if !FileManager.default.createFile(atPath: diskURL.path, contents: nil) {
+            fatalError("failed to create file at path \(diskURL.path)")
+        }
         var uncompressedDiskSize: UInt64 = 0
 
         for layer in diskLayers {
             guard let uncompressedLayerSize = layer.uncompressedSize else {
                 fatalError()
             }
-
             uncompressedDiskSize += uncompressedLayerSize
         }
-
         let disk = try FileHandle(forWritingTo: diskURL)
+        // reserve the space for the uncompressed disk
         try disk.truncate(atOffset: uncompressedDiskSize)
         try disk.close()
 
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            var globalDiskWritingOffset: UInt64 = 0
+        try await withThrowingTaskGroup(of: Void.self) { taskGroup in
+            var totalDiskOffset: UInt64 = 0
 
             for (index, diskLayer) in diskLayers.enumerated() {
-                // Queue if we are already at the concurrency limit
-                if index >= concurrency {
-                    try await group.next()
+                // Start queueing once we reach the max concurrency
+                if index >= maxConcurrency {
+                    try await taskGroup.next()
                 }
 
                 guard let uncompressedLayerSize = diskLayer.uncompressedSize else {
                     fatalError("V2 Layer must have an uncompressed size")
                 }
 
-                let diskWritingOffset = globalDiskWritingOffset
-                group.addTask {
+                let layerDiskOffset = totalDiskOffset
+                taskGroup.addTask {
                     let disk = try FileHandle(forWritingTo: diskURL)
-                    try disk.seek(toOffset: diskWritingOffset)
-                    let filter = try OutputFilter(.decompress, using: .lz4, bufferCapacity: Self.bufferSizeBytes) { data in
-                        if let data {
-                            disk.write(data)
+                    try disk.seek(toOffset: layerDiskOffset)
+                    let filter = try OutputFilter(
+                        .decompress,
+                        using: .lz4,
+                        bufferCapacity: Self.filterBufferSize
+                    ) {
+                        if let decompressedData = $0 {
+                            disk.write(decompressedData)
                         }
                     }
 
                     let data = try await registry.pullBlobData(digest: diskLayer.digest)
-                    progress.completedUnitCount += Int64(data.count)
                     try filter.write(data)
+                    progress.completedUnitCount += Int64(data.count)
                     try disk.close()
                 }
-
-                globalDiskWritingOffset += uncompressedLayerSize
+                totalDiskOffset += uncompressedLayerSize
             }
         }
     }

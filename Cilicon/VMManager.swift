@@ -238,7 +238,7 @@ class VMManager: NSObject, ObservableObject {
                 registry: client,
                 diskLayers: imgLayers,
                 diskURL: diskURL,
-                concurrency: 4,
+                maxConcurrency: 4,
                 progress: prog
             )
         default:
@@ -246,7 +246,7 @@ class VMManager: NSObject, ObservableObject {
                 registry: client,
                 diskLayers: imgLayers,
                 diskURL: diskURL,
-                concurrency: 0,
+                maxConcurrency: 0,
                 progress: prog
             )
         }
