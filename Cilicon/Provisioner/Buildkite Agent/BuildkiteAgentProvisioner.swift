@@ -1,5 +1,6 @@
 import Citadel
 import Foundation
+
 /// The Buildkite Provisioner
 class BuildkiteAgentProvisioner: Provisioner {
     let agentToken: String

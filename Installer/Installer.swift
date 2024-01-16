@@ -124,8 +124,8 @@ class Installer: ObservableObject {
             throw InstallerError.bundleAlreadyExists(bundle.url.relativePath)
         }
         let bundleFolders = [bundle.url]
-        try bundleFolders.forEach {
-            try FileManager.default.createDirectory(at: $0, withIntermediateDirectories: true)
+        for bundleFolder in bundleFolders {
+            try FileManager.default.createDirectory(at: bundleFolder, withIntermediateDirectories: true)
         }
     }
 

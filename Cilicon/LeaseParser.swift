@@ -1,6 +1,6 @@
 import Foundation
 
-struct LeaseParser {
+enum LeaseParser {
     static func parseLeases() throws -> [Lease] {
         let fileName = "/var/db/dhcpd_leases"
         let leasesString = try String(contentsOfFile: fileName)

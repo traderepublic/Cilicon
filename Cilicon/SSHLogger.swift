@@ -15,8 +15,8 @@ final class SSHLogger: ObservableObject {
 
     var combinedLog: String {
         var outString = String()
-        log.forEach {
-            outString.append($0.text)
+        for item in log {
+            outString.append(item.text)
             outString.append("\n")
         }
         return outString
