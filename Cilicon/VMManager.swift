@@ -99,10 +99,7 @@ class VMManager: NSObject, ObservableObject {
             return
         }
         try await Task.sleep(for: .seconds(5))
-        guard let ip = LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string)?.ipAddress else {
-            return
-        }
-        self.ip = ip
+        self.ip = try LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string).ipAddress
 
         let client = try await SSHClient.connect(
             host: ip,
