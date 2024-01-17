@@ -232,24 +232,13 @@ class VMManager: NSObject, ObservableObject {
         // trigger state update
         prog.completedUnitCount = 0
 
-        switch imgLayers.first?.mediaType {
-        case "application/vnd.cirruslabs.tart.disk.v2":
-            try await LayerV2Downloader.pull(
-                registry: client,
-                diskLayers: imgLayers,
-                diskURL: diskURL,
-                maxConcurrency: 4,
-                progress: prog
-            )
-        default:
-            try await LayerV1Downloader.pull(
-                registry: client,
-                diskLayers: imgLayers,
-                diskURL: diskURL,
-                maxConcurrency: 0,
-                progress: prog
-            )
-        }
+        try await LayerV1Downloader.pull(
+            registry: client,
+            diskLayers: imgLayers,
+            diskURL: diskURL,
+            progress: prog
+        )
+
         progCanc.cancel()
 
         // Getting NVRAM

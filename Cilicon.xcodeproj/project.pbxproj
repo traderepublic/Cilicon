@@ -40,7 +40,6 @@
 		A9CBD4142AD6C06900C6D47F /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBD4132AD6C06900C6D47F /* Downloader.swift */; };
 		A9CCFAA82B4C31FD002631F4 /* Descriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */; };
 		A9CCFAAB2B4C32C3002631F4 /* LayerV1Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */; };
-		A9CCFAAD2B4C32D3002631F4 /* LayerV2Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */; };
 		A9FA15C82A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */; };
 		A9FA15C92A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */; };
 		A9FA15CA2A1CA7ED0085A676 /* VMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961960629DC3A0B0095CAEC /* VMConfig.swift */; };
@@ -102,7 +101,6 @@
 		A9CBD4132AD6C06900C6D47F /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Descriptor+Extensions.swift"; sourceTree = "<group>"; };
 		A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerV1Downloader.swift; sourceTree = "<group>"; };
-		A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerV2Downloader.swift; sourceTree = "<group>"; };
 		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
 		A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVMBundle.swift; sourceTree = "<group>"; };
 		A9FC3D0F2A127BE900535E9C /* VMSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMSource.swift; sourceTree = "<group>"; };
@@ -288,7 +286,6 @@
 			children = (
 				A9CBD4132AD6C06900C6D47F /* Downloader.swift */,
 				A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */,
-				A9CCFAAC2B4C32D3002631F4 /* LayerV2Downloader.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -358,7 +355,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -469,7 +466,6 @@
 				A9728E092918F9C600342A77 /* GitHubService.swift in Sources */,
 				0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
-				A9CCFAAD2B4C32D3002631F4 /* LayerV2Downloader.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,
 				A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */,
 				A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */,

@@ -2,7 +2,7 @@ import Foundation
 import OCI
 
 protocol Downloader {
-    static func pull(registry: OCI, diskLayers: [Descriptor], diskURL: URL, maxConcurrency: UInt, progress: Progress) async throws
+    static func pull(registry: OCI, diskLayers: [Descriptor], diskURL: URL, progress: Progress) async throws
 }
 
 extension Downloader {

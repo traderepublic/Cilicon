@@ -6,7 +6,6 @@ class LayerV1Downloader: Downloader {
     static func pull(registry: OCI,
                      diskLayers: [Descriptor],
                      diskURL: URL,
-                     maxConcurrency: UInt,
                      progress: Progress) async throws {
         let fm = FileManager.default
         if fm.fileExists(atPath: diskURL.path) {
