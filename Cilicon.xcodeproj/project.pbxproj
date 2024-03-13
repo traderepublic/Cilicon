@@ -10,6 +10,8 @@
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
 		629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EA1322A05A6BC00899D73 /* ANSIParser.swift */; };
+		A92E97822BA1D5D20052B85D /* LayerV2Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92E97812BA1D5D20052B85D /* LayerV2Downloader.swift */; };
+		A92E97842BA1D5DD0052B85D /* Decompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92E97832BA1D5DD0052B85D /* Decompressor.swift */; };
 		A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C482937ACB500785136 /* ScriptProvisioner.swift */; };
 		A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */; };
 		A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A951BCD8292B966A00FFDACC /* VMConfigHelper+RunConfig.swift */; };
@@ -37,7 +39,6 @@
 		A9728E0F2918FA2300342A77 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = A9728E0E2918FA2300342A77 /* SwiftJWT */; };
 		A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = A9728E102918FA4700342A77 /* SendAppleEventToSystemProcess.c */; };
 		A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9728E122918FA4700342A77 /* AppleEvents.swift */; };
-		A9CBD4142AD6C06900C6D47F /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBD4132AD6C06900C6D47F /* Downloader.swift */; };
 		A9CCFAA82B4C31FD002631F4 /* Descriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */; };
 		A9CCFAAB2B4C32C3002631F4 /* LayerV1Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */; };
 		A9FA15C82A1CA7CB0085A676 /* LegacyVMBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FA15C72A1CA7CB0085A676 /* LegacyVMBundle.swift */; };
@@ -65,6 +66,8 @@
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
 		629EA1322A05A6BC00899D73 /* ANSIParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANSIParser.swift; sourceTree = "<group>"; };
+		A92E97812BA1D5D20052B85D /* LayerV2Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerV2Downloader.swift; sourceTree = "<group>"; };
+		A92E97832BA1D5DD0052B85D /* Decompressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decompressor.swift; sourceTree = "<group>"; };
 		A9517C482937ACB500785136 /* ScriptProvisioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisioner.swift; sourceTree = "<group>"; };
 		A9517C4A2937AFB900785136 /* ScriptProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptProvisionerConfig.swift; sourceTree = "<group>"; };
 		A951BCD6292B93D000FFDACC /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
@@ -98,7 +101,6 @@
 		A9728E122918FA4700342A77 /* AppleEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleEvents.swift; sourceTree = "<group>"; };
 		A9728E132918FA4700342A77 /* Cilicon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cilicon-Bridging-Header.h"; sourceTree = "<group>"; };
 		A98EEC3D2A0BB17200442399 /* OCI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = OCI; sourceTree = "<group>"; };
-		A9CBD4132AD6C06900C6D47F /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		A9CCFAA72B4C31FD002631F4 /* Descriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Descriptor+Extensions.swift"; sourceTree = "<group>"; };
 		A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerV1Downloader.swift; sourceTree = "<group>"; };
 		A9D45141292D1A00008CE4BB /* InstallMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallMode.swift; sourceTree = "<group>"; };
@@ -284,8 +286,9 @@
 		A9CCFAA92B4C32AE002631F4 /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
-				A9CBD4132AD6C06900C6D47F /* Downloader.swift */,
+				A92E97812BA1D5D20052B85D /* LayerV2Downloader.swift */,
 				A9CCFAAA2B4C32C3002631F4 /* LayerV1Downloader.swift */,
+				A92E97832BA1D5DD0052B85D /* Decompressor.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -355,7 +358,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -435,6 +438,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A92E97822BA1D5D20052B85D /* LayerV2Downloader.swift in Sources */,
 				A951BCD9292B966A00FFDACC /* VMConfigHelper+RunConfig.swift in Sources */,
 				A9728DD72918F79000342A77 /* ContentView.swift in Sources */,
 				A97080772A041553006E044D /* BuildkiteAgentProvisioner.swift in Sources */,
@@ -446,7 +450,6 @@
 				A9728E0B2918F9C600342A77 /* GHAppAuthHelper.swift in Sources */,
 				A9517C4B2937AFB900785136 /* ScriptProvisionerConfig.swift in Sources */,
 				A9728E152918FA4700342A77 /* AppleEvents.swift in Sources */,
-				A9CBD4142AD6C06900C6D47F /* Downloader.swift in Sources */,
 				A97080792A041628006E044D /* BuildkiteAgentProvisionerConfig.swift in Sources */,
 				A9728DFC2918F9A000342A77 /* VMConfigurationHelper.swift in Sources */,
 				0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */,
@@ -454,6 +457,7 @@
 				A970806F2A03B999006E044D /* LeaseParser.swift in Sources */,
 				A961960929DC3DA80095CAEC /* VMBundle.swift in Sources */,
 				A9728E0A2918F9C600342A77 /* GitHubActionsProvisioner.swift in Sources */,
+				A92E97842BA1D5DD0052B85D /* Decompressor.swift in Sources */,
 				A9728DFD2918F9A000342A77 /* GitHubProvisionerConfig.swift in Sources */,
 				A97080742A03F688006E044D /* SSHLogger.swift in Sources */,
 				A9517C492937ACB500785136 /* ScriptProvisioner.swift in Sources */,

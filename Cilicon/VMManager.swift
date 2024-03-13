@@ -141,10 +141,8 @@ class VMManager: NSObject, ObservableObject {
                 }
             }
         }
-
-        SSHLogger.shared.log(string: "---------- Shutting Down ----------\n")
         try await client.close()
-
+        SSHLogger.shared.log(string: "---------- Shutting Down ----------\n")
         Task { @MainActor in
             try await virtualMachine.stop()
             try await handleStop()
@@ -232,12 +230,32 @@ class VMManager: NSObject, ObservableObject {
         // trigger state update
         prog.completedUnitCount = 0
 
-        try await LayerV1Downloader.pull(
-            registry: client,
-            diskLayers: imgLayers,
-            diskURL: diskURL,
-            progress: prog
-        )
+        let fm = FileManager.default
+        if fm.fileExists(atPath: diskURL.path) {
+            try fm.removeItem(at: diskURL)
+        }
+        if !fm.createFile(atPath: diskURL.path, contents: nil) {
+            throw VMManagerError.failedToCreateDiskFile
+        }
+
+        let isV2Disk = imgLayers.allSatisfy({ $0.mediaType == "application/vnd.cirruslabs.tart.disk.v2" })
+
+        if isV2Disk {
+            try await LayerV2Downloader.pull(
+                registry: client,
+                diskLayers: imgLayers,
+                diskURL: diskURL,
+                progress: prog,
+                maxConcurrency: 4
+            )
+        } else {
+            try await LayerV1Downloader.pull(
+                registry: client,
+                diskLayers: imgLayers,
+                diskURL: diskURL,
+                progress: prog
+            )
+        }
 
         progCanc.cancel()
 
@@ -285,6 +303,7 @@ extension VMManager {
 
 enum VMManagerError: Error {
     case masterBundleNotFound(path: String)
+    case failedToCreateDiskFile
 }
 
 extension VMManagerError: LocalizedError {
@@ -292,6 +311,8 @@ extension VMManagerError: LocalizedError {
         switch self {
         case let .masterBundleNotFound(path):
             return "Could not found bundle at \(path)"
+        case .failedToCreateDiskFile:
+            return "Failed to create Disk File"
         }
     }
 }

@@ -1,15 +1,20 @@
 import OCI
 
 extension Descriptor {
-    var uncompressedSize: UInt64? {
+    func getDecompressedSize() throws -> UInt64 {
         guard let size = annotations?["org.cirruslabs.tart.uncompressed-size"] else {
-            return nil
+            throw DescriptorError.decompressedSizeMissing
         }
-
-        return UInt64(size)
+        return try UInt64(value: size)
     }
+}
 
-    var uncompressedContentDigest: String? {
-        annotations?["org.cirruslabs.tart.uncompressed-content-digest"]
+extension [Descriptor] {
+    func getTotalDecompressedSize() throws -> UInt64 {
+        try reduce(0) { try $0 + $1.getDecompressedSize() }
     }
+}
+
+enum DescriptorError: Error {
+    case decompressedSizeMissing
 }
