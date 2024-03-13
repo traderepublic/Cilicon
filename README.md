@@ -45,7 +45,7 @@ To get started, download the latest release [here](https://github.com/traderepub
 
 Cilicon uses the `tart` container format and comes with an integrated [OCI](https://opencontainers.org/) client to fetch images from the internet.
 
-It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode), however if you need to create or edit your master image, you may choose one of the following options:
+It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-sonoma-xcode), however if you need to create or edit your master image, you may choose one of the following options:
 
 - Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading via OCI) - recommended
 - Using Cilicon Installer (supports downloading and installing)
