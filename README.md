@@ -12,7 +12,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 <ul>
         <li>While Cilicon 1.0 relied on a user-defined Login Item script in the VM, its new version now includes an SSH client and directly executes commands on the VM.</li>
         <li>Cilicon has partially adopted the <a href="https://github.com/cirruslabs/tart">tart</a> image format and can automatically convert 1.0 images to it.</li>
-        <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-ventura-xcode">macos-ventura-xcode</a> images.</li>
+        <li>The integrated OCI client can download pre-built CI images that have been created with/for tart. We recommend their <a href="https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-sonoma-xcode">macos-sonoma-xcode</a> images.</li>
 </ul>
 <h4>Migrating from 1.0</h4>
 <ul>
@@ -83,7 +83,7 @@ To use the GitLab Runner provisioner you will need to [create a runner with an a
 Minimal example:
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
 provisioner:
   type: gitlab
   config:
@@ -94,7 +94,7 @@ provisioner:
 Full configuration:
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
 provisioner:
   type: gitlab
   config:
@@ -113,7 +113,7 @@ provisioner:
 To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
 provisioner:
   type: buildkite
   config:
@@ -125,7 +125,7 @@ provisioner:
 If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
 provisioner:
   type: script
   config:
