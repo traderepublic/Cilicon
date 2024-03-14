@@ -68,7 +68,7 @@ For more information on all available settings see [Config.swift](/Cilicon/Confi
 To use the GitHub Actions provisioner you will need to [create and install a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) with `Self-hosted runners` `Read & Write` permissions on the organization level and download the private key file to be referenced in the configuration file.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-ventura-xcode:14.3.1
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
 provisioner:
   type: github
   config:
