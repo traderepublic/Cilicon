@@ -7,6 +7,7 @@ struct Config: Codable {
         directoryMounts: [DirectoryMountConfig],
         source: VMSource,
         vmClonePath: String,
+        exitBehavior: ExitBehavior? = nil,
         numberOfRunsUntilHostReboot: Int? = nil,
         runnerName: String? = nil,
         editorMode: Bool,
@@ -21,6 +22,7 @@ struct Config: Codable {
         self.directoryMounts = directoryMounts
         self.source = source
         self.vmClonePath = vmClonePath
+        self.exitBehavior = exitBehavior
         self.numberOfRunsUntilHostReboot = numberOfRunsUntilHostReboot
         self.runnerName = runnerName
         self.editorMode = editorMode
@@ -30,7 +32,7 @@ struct Config: Codable {
         self.postRun = postRun
     }
 
-    /// Provisioner Configuration.
+    /// Provisioner Configuration
     let provisioner: ProvisionerConfig
     /// Hardware Configuration.
     let hardware: HardwareConfig
@@ -42,7 +44,9 @@ struct Config: Codable {
     /// This should be on the same APFS volume as `vmBundlePath`.
     /// Can be omitted, in which case it defaults to `~/vmclone`.
     let vmClonePath: String
-    /// Number of runs until the Host machine reboots.
+    /// Number of runs until exit and whether to reboot the host machine
+    var exitBehavior: ExitBehavior?
+    /// Number of runs until the Host machine reboots. (DEPRECATED: use exitBehavior)
     let numberOfRunsUntilHostReboot: Int?
     /// Overrides the runner name chosen by the provisioner.
     let runnerName: String?
@@ -63,6 +67,7 @@ struct Config: Codable {
         case directoryMounts
         case source
         case vmClonePath
+        case exitBehavior
         case numberOfRunsUntilHostReboot
         case runnerName
         case editorMode
@@ -82,6 +87,10 @@ struct Config: Codable {
             container.decodeIfPresent(String.self, forKey: .vmClonePath).map { ($0 as NSString).standardizingPath }
         ) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
+        self.exitBehavior = try container.decodeIfPresent(ExitBehavior.self, forKey: .exitBehavior)
+        if self.exitBehavior == nil && self.numberOfRunsUntilHostReboot != nil  {
+            self.exitBehavior = ExitBehavior(numberOfRuns: self.numberOfRunsUntilHostReboot!, reboot: true)
+        }
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
@@ -95,4 +104,9 @@ struct SSHCredentials: Codable {
     static var `default` = Self(username: "admin", password: "admin")
     let username: String
     let password: String
+}
+
+struct ExitBehavior: Codable {
+    var numberOfRuns: Int
+    var reboot: Bool
 }
