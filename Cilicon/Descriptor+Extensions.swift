@@ -1,4 +1,3 @@
-
 extension Descriptor {
     func getDecompressedSize() throws -> UInt64 {
         guard let size = annotations?["org.cirruslabs.tart.uncompressed-size"] else {

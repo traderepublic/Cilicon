@@ -117,7 +117,7 @@ enum ANSIParser {
         .init(red: 0.5, green: 0.5, blue: 1.0, alpha: 1), // bright blue
         .init(red: 1.0, green: 0.5, blue: 1.0, alpha: 1), // bright magenta
         .init(red: 0.5, green: 1.0, blue: 1.0, alpha: 1), // bright cyan
-        .white, // bright white
+        .white // bright white
     ]
 }
 

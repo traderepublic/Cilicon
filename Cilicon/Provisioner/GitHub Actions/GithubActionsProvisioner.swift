@@ -46,7 +46,7 @@ class GithubActionsProvisioner: Provisioner {
             "--token \(runnerToken.token)",
             "--replace",
             "--ephemeral",
-            "--unattended",
+            "--unattended"
         ]
 
         if let group = githubConfig.runnerGroup {
