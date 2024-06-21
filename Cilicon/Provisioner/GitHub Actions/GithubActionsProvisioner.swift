@@ -48,19 +48,30 @@ class GithubActionsProvisioner: Provisioner {
             "--ephemeral",
             "--unattended"
         ]
-
+        // Runner Group
         if let group = githubConfig.runnerGroup {
             configCommandComponents.append("--runnergroup '\(group)'")
         }
 
-        if let labels = githubConfig.extraLabels {
-            configCommandComponents.append("--labels \(labels.joined(separator: ","))")
+        // Labels
+        var labels = [String]()
+        if let version = Bundle
+            .main
+            .infoDictionary?["CFBundleShortVersionString"] as? String {
+            labels.append("cilicon-\(version)")
         }
+        if case let .OCI(oci) = config.source {
+            labels.append("\(oci.repository):\(oci.tag)")
+        }
+        labels += githubConfig.extraLabels ?? []
+        configCommandComponents.append("--labels \(labels.joined(separator: ","))")
 
+        // Work Folder
         if let workFolder = githubConfig.workFolder {
             configCommandComponents.append("--work '\(workFolder)'")
         }
 
+        // Config
         let configCommand = configCommandComponents.joined(separator: " ")
         let runCommand = "~/actions-runner/run.sh"
         command += [configCommand, runCommand].joined(separator: " && ")
