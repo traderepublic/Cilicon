@@ -1,16 +1,16 @@
 import Citadel
 import Foundation
 
-class GitHubActionsProvisioner: Provisioner {
+class GithubActionsProvisioner: Provisioner {
     let config: Config
-    let gitHubConfig: GitHubProvisionerConfig
-    let service: GitHubService
+    let githubConfig: GithubProvisionerConfig
+    let service: GithubService
     let fileManager: FileManager
 
-    init(config: Config, gitHubConfig: GitHubProvisionerConfig, fileManager: FileManager = .default) {
+    init(config: Config, githubConfig: GithubProvisionerConfig, fileManager: FileManager = .default) {
         self.config = config
-        self.gitHubConfig = gitHubConfig
-        self.service = GitHubService(config: gitHubConfig)
+        self.githubConfig = githubConfig
+        self.service = GithubService(config: githubConfig)
         self.fileManager = fileManager
     }
 
@@ -20,15 +20,14 @@ class GitHubActionsProvisioner: Provisioner {
 
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         await SSHLogger.shared.log(string: "[1;35mFetching Github Runner Token[0m\n")
-        let installation = try await service.getInstallation()
-        let authToken = try await service.getInstallationToken(installation: installation)
-        let token = try await service.createRunnerToken(token: authToken.token)
 
+        let authToken = try await service.getAuthToken()
+        let runnerToken = try await service.createRunnerToken(token: authToken)
         var command = ""
-        if gitHubConfig.downloadLatest {
+        if githubConfig.downloadLatest {
             let downloadURLs = try await service.getRunnerDownloadURLs(authToken: authToken)
             guard let macURL = downloadURLs.first(where: { $0.os == "osx" && $0.architecture == "arm64" }) else {
-                throw GitHubActionsProvisionerError.couldNotFindRunnerDownloadURL
+                throw GithubActionsProvisionerError.couldNotFindRunnerDownloadURL
             }
 
             let downloadCommands = [
@@ -37,27 +36,29 @@ class GitHubActionsProvisioner: Provisioner {
                 "mkdir ~/actions-runner",
                 "tar xzf ./actions-runner.tar.gz --directory ~/actions-runner"
             ]
-
             command += downloadCommands.joined(separator: " && ") + " && "
         }
 
         var configCommandComponents = [
             "~/actions-runner/config.sh",
-            "--url \(gitHubConfig.url)",
+            "--url \(githubConfig.url)",
             "--name '\(runnerName)'",
-            "--token \(token.token)",
+            "--token \(runnerToken.token)",
             "--replace",
             "--ephemeral",
-            "--work _work",
             "--unattended",
         ]
 
-        if let group = gitHubConfig.runnerGroup {
+        if let group = githubConfig.runnerGroup {
             configCommandComponents.append("--runnergroup '\(group)'")
         }
 
-        if let labels = gitHubConfig.extraLabels {
+        if let labels = githubConfig.extraLabels {
             configCommandComponents.append("--labels \(labels.joined(separator: ","))")
+        }
+
+        if let workFolder = githubConfig.workFolder {
+            configCommandComponents.append("--work '\(workFolder)'")
         }
 
         let configCommand = configCommandComponents.joined(separator: " ")
@@ -77,12 +78,12 @@ class GitHubActionsProvisioner: Provisioner {
     }
 }
 
-enum GitHubActionsProvisionerError: Error {
+enum GithubActionsProvisionerError: Error {
     case githubAppNotInstalled(appID: Int, org: String)
     case couldNotFindRunnerDownloadURL
 }
 
-extension GitHubActionsProvisionerError: LocalizedError {
+extension GithubActionsProvisionerError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .githubAppNotInstalled(appId, org):
@@ -91,4 +92,11 @@ extension GitHubActionsProvisionerError: LocalizedError {
             return "Could not find runner download URL"
         }
     }
+}
+
+struct GithubJitPayload: Encodable {
+    let name: String?
+    let runnerGroupId: Int?
+    let labels: [String]?
+    let workFolder: String?
 }

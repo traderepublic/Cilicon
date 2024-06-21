@@ -2,7 +2,6 @@ import Citadel
 import Combine
 import Compression
 import Foundation
-import OCI
 import Virtualization
 
 class VMManager: NSObject, ObservableObject {
@@ -16,7 +15,7 @@ class VMManager: NSObject, ObservableObject {
     var ip: String = ""
 
     var activeBundle: VMBundle {
-        config.editorMode ? masterBundle : clonedBundle
+        clonedBundle
     }
 
     @Published
@@ -24,8 +23,8 @@ class VMManager: NSObject, ObservableObject {
 
     init(config: Config) {
         switch config.provisioner {
-        case let .github(gitHubConfig):
-            self.provisioner = GitHubActionsProvisioner(config: config, gitHubConfig: gitHubConfig)
+        case let .github(githubConfig):
+            self.provisioner = GithubActionsProvisioner(config: config, githubConfig: githubConfig)
         case let .gitlab(gitLabConfig):
             self.provisioner = GitLabRunnerProvisioner(config: gitLabConfig)
         case let .buildkite(buildkiteConfig):
@@ -85,21 +84,15 @@ class VMManager: NSObject, ObservableObject {
 
     @MainActor
     private func setupAndRunVirtualMachine() async throws {
-        if !config.editorMode {
-            try await cloneBundle()
-        }
+        try await cloneBundle()
         let vmHelper = VMConfigHelper(vmBundle: activeBundle)
         let vmConfig = try vmHelper.computeRunConfiguration(config: config)
         let virtualMachine = VZVirtualMachine(configuration: vmConfig)
         virtualMachine.delegate = self
 
+        SSHLogger.shared.log(string: "---------- Starting Up ----------\n")
         try await virtualMachine.start()
         vmState = .running(virtualMachine)
-
-        if config.editorMode {
-            return
-        }
-        try await Task.sleep(for: .seconds(5))
         self.ip = try LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string).ipAddress
 
         let client = try await SSHClient.connect(
@@ -109,7 +102,6 @@ class VMManager: NSObject, ObservableObject {
             reconnect: .always
         )
 
-        print("IP Address: \(ip)")
         if let preRun = config.preRun {
             let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
             for try await blob in streamOutput {
@@ -126,7 +118,7 @@ class VMManager: NSObject, ObservableObject {
             do {
                 try await provisioner.provision(bundle: activeBundle, sshClient: client)
             } catch {
-                print(error.localizedDescription)
+                SSHLogger.shared.log(string: error.localizedDescription + "\n")
             }
         }
 
@@ -149,6 +141,8 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
+    func provisionVM() async throws { }
+
     func isBundleComplete() throws -> Bool {
         let filesExist = [
             masterBundle.diskImageURL,
@@ -164,11 +158,6 @@ class VMManager: NSObject, ObservableObject {
 
     @MainActor
     func handleStop() async throws {
-        if config.editorMode {
-            // In editor mode we don't want to reboot or restart the VM
-            NSApplication.shared.terminate(nil)
-            return
-        }
         if let runsTilReboot = config.numberOfRunsUntilHostReboot, runCounter >= runsTilReboot {
             AppleEvent.restart.perform()
             NSApplication.shared.terminate(nil)

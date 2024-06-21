@@ -1,5 +1,4 @@
 import Foundation
-import OCI
 
 enum LayerV1Downloader {
     static func pull(registry: OCI,

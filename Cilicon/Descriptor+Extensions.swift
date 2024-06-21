@@ -1,4 +1,3 @@
-import OCI
 
 extension Descriptor {
     func getDecompressedSize() throws -> UInt64 {

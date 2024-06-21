@@ -1,5 +1,4 @@
 import Foundation
-import OCI
 
 enum VMSource: Codable {
     case OCI(OCIURL)

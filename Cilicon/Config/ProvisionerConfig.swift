@@ -1,7 +1,7 @@
 import Foundation
 
 enum ProvisionerConfig: Codable {
-    case github(GitHubProvisionerConfig)
+    case github(GithubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
     case buildkite(BuildkiteAgentProvisionerConfig)
     case script(ScriptProvisionerConfig)
@@ -16,7 +16,7 @@ enum ProvisionerConfig: Codable {
         let type = try container.decode(ProvisionerType.self, forKey: .type)
         switch type {
         case .github:
-            let config = try container.decode(GitHubProvisionerConfig.self, forKey: .config)
+            let config = try container.decode(GithubProvisionerConfig.self, forKey: .config)
             self = .github(config)
         case .gitlab:
             let config = try container.decode(GitLabProvisionerConfig.self, forKey: .config)

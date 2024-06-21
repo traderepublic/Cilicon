@@ -1,7 +1,7 @@
 import Foundation
 import SwiftJWT
 
-enum GitHubAppAuthHelper {
+enum GithubAppAuthHelper {
     struct GHClaims: Claims {
         /// Issuer: The App ID should be used
         let iss: String

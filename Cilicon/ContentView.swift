@@ -20,11 +20,7 @@ struct ContentView: View {
     init(config: Config) {
         self.vmManager = VMManager(config: config)
         self.config = config
-        if config.editorMode {
-            self.title = "Cilicon (Editor Mode)"
-        } else {
-            self.title = "Cilicon"
-        }
+        self.title = "Cilicon"
     }
 
     var body: some View {
@@ -36,19 +32,17 @@ struct ContentView: View {
                         try await vmManager.start(vm: vm)
                     }
                 }
-                if !config.editorMode {
-                    ScrollViewReader { scrollViewProxy in
-                        ScrollView(.vertical) {
-                            LazyVStack {
-                                ForEach([logger], id: \.combinedLog) {
-                                    Text($0.attributedLog)
-                                        .frame(width: 800, alignment: .leading)
-                                }
+                ScrollViewReader { scrollViewProxy in
+                    ScrollView(.vertical) {
+                        LazyVStack {
+                            ForEach([logger], id: \.combinedLog) {
+                                Text($0.attributedLog)
+                                    .frame(width: 800, alignment: .leading)
                             }
-                            .textSelection(.enabled)
-                            .onReceive(logger.log.publisher) { _ in
-                                scrollViewProxy.scrollTo(logger.combinedLog, anchor: .bottom)
-                            }
+                        }
+                        .textSelection(.enabled)
+                        .onReceive(logger.log.publisher) { _ in
+                            scrollViewProxy.scrollTo(logger.combinedLog, anchor: .bottom)
                         }
                     }
                 }

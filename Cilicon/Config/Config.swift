@@ -9,7 +9,6 @@ struct Config: Codable {
         vmClonePath: String,
         numberOfRunsUntilHostReboot: Int? = nil,
         runnerName: String? = nil,
-        editorMode: Bool,
         autoTransferImageVolume: String? = nil,
         retryDelay: Int,
         sshCredentials: SSHCredentials,
@@ -23,7 +22,6 @@ struct Config: Codable {
         self.vmClonePath = vmClonePath
         self.numberOfRunsUntilHostReboot = numberOfRunsUntilHostReboot
         self.runnerName = runnerName
-        self.editorMode = editorMode
         self.retryDelay = retryDelay
         self.sshCredentials = sshCredentials
         self.preRun = preRun
@@ -46,8 +44,6 @@ struct Config: Codable {
     let numberOfRunsUntilHostReboot: Int?
     /// Overrides the runner name chosen by the provisioner.
     let runnerName: String?
-    /// Does not copy the VM bundle and mounts the `Editor Resources` folder contained in the bundle on the guest machine.
-    let editorMode: Bool
     /// Delay in seconds before retrying to provision the image a failed cycle.
     let retryDelay: Int
     /// Credentials to be used when connecting via SSH.
@@ -65,7 +61,6 @@ struct Config: Codable {
         case vmClonePath
         case numberOfRunsUntilHostReboot
         case runnerName
-        case editorMode
         case retryDelay
         case sshCredentials
         case preRun
@@ -83,7 +78,6 @@ struct Config: Codable {
         ) ?? URL(filePath: NSHomeDirectory()).appending(component: "vmclone").path
         self.numberOfRunsUntilHostReboot = try container.decodeIfPresent(Int.self, forKey: .numberOfRunsUntilHostReboot)
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
-        self.editorMode = try container.decodeIfPresent(Bool.self, forKey: .editorMode) ?? false
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
         self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .default
         self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)

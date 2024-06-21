@@ -35,7 +35,6 @@ struct VMBundle {
 protocol BundleType {
     var url: URL { get }
     var resourcesURL: URL { get }
-    var editorResourcesURL: URL { get }
     var diskImageURL: URL { get }
     var auxiliaryStorageURL: URL { get }
     init(url: URL)

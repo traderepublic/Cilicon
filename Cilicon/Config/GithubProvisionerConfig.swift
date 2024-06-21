@@ -1,7 +1,7 @@
 import Foundation
 
-struct GitHubProvisionerConfig: Decodable {
-    /// The GitHub API URL. Will be `https://api.github.com/` in most cases
+struct GithubProvisionerConfig: Decodable {
+    /// The Github API URL. Will be `https://api.github.com/` in most cases
     let apiURL: URL?
     /// The App Id of the installed application with Organization "Self-hosted runners" Read & Write access.
     let appId: Int
@@ -18,6 +18,8 @@ struct GitHubProvisionerConfig: Decodable {
 
     let runnerGroup: String?
 
+    let workFolder: String?
+
     let url: URL
 
     enum CodingKeys: CodingKey {
@@ -30,6 +32,7 @@ struct GitHubProvisionerConfig: Decodable {
         case url
         case downloadLatest
         case repository
+        case workFolder
     }
 
     init(from decoder: Decoder) throws {
@@ -47,5 +50,6 @@ struct GitHubProvisionerConfig: Decodable {
         }
         self.url = try container.decodeIfPresent(URL.self, forKey: .url) ?? fallbackURL
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
+        self.workFolder = try container.decodeIfPresent(String.self, forKey: .workFolder)
     }
 }
