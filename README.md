@@ -45,11 +45,7 @@ To get started, download the latest release [here](https://github.com/traderepub
 
 Cilicon uses the `tart` container format and comes with an integrated [OCI](https://opencontainers.org/) client to fetch images from the internet.
 
-It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-sonoma-xcode), however if you need to create or edit your master image, you may choose one of the following options:
-
-- Using [tart](https://github.com/cirruslabs/tart/) (supports downloading, installing, editing, and uploading via OCI) - recommended
-- Using Cilicon Installer (supports downloading and installing)
-- Using Cilicon (supports editing by enabling `editorMode` in the configuration file)
+It's recommended to use [publicly hosted images](https://github.com/cirruslabs/macos-image-templates/pkgs/container/macos-sonoma-xcode), however if you need to create or customize your own image, you may use [tart](https://github.com/cirruslabs/tart/).
 
 
 #### ⚠️ Important
@@ -136,6 +132,8 @@ provisioner:
 
 ### 🔨 Setting Up the Host OS
 It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally one that is [freshly restored](https://support.apple.com/en-gb/guide/apple-configurator-mac/apdd5f3c75ad/mac).
+
+If you don't want to host your machine locally, [OakHost](https://www.oakhost.net/) provides great value dedicated Macs and are kindly offering 10% off the first two months for new customers with the code `CILICON10` (Disclaimer: We do not receive any form of compensation from sharing this code).
 
 - Transfer `Cilicon.app`, `cilicon.yml` as well as any other files referenced by your config (e.g. Local image, GitHub private key etc.) to your Host OS.
 - Add `Cilicon.app` as a launch item
