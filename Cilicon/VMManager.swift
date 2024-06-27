@@ -82,6 +82,26 @@ class VMManager: NSObject, ObservableObject {
         }.value
     }
 
+    private func fetchIP(macAddress: String) async throws -> String {
+        var leaseTries = 0
+
+        while true {
+            let ipResult = Result {
+                try LeaseParser.leaseForMacAddress(mac: macAddress).ipAddress
+            }
+            switch ipResult {
+            case let .success(ip):
+                return ip
+            case let .failure(err):
+                if leaseTries >= 5 {
+                    throw err
+                }
+                try await Task.sleep(for: .seconds(5))
+                leaseTries += 1
+            }
+        }
+    }
+
     @MainActor
     private func setupAndRunVirtualMachine() async throws {
         try await cloneBundle()
@@ -93,7 +113,7 @@ class VMManager: NSObject, ObservableObject {
         SSHLogger.shared.log(string: "---------- Starting Up ----------\n")
         try await virtualMachine.start()
         vmState = .running(virtualMachine)
-        self.ip = try LeaseParser.leaseForMacAddress(mac: masterBundle.configuration.macAddress.string).ipAddress
+        self.ip = try await fetchIP(macAddress: clonedBundle.configuration.macAddress.string)
 
         let client = try await SSHClient.connect(
             host: ip,
