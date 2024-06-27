@@ -31,7 +31,8 @@ class GithubActionsProvisioner: Provisioner {
             }
 
             let downloadCommands = [
-                "curl -o actions-runner.tar.gz -L \(macURL.downloadUrl.absoluteString)",
+                "echo 'Downloading Actions Runner'",
+                "curl -so actions-runner.tar.gz -L \(macURL.downloadUrl.absoluteString)",
                 "rm -rf ~/actions-runner",
                 "mkdir ~/actions-runner",
                 "tar xzf ./actions-runner.tar.gz --directory ~/actions-runner"
