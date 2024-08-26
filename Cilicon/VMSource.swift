@@ -48,6 +48,15 @@ enum VMSource: Codable {
         }
     }
 
+    var uiRepresentation: String {
+        switch self {
+        case let .local(url):
+            return url.relativePath
+        case let .OCI(url):
+            return "oci://\(url.registry)\(url.repository):\(url.tag)"
+        }
+    }
+
     enum VMSourceError: LocalizedError {
         case invalidPath
 

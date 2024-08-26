@@ -1,11 +1,13 @@
 import Foundation
+import Semaphore
 
 enum LayerV2Downloader {
     static func pull(registry: OCI,
                      diskLayers: [Descriptor],
                      diskURL: URL,
                      progress: Progress,
-                     maxConcurrency: Int) async throws {
+                     maxConcurrency: Int = 4) async throws {
+        let semaphore = AsyncSemaphore(value: maxConcurrency)
         // Reserve file size
         let totDecompressedSize = try diskLayers.getTotalDecompressedSize()
         let disk = try FileHandle(forWritingTo: diskURL)
@@ -14,10 +16,8 @@ enum LayerV2Downloader {
 
         try await withThrowingTaskGroup(of: Void.self) { taskGroup in
             var totalDiskOffset: UInt64 = 0
-            for (index, diskLayer) in diskLayers.enumerated() {
-                if index >= maxConcurrency {
-                    try await taskGroup.next()
-                }
+            for diskLayer in diskLayers {
+                await semaphore.wait()
                 let layerDiskOffset = totalDiskOffset
                 taskGroup.addTask {
                     let decomp = try Decompressor(fileURL: diskURL)
@@ -25,6 +25,7 @@ enum LayerV2Downloader {
                     try decomp.decompress(data: data, offset: layerDiskOffset)
                     try decomp.finalize()
                     progress.completedUnitCount += Int64(data.count)
+                    semaphore.signal()
                 }
                 totalDiskOffset += try diskLayer.getDecompressedSize()
             }

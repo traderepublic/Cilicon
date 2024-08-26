@@ -8,10 +8,10 @@ class GitLabRunnerProvisioner: Provisioner {
         self.config = config
     }
 
-    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
+    func provision(sshClient: SSHClient, sshLogger: SSHLogger) async throws {
         var downloadCommands: [String] = []
 
-        await SSHLogger.shared.log(string: "Configuring GitLab Runner...".magentaBold)
+        sshLogger.log(string: "Configuring GitLab Runner...".magentaBold)
         let copyConfigTomlCommand = """
         mkdir -p ~/.gitlab-runner
         rm -rf ~/.gitlab-runner/config.toml
@@ -25,35 +25,35 @@ class GitLabRunnerProvisioner: Provisioner {
         EOF
         exit 1
         """
-        try await executeCommand(command: copyConfigTomlCommand, sshClient: sshClient)
-        await SSHLogger.shared.log(string: "Successfully configured GitLab Runner".greenBold)
+        try await executeCommand(command: copyConfigTomlCommand, sshClient: sshClient, sshLogger: sshLogger)
+        sshLogger.log(string: "Successfully configured GitLab Runner".greenBold)
 
         if config.downloadLatest {
-            await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary from Source".magentaBold)
+            sshLogger.log(string: "Downloading GitLab Runner Binary from Source".magentaBold)
             downloadCommands = [
                 "rm -rf gitlab-runner",
                 "curl -o gitlab-runner \(config.downloadURL)",
                 "sudo chmod +x gitlab-runner"
             ]
-            try await executeCommand(command: downloadCommands.joined(separator: " && "), sshClient: sshClient)
-            await SSHLogger.shared.log(string: "Downloaded GitLab Runner Binary from Source successfully".magentaBold)
+            try await executeCommand(command: downloadCommands.joined(separator: " && "), sshClient: sshClient, sshLogger: sshLogger)
+            sshLogger.log(string: "Downloaded GitLab Runner Binary from Source successfully".magentaBold)
         } else {
-            await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
+            sshLogger.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
 
         let runCommand = "gitlab-runner run"
-        await SSHLogger.shared.log(string: "Starting GitLab Runner...".magentaBold)
-        try await executeCommand(command: runCommand, sshClient: sshClient)
+        sshLogger.log(string: "Starting GitLab Runner...".magentaBold)
+        try await executeCommand(command: runCommand, sshClient: sshClient, sshLogger: sshLogger)
     }
 
-    private func executeCommand(command: String, sshClient: SSHClient) async throws {
+    private func executeCommand(command: String, sshClient: SSHClient, sshLogger: SSHLogger) async throws {
         let streamOutput = try await sshClient.executeCommandStream(command, inShell: true)
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                sshLogger.log(string: String(buffer: stdout))
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                sshLogger.log(string: String(buffer: stderr))
             }
         }
     }

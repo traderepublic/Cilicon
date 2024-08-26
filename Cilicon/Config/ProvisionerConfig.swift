@@ -48,4 +48,17 @@ enum ProvisionerConfig: Codable {
         case buildkite
         case script
     }
+
+    var uiRepresentation: String {
+        switch self {
+        case .github:
+            return "GitHub"
+        case .gitlab:
+            return "GitLab"
+        case .buildkite:
+            return "Buildkite"
+        case .script:
+            return "Script"
+        }
+    }
 }

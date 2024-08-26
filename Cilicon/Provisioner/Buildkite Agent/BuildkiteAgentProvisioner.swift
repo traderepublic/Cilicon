@@ -11,7 +11,7 @@ class BuildkiteAgentProvisioner: Provisioner {
         self.tags = config.tags
     }
 
-    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
+    func provision(sshClient: SSHClient, sshLogger: SSHLogger) async throws {
         var block = """
         TOKEN="\(agentToken)" bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
         ~/.buildkite-agent/bin/buildkite-agent start --disconnect-after-job
@@ -25,9 +25,9 @@ class BuildkiteAgentProvisioner: Provisioner {
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                sshLogger.log(string: String(buffer: stdout))
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                sshLogger.log(string: String(buffer: stderr))
             }
         }
     }

@@ -9,7 +9,12 @@ extension Descriptor {
 
 extension [Descriptor] {
     func getTotalDecompressedSize() throws -> UInt64 {
-        try reduce(0) { try $0 + $1.getDecompressedSize() }
+        try reduce(0) {
+            guard let size = $1.annotations?["org.cirruslabs.tart.uncompressed-size"] else {
+                return $0
+            }
+            return try $0 + UInt64(value: size)
+        }
     }
 }
 

@@ -1,12 +1,8 @@
 import Foundation
+import NIOCore
 
-@MainActor
-final class SSHLogger: ObservableObject {
-    static let shared = SSHLogger()
-
-    private init() { }
-
-    @Published
+@Observable
+final class SSHLogger {
     var log: [LogChunk] = []
 
     var attributedLog: AttributedString {
@@ -20,6 +16,10 @@ final class SSHLogger: ObservableObject {
             outString.append("\n")
         }
         return outString
+    }
+
+    func log(buffer: ByteBuffer) {
+        log(string: String(buffer: buffer))
     }
 
     func log(string: String) {

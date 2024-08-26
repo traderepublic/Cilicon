@@ -10,15 +10,7 @@ class ScriptProvisioner: Provisioner {
         self.runBlock = runBlock
     }
 
-    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        let streamOutput = try await sshClient.executeCommandStream(runBlock, inShell: true)
-        for try await blob in streamOutput {
-            switch blob {
-            case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
-            case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
-            }
-        }
+    func provision(sshClient: SSHClient, sshLogger: SSHLogger) async throws {
+        try await runCommand(cmd: runBlock, sshClient: sshClient, sshLogger: sshLogger)
     }
 }

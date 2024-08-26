@@ -2,7 +2,7 @@ import Foundation
 import Virtualization
 
 extension VMConfigHelper {
-    public func computeRunConfiguration(config: Config) throws -> VZVirtualMachineConfiguration {
+    public func computeRunConfiguration(config: MachineConfig, macAddress: VZMACAddress) throws -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = try parseMacPlatform()
         virtualMachineConfiguration.bootLoader = VZMacOSBootLoader()
@@ -17,7 +17,7 @@ extension VMConfigHelper {
             )
         ]
         virtualMachineConfiguration.storageDevices = try [createBlockDeviceConfiguration()]
-        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: vmBundle.configuration.macAddress)]
+        virtualMachineConfiguration.networkDevices = [createNetworkDeviceConfiguration(mac: macAddress)]
         virtualMachineConfiguration.pointingDevices = [VZUSBScreenCoordinatePointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [VZUSBKeyboardConfiguration()]
         if config.hardware.connectsToAudioDevice {
@@ -29,7 +29,7 @@ extension VMConfigHelper {
         return virtualMachineConfiguration
     }
 
-    private func createDirectorySharingConfiguration(config: Config) throws -> VZVirtioFileSystemDeviceConfiguration {
+    private func createDirectorySharingConfiguration(config: MachineConfig) throws -> VZVirtioFileSystemDeviceConfiguration {
         var directoriesToShare = [String: VZSharedDirectory]()
         for mountConfig in config.directoryMounts {
             if !FileManager.default.fileExists(atPath: mountConfig.hostPath) {

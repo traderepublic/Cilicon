@@ -16,6 +16,8 @@ struct GithubProvisionerConfig: Decodable {
     /// Default: `true`
     let downloadLatest: Bool
 
+    let runnerName: String?
+
     let runnerGroup: String?
 
     let workFolder: String?
@@ -33,6 +35,7 @@ struct GithubProvisionerConfig: Decodable {
         case downloadLatest
         case repository
         case workFolder
+        case runnerName
     }
 
     init(from decoder: Decoder) throws {
@@ -51,5 +54,6 @@ struct GithubProvisionerConfig: Decodable {
         self.url = try container.decodeIfPresent(URL.self, forKey: .url) ?? fallbackURL
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
         self.workFolder = try container.decodeIfPresent(String.self, forKey: .workFolder)
+        self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
     }
 }

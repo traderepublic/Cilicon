@@ -2,25 +2,21 @@ import Citadel
 import Foundation
 
 class GithubActionsProvisioner: Provisioner {
-    let config: Config
     let githubConfig: GithubProvisionerConfig
     let service: GithubService
     let fileManager: FileManager
+    let runnerName: String
+    let config: MachineConfig
 
-    init(config: Config, githubConfig: GithubProvisionerConfig, fileManager: FileManager = .default) {
-        self.config = config
+    init(config: MachineConfig, githubConfig: GithubProvisionerConfig, fileManager: FileManager = .default) {
         self.githubConfig = githubConfig
         self.service = GithubService(config: githubConfig)
         self.fileManager = fileManager
+        self.config = config
+        self.runnerName = githubConfig.runnerName ?? Host.current().localizedName ?? "" + "-\(config.id)"
     }
 
-    var runnerName: String {
-        config.runnerName ?? Host.current().localizedName ?? "no-name"
-    }
-
-    func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        await SSHLogger.shared.log(string: "[1;35mFetching Github Runner Token[0m\n")
-
+    func provision(sshClient: SSHClient, sshLogger: SSHLogger) async throws {
         let authToken = try await service.getAuthToken()
         let runnerToken = try await service.createRunnerToken(token: authToken)
         var command = ""
@@ -82,9 +78,9 @@ class GithubActionsProvisioner: Provisioner {
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                sshLogger.log(string: String(buffer: stdout))
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                sshLogger.log(string: String(buffer: stderr))
             }
         }
     }
