@@ -16,10 +16,10 @@ class ConfigManager {
         // Launch argument to config e.g. ~/cilicon.yml
         // If no launch argument is found. The default fallback config is used
         guard let configPath = UserDefaults.standard.string(forKey: "config-path") ?? Self.fallbackConfig else {
-            throw ConfigManagerError.fileNotExists
+            throw ConfigManagerError.fileDoesNotExist
         }
         guard FileManager.default.fileExists(atPath: configPath) else {
-            throw ConfigManagerError.fileNotExists
+            throw ConfigManagerError.fileDoesNotExist
         }
         guard let data = FileManager.default.contents(atPath: configPath) else {
             throw ConfigManagerError.fileCouldNotBeRead
@@ -30,5 +30,5 @@ class ConfigManager {
 
 enum ConfigManagerError: Error {
     case fileCouldNotBeRead
-    case fileNotExists
+    case fileDoesNotExist
 }
