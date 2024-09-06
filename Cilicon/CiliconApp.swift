@@ -3,23 +3,22 @@ import Yams
 
 @main
 struct CiliconApp: App {
-    @State private var vmSource: String = ""
 
     var body: some Scene {
         Window("Cilicon", id: "cihost") {
-            if ConfigManager.fileExists {
+            Group {
                 switch Result(catching: { try ConfigManager().config }) {
                 case let .success(config):
-                    let contentView = ContentView(config: config)
-                    AnyView(contentView)
+                    ContentView(config: config)
+                case let .failure(error) where error is ConfigManagerError:
+                    Text("No configuration file found.\n\n"
+                         + "Please refer to the documentation on Github to create a configuration and restart the Cilicon.\n"
+                         + "Try following: `open /Applications/Cilicon.app  --args -config-path User/<user>/cilicon.yml`")
                 case let .failure(error):
                     Text(String(describing: error))
                 }
-
-            } else {
-                Text("No configuration file found.\n\nPlease refer to the documentation on Github to create a configuration and restart the Cilicon.")
-                    .multilineTextAlignment(.center)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
