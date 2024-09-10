@@ -41,7 +41,7 @@ class GitLabRunnerProvisioner: Provisioner {
             await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
 
-        let runCommand = "gitlab-runner run"
+        let runCommand = "gitlab-runner run-single -u \(config.gitlabURL) -t \(config.runnerToken) --executor \(config.executor) --max-builds \(config.maxNumberOfBuilds)"
         await SSHLogger.shared.log(string: "Starting GitLab Runner...".magentaBold)
         try await executeCommand(command: runCommand, sshClient: sshClient)
     }
