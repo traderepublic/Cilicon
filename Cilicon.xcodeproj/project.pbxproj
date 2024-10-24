@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04B9C9B22CCA37AF001BE7E5 /* CirlceCIProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B9C9B12CCA379E001BE7E5 /* CirlceCIProvisionerConfig.swift */; };
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
 		629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EA1322A05A6BC00899D73 /* ANSIParser.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04B9C9B12CCA379E001BE7E5 /* CirlceCIProvisionerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirlceCIProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
 		629EA1322A05A6BC00899D73 /* ANSIParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANSIParser.swift; sourceTree = "<group>"; };
@@ -103,6 +105,10 @@
 		A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSound+SystemSounds.swift"; sourceTree = "<group>"; };
 		A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryMountConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		04F712482CCA334A008378A4 /* CircleCI Runner */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "CircleCI Runner"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A9728DCE2918F79000342A77 /* Frameworks */ = {
@@ -228,6 +234,7 @@
 		A9728DF52918F98500342A77 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				04B9C9B12CCA379E001BE7E5 /* CirlceCIProvisionerConfig.swift */,
 				A9728DF92918F9A000342A77 /* Config.swift */,
 				A9728DFB2918F9A000342A77 /* ConfigManager.swift */,
 				A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */,
@@ -244,6 +251,7 @@
 		A9728E022918F9A800342A77 /* Provisioner */ = {
 			isa = PBXGroup;
 			children = (
+				04F712482CCA334A008378A4 /* CircleCI Runner */,
 				A9728E042918F9BF00342A77 /* Provisioner.swift */,
 				A9517C472937ACA800785136 /* Process */,
 				A97080752A041539006E044D /* Buildkite Agent */,
@@ -307,6 +315,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				04F712482CCA334A008378A4 /* CircleCI Runner */,
+			);
 			name = Cilicon;
 			packageProductDependencies = (
 				A9E7A0972C257E8700B38458 /* Yams */,
@@ -325,7 +336,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -416,6 +427,7 @@
 				A92E97842BA1D5DD0052B85D /* Decompressor.swift in Sources */,
 				A9728DFD2918F9A000342A77 /* GithubProvisionerConfig.swift in Sources */,
 				A97080742A03F688006E044D /* SSHLogger.swift in Sources */,
+				04B9C9B22CCA37AF001BE7E5 /* CirlceCIProvisionerConfig.swift in Sources */,
 				A91D8AB82C25803400810198 /* WWWAuthenticate.swift in Sources */,
 				A91D8AB92C25803400810198 /* Descriptor.swift in Sources */,
 				A91D8ABA2C25803400810198 /* OCIURL.swift in Sources */,
