@@ -116,6 +116,18 @@ provisioner:
     agentToken: <AGENT_TOKEN>
 ```
 
+#### CircleCI Runner
+
+To use the CircleCI Runner provisioner, just add your runner token to the provisioner config.
+
+``` yml
+source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+provisioner:
+  type: circleci
+  config:
+    runnerToken: <RUNNER_TOKEN>
+```
+
 #### Script
 
 If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
