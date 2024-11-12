@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0EBACEC3299287AA00A041C4 /* GitlabProvisionerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */; };
 		0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */; };
+		30C70FA42CE3B236007FADD1 /* SSHClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C70FA32CE3B231007FADD1 /* SSHClient.swift */; };
 		629EA1332A05A6BC00899D73 /* ANSIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629EA1322A05A6BC00899D73 /* ANSIParser.swift */; };
 		A91D8AB82C25803400810198 /* WWWAuthenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91D8AB42C257FF100810198 /* WWWAuthenticate.swift */; };
 		A91D8AB92C25803400810198 /* Descriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91D8AB12C257FF100810198 /* Descriptor.swift */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
+		30C70FA32CE3B231007FADD1 /* SSHClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHClient.swift; sourceTree = "<group>"; };
 		629EA1322A05A6BC00899D73 /* ANSIParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANSIParser.swift; sourceTree = "<group>"; };
 		A91D8AB12C257FF100810198 /* Descriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Descriptor.swift; sourceTree = "<group>"; };
 		A91D8AB22C257FF100810198 /* Manifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manifest.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				629EA1322A05A6BC00899D73 /* ANSIParser.swift */,
 				A9728DE32918F7C500342A77 /* VirtualMachineView.swift */,
 				A9728DE72918F7D000342A77 /* VMManager.swift */,
+				30C70FA32CE3B231007FADD1 /* SSHClient.swift */,
 				A9CCFAA92B4C32AE002631F4 /* Downloader */,
 				A9728E022918F9A800342A77 /* Provisioner */,
 				A9728E0C2918F9CF00342A77 /* AppleEvents */,
@@ -430,6 +433,7 @@
 				A9728E092918F9C600342A77 /* GithubService.swift in Sources */,
 				0EBACEC6299287BF00A041C4 /* GitLabRunnerProvisioner.swift in Sources */,
 				A9728DFE2918F9A000342A77 /* HardwareConfig.swift in Sources */,
+				30C70FA42CE3B236007FADD1 /* SSHClient.swift in Sources */,
 				A9728E002918F9A000342A77 /* ProvisionerConfig.swift in Sources */,
 				A9728E012918F9A000342A77 /* ConfigManager.swift in Sources */,
 				A9728E142918FA4700342A77 /* SendAppleEventToSystemProcess.c in Sources */,

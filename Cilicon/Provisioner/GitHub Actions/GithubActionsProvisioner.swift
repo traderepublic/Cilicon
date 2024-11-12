@@ -1,4 +1,3 @@
-import Citadel
 import Foundation
 
 class GithubActionsProvisioner: Provisioner {
@@ -77,14 +76,14 @@ class GithubActionsProvisioner: Provisioner {
         let runCommand = "~/actions-runner/run.sh"
         command += [configCommand, runCommand].joined(separator: " && ")
 
-        let streamOutput = try await sshClient.executeCommandStream(command, inShell: true)
+        let streamOutput = try await sshClient.executeCommandStream(command)
 
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                await SSHLogger.shared.log(string: stdout)
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                await SSHLogger.shared.log(string: stderr)
             }
         }
     }

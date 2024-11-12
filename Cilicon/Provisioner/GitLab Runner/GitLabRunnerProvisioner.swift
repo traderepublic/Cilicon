@@ -1,4 +1,3 @@
-import Citadel
 import Foundation
 
 class GitLabRunnerProvisioner: Provisioner {
@@ -47,13 +46,13 @@ class GitLabRunnerProvisioner: Provisioner {
     }
 
     private func executeCommand(command: String, sshClient: SSHClient) async throws {
-        let streamOutput = try await sshClient.executeCommandStream(command, inShell: true)
+        let streamOutput = try await sshClient.executeCommandStream(command)
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                await SSHLogger.shared.log(string: stdout)
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                await SSHLogger.shared.log(string: stderr)
             }
         }
     }

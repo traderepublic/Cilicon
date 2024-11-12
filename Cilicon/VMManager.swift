@@ -115,21 +115,23 @@ class VMManager: NSObject, ObservableObject {
         vmState = .running(virtualMachine)
         self.ip = try await fetchIP(macAddress: clonedBundle.configuration.macAddress.string)
 
-        let client = try await SSHClient.connect(
-            host: ip,
-            authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
-            hostKeyValidator: .acceptAnything(),
-            reconnect: .always
+        let client = BinarySSHClient()
+//        let client = CitadelSSHClient()
+
+        try await client.connect(
+            ip: ip,
+            username: config.sshCredentials.username,
+            password: config.sshCredentials.password
         )
 
         if let preRun = config.preRun {
-            let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
+            let streamOutput = try await client.executeCommandStream(preRun)
             for try await blob in streamOutput {
                 switch blob {
                 case let .stdout(stdout):
-                    SSHLogger.shared.log(string: String(buffer: stdout))
+                    SSHLogger.shared.log(string: stdout)
                 case let .stderr(stderr):
-                    SSHLogger.shared.log(string: String(buffer: stderr))
+                    SSHLogger.shared.log(string: stderr)
                 }
             }
         }
@@ -143,13 +145,13 @@ class VMManager: NSObject, ObservableObject {
         }
 
         if let postRun = config.postRun {
-            let streamOutput = try await client.executeCommandStream(postRun, inShell: true)
+            let streamOutput = try await client.executeCommandStream(postRun)
             for try await blob in streamOutput {
                 switch blob {
                 case let .stdout(stdout):
-                    SSHLogger.shared.log(string: String(buffer: stdout))
+                    SSHLogger.shared.log(string: stdout)
                 case let .stderr(stderr):
-                    SSHLogger.shared.log(string: String(buffer: stderr))
+                    SSHLogger.shared.log(string: stderr)
                 }
             }
         }

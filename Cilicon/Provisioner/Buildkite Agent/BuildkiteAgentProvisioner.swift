@@ -1,4 +1,3 @@
-import Citadel
 import Foundation
 
 /// The Buildkite Provisioner
@@ -21,13 +20,13 @@ class BuildkiteAgentProvisioner: Provisioner {
             block.append(" --tags \(tags.joined(separator: ","))")
         }
 
-        let streamOutput = try await sshClient.executeCommandStream(block, inShell: true)
+        let streamOutput = try await sshClient.executeCommandStream(block)
         for try await blob in streamOutput {
             switch blob {
             case let .stdout(stdout):
-                await SSHLogger.shared.log(string: String(buffer: stdout))
+                await SSHLogger.shared.log(string: stdout)
             case let .stderr(stderr):
-                await SSHLogger.shared.log(string: String(buffer: stderr))
+                await SSHLogger.shared.log(string: stderr)
             }
         }
     }
