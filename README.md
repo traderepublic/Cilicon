@@ -7,6 +7,9 @@
   • <a href="#-join-us">Join Us</a>
 </p>
 
+> [!CAUTION]
+> There seems to be an issue with swift-nio based SSH on macOS 15.X hosts. Please don't update your host OS if you rely on Cilicon for production CI. This issue only affects the host OS. Images may still be updated to 15.X.
+
 <details><summary><h3>💥 What's new in 2.0?</h3></summary>
 We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
 <ul>
