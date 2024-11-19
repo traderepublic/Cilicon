@@ -2,7 +2,6 @@ import Foundation
 import Yams
 
 class ConfigManager {
-
     let config: Config
 
     /// Default config

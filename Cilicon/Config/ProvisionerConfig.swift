@@ -4,6 +4,7 @@ enum ProvisionerConfig: Codable {
     case github(GithubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
     case buildkite(BuildkiteAgentProvisionerConfig)
+    case circleci(CircleCIProvisionerConfig)
     case script(ScriptProvisionerConfig)
 
     enum CodingKeys: CodingKey {
@@ -24,6 +25,9 @@ enum ProvisionerConfig: Codable {
         case .buildkite:
             let config = try container.decode(BuildkiteAgentProvisionerConfig.self, forKey: .config)
             self = .buildkite(config)
+        case .circleci:
+            let config = try container.decode(CircleCIProvisionerConfig.self, forKey: .config)
+            self = .circleci(config)
         case .script:
             let config = try container.decode(ScriptProvisionerConfig.self, forKey: .config)
             self = .script(config)
@@ -46,6 +50,7 @@ enum ProvisionerConfig: Codable {
         case github
         case gitlab
         case buildkite
+        case circleci
         case script
     }
 }
