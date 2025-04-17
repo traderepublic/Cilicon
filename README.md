@@ -7,8 +7,8 @@
   • <a href="#-join-us">Join Us</a>
 </p>
 
-> [!CAUTION]
-> There seems to be an issue with swift-nio based SSH on macOS 15.X hosts. Please don't update your host OS if you rely on Cilicon for production CI. This issue only affects the host OS. Images may still be updated to 15.X.
+> [!WARNING]
+> There seems to be an issue with swift-nio based SSH on macOS 15.0-15.3.X. Please use macOS 15.4+ for a more reliable experience.
 
 <details><summary><h3>💥 What's new in 2.0?</h3></summary>
 We're excited to announce a new major update to Cilicon! Here's a summary of what's new:
@@ -67,7 +67,7 @@ For more information on all available settings see [Config.swift](/Cilicon/Confi
 To use the GitHub Actions provisioner you will need to [create and install a new GitHub App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app) with `Self-hosted runners` `Read & Write` permissions on the organization level and download the private key file to be referenced in the configuration file.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
 provisioner:
   type: github
   config:
@@ -82,7 +82,7 @@ To use the GitLab Runner provisioner you will need to [create a runner with an a
 Minimal example:
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
 provisioner:
   type: gitlab
   config:
@@ -93,7 +93,7 @@ provisioner:
 Full configuration:
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
 provisioner:
   type: gitlab
   config:
@@ -101,10 +101,8 @@ provisioner:
     runnerToken: <RUNNER_TOKEN>
     executor: <EXECUTOR> # defaults to 'shell'
     maxNumberOfBuilds: <MAX_BUILDS> # defaults to '1'
-    downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'
+    downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'. If 'false' it expects the binary to be present at the user's home directory
     downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
-    configToml: > # Advanced config as custom config.toml file to be appended to the basic config and copied to the runner.
-      <CONFIG_TOML>
 ```
 
 #### Buildkite Agent
@@ -112,7 +110,7 @@ provisioner:
 To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
 provisioner:
   type: buildkite
   config:
@@ -124,7 +122,7 @@ provisioner:
 If you want to run a script (e.g. to start a runner that's not natively supported), you may use the `script` provisioner.
 
 ``` yml
-source: oci://ghcr.io/cirruslabs/macos-sonoma-xcode:15.3
+source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
 provisioner:
   type: script
   config:

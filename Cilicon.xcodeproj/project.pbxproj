@@ -325,7 +325,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
@@ -583,7 +583,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -617,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.cilicon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -656,7 +656,7 @@
 			repositoryURL = "https://github.com/jpsim/Yams/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.2;
+				minimumVersion = 5.3.1;
 			};
 		};
 		A9E7A0992C257E9700B38458 /* XCRemoteSwiftPackageReference "Citadel" */ = {
@@ -664,7 +664,7 @@
 			repositoryURL = "https://github.com/orlandos-nl/Citadel/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.7.2;
+				minimumVersion = 0.10.0;
 			};
 		};
 		A9E7A09C2C257EA400B38458 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {

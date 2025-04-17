@@ -17,12 +17,6 @@ struct GitLabProvisionerConfig: Decodable {
     /// Only used if `downloadLatest` is set to `true`
     /// Defaults to the latest macOS binary from GitLab's S3 bucket
     let downloadURL: String
-    /// Optional advanced configuration for the GitLab Runner, will be appended to the `config.toml` file after the preconfigured `[[runners]]`
-    /// section.
-    /// The values for `url`, `token`, `executor` and `limit` are already configured using the values specified in the Cilicon configuration file and
-    /// should not be duplicated in this field.
-    /// - seealso: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
-    let configToml: String?
 
     enum CodingKeys: CodingKey {
         case gitlabURL
@@ -31,7 +25,6 @@ struct GitLabProvisionerConfig: Decodable {
         case maxNumberOfBuilds
         case downloadLatest
         case downloadURL
-        case configToml
     }
 
     init(from decoder: Decoder) throws {
@@ -44,6 +37,5 @@ struct GitLabProvisionerConfig: Decodable {
         self.maxNumberOfBuilds = try container.decodeIfPresent(Int.self, forKey: .maxNumberOfBuilds) ?? 1
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
         self.downloadURL = try container.decodeIfPresent(String.self, forKey: .downloadURL) ?? defaultDownloadURL
-        self.configToml = try container.decodeIfPresent(String.self, forKey: .configToml)
     }
 }
