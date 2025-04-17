@@ -9,41 +9,31 @@ class GitLabRunnerProvisioner: Provisioner {
     }
 
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
-        var downloadCommands: [String] = []
-
-        await SSHLogger.shared.log(string: "Configuring GitLab Runner...".magentaBold)
-        let copyConfigTomlCommand = """
-        mkdir -p ~/.gitlab-runner
-        rm -rf ~/.gitlab-runner/config.toml
-        cat <<'EOF' >> ~/.gitlab-runner/config.toml
-        [[runners]]
-          url = "\(config.gitlabURL)"
-          token = "\(config.runnerToken)"
-          executor = "\(config.executor)"
-          limit = \(config.maxNumberOfBuilds)
-        \(config.configToml ?? "")
-        EOF
-        exit 1
-        """
-        try await executeCommand(command: copyConfigTomlCommand, sshClient: sshClient)
-        await SSHLogger.shared.log(string: "Successfully configured GitLab Runner".greenBold)
-
+        var commands: [String] = []
         if config.downloadLatest {
-            await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary from Source".magentaBold)
-            downloadCommands = [
-                "rm -rf gitlab-runner",
+            await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary".magentaBold)
+            commands = [
                 "curl -o gitlab-runner \(config.downloadURL)",
-                "sudo chmod +x gitlab-runner"
+                "chmod +x gitlab-runner"
             ]
-            try await executeCommand(command: downloadCommands.joined(separator: " && "), sshClient: sshClient)
-            await SSHLogger.shared.log(string: "Downloaded GitLab Runner Binary from Source successfully".magentaBold)
+            await SSHLogger.shared.log(string: "Downloaded GitLab Runner Binary".magentaBold)
         } else {
             await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
+        if let tomlPath = config.tomlPath {
+            commands.append("./gitlab-runner run-single -c '\(tomlPath)'")
+        } else {
+            let registerCommand = """
+            ./gitlab-runner run-single \
+            --token \(config.runnerToken) \
+            --url \(config.gitlabURL) \
+            --executor \(config.executor) \
+            --max-builds \(config.maxNumberOfBuilds)
+            """
+            commands.append(registerCommand)
+        }
 
-        let runCommand = "gitlab-runner run"
-        await SSHLogger.shared.log(string: "Starting GitLab Runner...".magentaBold)
-        try await executeCommand(command: runCommand, sshClient: sshClient)
+        try await executeCommand(command: commands.joined(separator: " && "), sshClient: sshClient)
     }
 
     private func executeCommand(command: String, sshClient: SSHClient) async throws {

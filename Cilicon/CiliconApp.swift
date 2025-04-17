@@ -3,7 +3,6 @@ import Yams
 
 @main
 struct CiliconApp: App {
-
     var body: some Scene {
         Window("Cilicon", id: "cihost") {
             Group {
@@ -11,9 +10,11 @@ struct CiliconApp: App {
                 case let .success(config):
                     ContentView(config: config)
                 case let .failure(error) where error is ConfigManagerError:
-                    Text("No configuration file found.\n\n"
-                         + "Please refer to the documentation on Github to create a configuration and restart the Cilicon.\n"
-                         + "Try following: `open /Applications/Cilicon.app  --args -config-path User/<user>/cilicon.yml`")
+                    Text(
+                        "No configuration file found.\n\n"
+                            + "Please refer to the documentation on Github to create a configuration and restart the Cilicon.\n"
+                            + "Try following: `open /Applications/Cilicon.app  --args -config-path User/<user>/cilicon.yml`"
+                    )
                 case let .failure(error):
                     Text(String(describing: error))
                 }
