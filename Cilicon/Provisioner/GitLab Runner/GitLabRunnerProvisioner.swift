@@ -11,14 +11,10 @@ class GitLabRunnerProvisioner: Provisioner {
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
         var commands: [String] = []
         if config.downloadLatest {
-            await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary".magentaBold)
             commands = [
                 "curl -o gitlab-runner \(config.downloadURL)",
                 "chmod +x gitlab-runner"
             ]
-            await SSHLogger.shared.log(string: "Downloaded GitLab Runner Binary".magentaBold)
-        } else {
-            await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
         if let tomlPath = config.tomlPath {
             commands.append("./gitlab-runner run-single -c '\(tomlPath)'")
