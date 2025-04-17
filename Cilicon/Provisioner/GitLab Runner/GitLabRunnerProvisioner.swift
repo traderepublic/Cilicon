@@ -20,8 +20,8 @@ class GitLabRunnerProvisioner: Provisioner {
         } else {
             await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
-        if config.useToml {
-            commands.append("./gitlab-runner run-single -c ./config.toml")
+        if let tomlPath = config.tomlPath {
+            commands.append("./gitlab-runner run-single -c '\(tomlPath)'")
         } else {
             let registerCommand = """
             ./gitlab-runner run-single \

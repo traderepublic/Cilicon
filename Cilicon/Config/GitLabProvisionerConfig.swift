@@ -17,11 +17,9 @@ struct GitLabProvisionerConfig: Decodable {
     /// Only used if `downloadLatest` is set to `true`
     /// Defaults to the latest macOS binary from GitLab's S3 bucket
     let downloadURL: String
-    /// If this is set to true, the runner ignore the other runner-related configs
-    /// and run `./gitlab-runner run-single -c ./config.toml`.
-    /// You may use a `preRun` script to prepare your toml file.
-    /// Defaults to `false`
-    let useToml: Bool
+    /// If this is set, the other runner related variables are ignored.
+    /// Instead, the toml file specified will be used to configure the runner.
+    let tomlPath: String?
 
     enum CodingKeys: CodingKey {
         case gitlabURL
@@ -30,7 +28,7 @@ struct GitLabProvisionerConfig: Decodable {
         case maxNumberOfBuilds
         case downloadLatest
         case downloadURL
-        case useToml
+        case tomlPath
     }
 
     init(from decoder: Decoder) throws {
@@ -43,6 +41,6 @@ struct GitLabProvisionerConfig: Decodable {
         self.maxNumberOfBuilds = try container.decodeIfPresent(Int.self, forKey: .maxNumberOfBuilds) ?? 1
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
         self.downloadURL = try container.decodeIfPresent(String.self, forKey: .downloadURL) ?? defaultDownloadURL
-        self.useToml = try container.decodeIfPresent(Bool.self, forKey: .useToml) ?? false
+        self.tomlPath = try container.decodeIfPresent(String.self, forKey: .tomlPath)
     }
 }
