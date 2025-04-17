@@ -9,24 +9,31 @@ class GitLabRunnerProvisioner: Provisioner {
     }
 
     func provision(bundle: VMBundle, sshClient: SSHClient) async throws {
+        var commands: [String] = []
         if config.downloadLatest {
             await SSHLogger.shared.log(string: "Downloading GitLab Runner Binary".magentaBold)
-            let downloadCommand = """
-            curl -o gitlab-runner \(config.downloadURL) && chmod +x gitlab-runner
-            """
-            try await executeCommand(command: downloadCommand, sshClient: sshClient)
+            commands = [
+                "curl -o gitlab-runner \(config.downloadURL)",
+                "chmod +x gitlab-runner"
+            ]
             await SSHLogger.shared.log(string: "Downloaded GitLab Runner Binary".magentaBold)
         } else {
             await SSHLogger.shared.log(string: "Skipped downloading GitLab Runner Binary because downloadLatest is false".magentaBold)
         }
-        let registerCommand = """
-        ./gitlab-runner run-single \
-        --token \(config.runnerToken) \
-        --url \(config.gitlabURL) \
-        --executor \(config.executor) \
-        --max-builds \(config.maxNumberOfBuilds)
-        """
-        try await executeCommand(command: registerCommand, sshClient: sshClient)
+        if config.useToml {
+            commands.append("./gitlab-runner run-single -c ./config.toml")
+        } else {
+            let registerCommand = """
+            ./gitlab-runner run-single \
+            --token \(config.runnerToken) \
+            --url \(config.gitlabURL) \
+            --executor \(config.executor) \
+            --max-builds \(config.maxNumberOfBuilds)
+            """
+            commands.append(registerCommand)
+        }
+
+        try await executeCommand(command: commands.joined(separator: " && "), sshClient: sshClient)
     }
 
     private func executeCommand(command: String, sshClient: SSHClient) async throws {

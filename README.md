@@ -103,6 +103,7 @@ provisioner:
     maxNumberOfBuilds: <MAX_BUILDS> # defaults to '1'
     downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'. If 'false' it expects the binary to be present at the user's home directory
     downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
+    useToml: <USE_TOML> # defaults to `false`. If `true` it ignores the other runner configurations and expects the user to have a toml file ready in the admin's home directory.
 ```
 
 #### Buildkite Agent
