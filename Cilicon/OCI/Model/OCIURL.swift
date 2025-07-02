@@ -23,7 +23,7 @@ public struct OCIURL: Encodable {
         self.scheme = scheme
         self.registry = host
         self.repository = components[0]
-        self.tag = components[1]
+        self.tag = components.dropFirst().joined(separator: ":")
     }
 
     public init?(string: String) {
