@@ -24,6 +24,15 @@ extension VMConfigHelper {
             virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
         }
         virtualMachineConfiguration.directorySharingDevices = try [createDirectorySharingConfiguration(config: config)]
+
+        // cirruslabs tart VMs have tart-guest-agent running that expects a port with prefix "tart-version-".
+        // Add a dummy port 'tart-version-cilicon" to prevent boot loops.
+        let consolePort = VZVirtioConsolePortConfiguration()
+        consolePort.name = "tart-version-cilicon"
+        let consoleDevice = VZVirtioConsoleDeviceConfiguration()
+        consoleDevice.ports[0] = consolePort
+        virtualMachineConfiguration.consoleDevices.append(consoleDevice)
+
         try virtualMachineConfiguration.validate()
 
         return virtualMachineConfiguration
