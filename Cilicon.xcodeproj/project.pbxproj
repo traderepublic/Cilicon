@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -54,6 +54,16 @@
 		A9FDAB2329375E8100B8CA1F /* DirectoryMountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F9C7BCF02E17E2C700E8F9CE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9728DC92918F79000342A77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9728DD02918F79000342A77;
+			remoteInfo = Cilicon;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0EBACEC2299287AA00A041C4 /* GitlabProvisionerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitlabProvisionerConfig.swift; sourceTree = "<group>"; };
 		0EBACEC5299287BF00A041C4 /* GitLabRunnerProvisioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitLabRunnerProvisioner.swift; sourceTree = "<group>"; };
@@ -102,7 +112,12 @@
 		A9FC3D0F2A127BE900535E9C /* VMSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMSource.swift; sourceTree = "<group>"; };
 		A9FDAB1C292E5A2E00B8CA1F /* NSSound+SystemSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSound+SystemSounds.swift"; sourceTree = "<group>"; };
 		A9FDAB2229375E8100B8CA1F /* DirectoryMountConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryMountConfig.swift; sourceTree = "<group>"; };
+		F9C7BCEC2E17E2C700E8F9CE /* CiliconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CiliconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F9C7BCED2E17E2C700E8F9CE /* CiliconTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CiliconTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A9728DCE2918F79000342A77 /* Frameworks */ = {
@@ -112,6 +127,13 @@
 				A9E7A09B2C257E9700B38458 /* Citadel in Frameworks */,
 				A9E7A09E2C257EA400B38458 /* SwiftJWT in Frameworks */,
 				A9E7A0982C257E8700B38458 /* Yams in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9C7BCE92E17E2C700E8F9CE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +210,7 @@
 				A98EEC3C2A0BB17200442399 /* Packages */,
 				A9728DD32918F79000342A77 /* Cilicon */,
 				A951BCCD292B922D00FFDACC /* Common */,
+				F9C7BCED2E17E2C700E8F9CE /* CiliconTests */,
 				A9728DD22918F79000342A77 /* Products */,
 				A951BCD3292B93C900FFDACC /* Frameworks */,
 			);
@@ -197,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				A9728DD12918F79000342A77 /* Cilicon.app */,
+				F9C7BCEC2E17E2C700E8F9CE /* CiliconTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -317,6 +341,29 @@
 			productReference = A9728DD12918F79000342A77 /* Cilicon.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F9C7BCEB2E17E2C700E8F9CE /* CiliconTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9C7BCF22E17E2C700E8F9CE /* Build configuration list for PBXNativeTarget "CiliconTests" */;
+			buildPhases = (
+				F9C7BCE82E17E2C700E8F9CE /* Sources */,
+				F9C7BCE92E17E2C700E8F9CE /* Frameworks */,
+				F9C7BCEA2E17E2C700E8F9CE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F9C7BCF12E17E2C700E8F9CE /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F9C7BCED2E17E2C700E8F9CE /* CiliconTests */,
+			);
+			name = CiliconTests;
+			packageProductDependencies = (
+			);
+			productName = CiliconTests;
+			productReference = F9C7BCEC2E17E2C700E8F9CE /* CiliconTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -324,11 +371,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1410;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					A9728DD02918F79000342A77 = {
 						CreatedOnToolsVersion = 14.1;
+					};
+					F9C7BCEB2E17E2C700E8F9CE = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = A9728DD02918F79000342A77;
 					};
 				};
 			};
@@ -351,6 +402,7 @@
 			projectRoot = "";
 			targets = (
 				A9728DD02918F79000342A77 /* Cilicon */,
+				F9C7BCEB2E17E2C700E8F9CE /* CiliconTests */,
 			);
 		};
 /* End PBXProject section */
@@ -361,6 +413,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9728DD92918F79100342A77 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9C7BCEA2E17E2C700E8F9CE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +496,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F9C7BCE82E17E2C700E8F9CE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F9C7BCF12E17E2C700E8F9CE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9728DD02918F79000342A77 /* Cilicon */;
+			targetProxy = F9C7BCF02E17E2C700E8F9CE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A9728DDE2918F79100342A77 /* Debug */ = {
@@ -627,6 +701,34 @@
 			};
 			name = Release;
 		};
+		F9C7BCF32E17E2C700E8F9CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.CiliconTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cilicon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cilicon";
+			};
+			name = Debug;
+		};
+		F9C7BCF42E17E2C700E8F9CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.traderepublic.CiliconTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cilicon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cilicon";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -644,6 +746,15 @@
 			buildConfigurations = (
 				A9728DE12918F79100342A77 /* Debug */,
 				A9728DE22918F79100342A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9C7BCF22E17E2C700E8F9CE /* Build configuration list for PBXNativeTarget "CiliconTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9C7BCF32E17E2C700E8F9CE /* Debug */,
+				F9C7BCF42E17E2C700E8F9CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

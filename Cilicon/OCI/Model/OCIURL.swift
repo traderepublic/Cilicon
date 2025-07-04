@@ -16,14 +16,15 @@ public struct OCIURL: Encodable {
             return nil
         }
 
-        let components = path.split(separator: ":").map(String.init)
+        let components = path.split(separator: ":")
         guard components.count >= 2 else {
             return nil
         }
         self.scheme = scheme
         self.registry = host
-        self.repository = components[0]
-        self.tag = components[1]
+        // Assume the first component is the repository and the rest is the tag.
+        self.repository = String(components[0])
+        self.tag = components.dropFirst().joined(separator: ":")
     }
 
     public init?(string: String) {
