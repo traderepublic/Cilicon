@@ -104,25 +104,34 @@ class VMManager: NSObject, ObservableObject {
 
     @MainActor
     private func setupAndRunVirtualMachine() async throws {
+        SSHLogger.shared.log(string: "Cloning VM...")
         try await cloneBundle()
+        SSHLogger.shared.log(string: " Done.\n")
         let vmHelper = VMConfigHelper(vmBundle: activeBundle)
         let vmConfig = try vmHelper.computeRunConfiguration(config: config)
         let virtualMachine = VZVirtualMachine(configuration: vmConfig)
         virtualMachine.delegate = self
 
         SSHLogger.shared.log(string: "---------- Starting Up ----------\n")
+        SSHLogger.shared.log(string: "Starting VM...")
         try await virtualMachine.start()
+        SSHLogger.shared.log(string: " Done.\n")
         vmState = .running(virtualMachine)
+        SSHLogger.shared.log(string: "Fetching IP Address...")
         self.ip = try await fetchIP(macAddress: clonedBundle.configuration.macAddress.string)
+        SSHLogger.shared.log(string: " IP: \(ip)\n")
 
+        SSHLogger.shared.log(string: "Connect SSH...")
         let client = try await SSHClient.connect(
             host: ip,
             authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
             hostKeyValidator: .acceptAnything(),
             reconnect: .always
         )
+        SSHLogger.shared.log(string: " Connected.\n")
 
         if let preRun = config.preRun {
+            SSHLogger.shared.log(string: "Execute pre run step... ")
             let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
             for try await blob in streamOutput {
                 switch blob {
@@ -132,10 +141,12 @@ class VMManager: NSObject, ObservableObject {
                     SSHLogger.shared.log(string: String(buffer: stderr))
                 }
             }
+            SSHLogger.shared.log(string: " Done.\n")
         }
 
         if let provisioner {
             do {
+                SSHLogger.shared.log(string: "Run provisioner \(type(of: provisioner))\n")
                 try await provisioner.provision(bundle: activeBundle, sshClient: client)
             } catch {
                 SSHLogger.shared.log(string: error.localizedDescription + "\n")
@@ -143,6 +154,7 @@ class VMManager: NSObject, ObservableObject {
         }
 
         if let postRun = config.postRun {
+            SSHLogger.shared.log(string: "Execute post run step... ")
             let streamOutput = try await client.executeCommandStream(postRun, inShell: true)
             for try await blob in streamOutput {
                 switch blob {
@@ -152,11 +164,14 @@ class VMManager: NSObject, ObservableObject {
                     SSHLogger.shared.log(string: String(buffer: stderr))
                 }
             }
+            SSHLogger.shared.log(string: " Done.\n")
         }
         try await client.close()
         SSHLogger.shared.log(string: "---------- Shutting Down ----------\n")
         Task { @MainActor in
+            SSHLogger.shared.log(string: "Stopping VM... ")
             try await virtualMachine.stop()
+            SSHLogger.shared.log(string: " Done.\n")
             try await handleStop()
         }
     }
@@ -179,6 +194,7 @@ class VMManager: NSObject, ObservableObject {
     @MainActor
     func handleStop() async throws {
         if let runsTilReboot = config.numberOfRunsUntilHostReboot, runCounter >= runsTilReboot {
+            SSHLogger.shared.log(string: "Restart host machine... ")
             AppleEvent.restart.perform()
             NSApplication.shared.terminate(nil)
             return
