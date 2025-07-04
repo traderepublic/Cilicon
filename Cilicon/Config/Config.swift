@@ -13,7 +13,8 @@ struct Config: Codable {
         retryDelay: Int,
         sshCredentials: SSHCredentials,
         preRun: String? = nil,
-        postRun: String? = nil
+        postRun: String? = nil,
+        consoleDevices: [String] = []
     ) {
         self.provisioner = provisioner
         self.hardware = hardware
@@ -26,6 +27,7 @@ struct Config: Codable {
         self.sshCredentials = sshCredentials
         self.preRun = preRun
         self.postRun = postRun
+        self.consoleDevices = consoleDevices
     }
 
     /// Provisioner Configuration.
@@ -52,6 +54,8 @@ struct Config: Codable {
     let preRun: String?
     /// A command to run after the provisioning commands are run.
     let postRun: String?
+    /// A list of console device names that are going to be injected into the VM.
+    let consoleDevices: [String]
 
     enum CodingKeys: CodingKey {
         case provisioner
@@ -65,6 +69,7 @@ struct Config: Codable {
         case sshCredentials
         case preRun
         case postRun
+        case consoleDevices
     }
 
     init(from decoder: Decoder) throws {
@@ -82,6 +87,7 @@ struct Config: Codable {
         self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .default
         self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)
         self.postRun = try container.decodeIfPresent(String.self, forKey: .postRun)
+        self.consoleDevices = try container.decodeIfPresent([String].self, forKey: .consoleDevices) ?? []
     }
 }
 
