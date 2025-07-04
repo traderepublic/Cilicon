@@ -122,12 +122,29 @@ class VMManager: NSObject, ObservableObject {
         SSHLogger.shared.log(string: " IP: \(ip)\n")
 
         SSHLogger.shared.log(string: "Connect SSH...")
-        let client = try await SSHClient.connect(
-            host: ip,
-            authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
-            hostKeyValidator: .acceptAnything(),
-            reconnect: .always
-        )
+        let connectTimeout: TimeInterval = 30
+        let connectStalledTimeout = connectTimeout * 2.0
+        let connectTask = Task {
+            let client = try await SSHClient.connect(
+                host: ip,
+                authenticationMethod: .passwordBased(
+                    username: config.sshCredentials.username,
+                    password: config.sshCredentials.password
+                ),
+                hostKeyValidator: .acceptAnything(),
+                reconnect: .always,
+                connectTimeout: .seconds(Int64(connectTimeout))
+            )
+            try Task.checkCancellation()
+            return client
+        }
+        let timeoutTask = Task {
+            try await Task.sleep(nanoseconds: UInt64(connectStalledTimeout) * NSEC_PER_SEC)
+            SSHLogger.shared.log(string: "Timeout after \(connectStalledTimeout) seconds.\n")
+            connectTask.cancel()
+        }
+        let client = try await connectTask.value
+        timeoutTask.cancel()
         SSHLogger.shared.log(string: " Connected.\n")
 
         if let preRun = config.preRun {
