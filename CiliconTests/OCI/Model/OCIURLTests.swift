@@ -30,6 +30,15 @@ final class OCIURLTests: XCTestCase {
         XCTAssertEqual(sut.tag, "tag")
     }
 
+    func test_initWithString_sha256Revision() throws {
+        let sut = try XCTUnwrap(OCIURL(string: "oci://example.com/namespace/image_name:sha256:123abc"))
+
+        XCTAssertEqual(sut.scheme, "oci")
+        XCTAssertEqual(sut.registry, "example.com")
+        XCTAssertEqual(sut.repository, "/namespace/image_name")
+        XCTAssertEqual(sut.tag, "sha256:123abc")
+    }
+
     // MARK: - encode()
 
     func test_encode() throws {
