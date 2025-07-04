@@ -24,6 +24,15 @@ extension VMConfigHelper {
             virtualMachineConfiguration.audioDevices = [createAudioDeviceConfiguration()]
         }
         virtualMachineConfiguration.directorySharingDevices = try [createDirectorySharingConfiguration(config: config)]
+
+        for consoleDeviceConfig in config.consoleDevices {
+            let consolePort = VZVirtioConsolePortConfiguration()
+            consolePort.name = consoleDeviceConfig
+            let consoleDevice = VZVirtioConsoleDeviceConfiguration()
+            consoleDevice.ports[0] = consolePort
+            virtualMachineConfiguration.consoleDevices.append(consoleDevice)
+        }
+
         try virtualMachineConfiguration.validate()
 
         return virtualMachineConfiguration
