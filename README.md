@@ -104,6 +104,8 @@ provisioner:
     downloadLatest: <DOWNLOAD_LATEST> # defaults to 'true'. If 'false' it expects the binary to be present at the user's home directory
     downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
     tomlPath: <PATH_TO_TOML> # defaults to `nil`. If set, it ignores the other runner related variables and passes the specified path to the runner executable
+consoleDevices:
+  - tart-version-cilicon
 ```
 
 #### Buildkite Agent
@@ -130,6 +132,17 @@ provisioner:
      run: |
      	echo "Hello World"
         sleep 10
+```
+
+#### Console Devices
+
+Cilicon supports injecting console devices into the VM configuration. This is particularly useful for compatibility with tools like [tart-guest-agent](https://github.com/cirruslabs/tart-guest-agent) which expect specific console devices to be present.
+
+To add console devices, use the `consoleDevices` field in your configuration:
+
+```yml
+consoleDevices:
+  - tart-version-cilicon
 ```
 
 ### 🔨 Setting Up the Host OS
