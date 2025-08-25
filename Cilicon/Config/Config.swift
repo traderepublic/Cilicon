@@ -12,6 +12,7 @@ struct Config: Codable {
         autoTransferImageVolume: String? = nil,
         retryDelay: Int,
         sshCredentials: SSHCredentials,
+        sshConnectMaxRetries: Int,
         preRun: String? = nil,
         postRun: String? = nil,
         consoleDevices: [String] = []
@@ -25,6 +26,7 @@ struct Config: Codable {
         self.runnerName = runnerName
         self.retryDelay = retryDelay
         self.sshCredentials = sshCredentials
+        self.sshConnectMaxRetries = sshConnectMaxRetries
         self.preRun = preRun
         self.postRun = postRun
         self.consoleDevices = consoleDevices
@@ -50,6 +52,8 @@ struct Config: Codable {
     let retryDelay: Int
     /// Credentials to be used when connecting via SSH.
     let sshCredentials: SSHCredentials
+    /// Maximum number of retries for SSH connection attempts.
+    let sshConnectMaxRetries: Int
     /// A command to run before the provisioning commands are run.
     let preRun: String?
     /// A command to run after the provisioning commands are run.
@@ -67,6 +71,7 @@ struct Config: Codable {
         case runnerName
         case retryDelay
         case sshCredentials
+        case sshConnectMaxRetries
         case preRun
         case postRun
         case consoleDevices
@@ -85,6 +90,7 @@ struct Config: Codable {
         self.runnerName = try container.decodeIfPresent(String.self, forKey: .runnerName)
         self.retryDelay = try container.decodeIfPresent(Int.self, forKey: .retryDelay) ?? 5
         self.sshCredentials = try container.decodeIfPresent(SSHCredentials.self, forKey: .sshCredentials) ?? .default
+        self.sshConnectMaxRetries = try container.decodeIfPresent(Int.self, forKey: .sshConnectMaxRetries) ?? 10
         self.preRun = try container.decodeIfPresent(String.self, forKey: .preRun)
         self.postRun = try container.decodeIfPresent(String.self, forKey: .postRun)
         self.consoleDevices = try container.decodeIfPresent([String].self, forKey: .consoleDevices) ?? []
