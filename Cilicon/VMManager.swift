@@ -115,12 +115,8 @@ class VMManager: NSObject, ObservableObject {
         vmState = .running(virtualMachine)
         self.ip = try await fetchIP(macAddress: clonedBundle.configuration.macAddress.string)
 
-        let client = try await SSHClient.connect(
-            host: ip,
-            authenticationMethod: .passwordBased(username: config.sshCredentials.username, password: config.sshCredentials.password),
-            hostKeyValidator: .acceptAnything(),
-            reconnect: .always
-        )
+        // Wait for VM to fully boot and can execute SSH commands before proceeding
+        let client = try await createAndConnectSSHClient(ip: ip)
 
         if let preRun = config.preRun {
             let streamOutput = try await client.executeCommandStream(preRun, inShell: true)
@@ -161,7 +157,59 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
-    func provisionVM() async throws { }
+    /// Creates and connects an SSH client to the given IP address, retrying until successful or a timeout occurs.
+    @MainActor
+    private func createAndConnectSSHClient(ip: String) async throws -> SSHClient {
+        SSHLogger.shared.log(string: "Waiting for VM to boot and SSH to be available...\n")
+        let maxRetries = config.sshConnectMaxRetries
+        var tries = 0
+
+        while tries < maxRetries {
+            do {
+                let client = try await SSHClient.connect(
+                    host: ip,
+                    authenticationMethod: .passwordBased(
+                        username: config.sshCredentials.username,
+                        password: config.sshCredentials.password
+                    ),
+                    hostKeyValidator: .acceptAnything(),
+                    reconnect: .never,
+                    connectTimeout: .seconds(5)
+                )
+
+                // Test if we can execute a simple command
+                let token = "ssh-connected"
+                let streamOutput = try await client.executeCommandStream("echo \(token)", inShell: true)
+                var commandSuccessful = false
+
+                for try await blob in streamOutput {
+                    switch blob {
+                    case let .stdout(stdout):
+                        let output = String(buffer: stdout)
+                        if output.contains(token) {
+                            commandSuccessful = true
+                        }
+                    case .stderr:
+                        break
+                    }
+                }
+
+                if commandSuccessful {
+                    SSHLogger.shared.log(string: "VM fully booted and SSH available\n")
+                    return client
+                }
+
+                try await client.close()
+            } catch {
+                // SSH not ready yet, continue waiting
+                tries += 1
+                SSHLogger.shared.log(string: "SSH connect \(tries)/\(maxRetries): SSH not ready, waiting 5s...\n")
+                try await Task.sleep(for: .seconds(5))
+            }
+        }
+
+        throw VMManagerError.sshConnectTimeout
+    }
 
     func isBundleComplete() throws -> Bool {
         let filesExist = [
@@ -313,6 +361,7 @@ extension VMManager {
 enum VMManagerError: Error {
     case masterBundleNotFound(path: String)
     case failedToCreateDiskFile
+    case sshConnectTimeout
 }
 
 extension VMManagerError: LocalizedError {
@@ -322,6 +371,8 @@ extension VMManagerError: LocalizedError {
             return "Could not found bundle at \(path)"
         case .failedToCreateDiskFile:
             return "Failed to create Disk File"
+        case .sshConnectTimeout:
+            return "SSH Connect timeout"
         }
     }
 }

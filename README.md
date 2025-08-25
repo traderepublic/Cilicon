@@ -105,7 +105,8 @@ provisioner:
     downloadURL: <DOWNLOAD_URL> # defaults to GitLab official S3 bucket
     tomlPath: <PATH_TO_TOML> # defaults to `nil`. If set, it ignores the other runner related variables and passes the specified path to the runner executable
 consoleDevices:
-  - tart-version-cilicon
+  - tart-version-2
+sshConnectMaxRetries: <SSH_CONNECT_MAX_RETRIES> # defaults to 10
 ```
 
 #### Buildkite Agent
@@ -142,7 +143,16 @@ To add console devices, use the `consoleDevices` field in your configuration:
 
 ```yml
 consoleDevices:
-  - tart-version-cilicon
+  - tart-version-2
+```
+
+#### SSH Connect Retries
+After the VM starts, Cilicon connects to the guest over SSH to run any preRun/postRun commands and the provisioner. Some images may take a while before the SSH service is ready. Use `sshConnectMaxRetries` to control how many connection attempts Cilicon will make before giving up (default: 10).
+
+Example:
+
+```yml
+sshConnectMaxRetries: 20
 ```
 
 ### 🔨 Setting Up the Host OS
