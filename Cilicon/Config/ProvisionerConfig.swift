@@ -3,7 +3,6 @@ import Foundation
 enum ProvisionerConfig: Codable {
     case github(GithubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
-    case buildkite(BuildkiteAgentProvisionerConfig)
     case script(ScriptProvisionerConfig)
 
     enum CodingKeys: CodingKey {
@@ -21,9 +20,6 @@ enum ProvisionerConfig: Codable {
         case .gitlab:
             let config = try container.decode(GitLabProvisionerConfig.self, forKey: .config)
             self = .gitlab(config)
-        case .buildkite:
-            let config = try container.decode(BuildkiteAgentProvisionerConfig.self, forKey: .config)
-            self = .buildkite(config)
         case .script:
             let config = try container.decode(ScriptProvisionerConfig.self, forKey: .config)
             self = .script(config)
@@ -45,7 +41,6 @@ enum ProvisionerConfig: Codable {
     enum ProvisionerType: String, Codable {
         case github
         case gitlab
-        case buildkite
         case script
     }
 }
