@@ -27,7 +27,7 @@ We're excited to announce a new major update to Cilicon! Here's a summary of wha
 
 ## 🔁 About Cilicon
 
-Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. It currently supports Github Actions, Buildkite Agent, GitLab Runner and arbitrary scripts. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀
+Cilicon is a macOS App that leverages Apple's [Virtualization Framework](https://developer.apple.com/documentation/virtualization) to create, provision and run ephemeral CI VMs with near-native performance. It currently supports Github Actions, GitLab Runner and arbitrary scripts. Depending on your setup, should be able to get up and running with your self-hosted CI in minutes 🚀
 
 Cilicon operates in a very simple cycle described below:
 
@@ -107,18 +107,6 @@ provisioner:
 consoleDevices:
   - tart-version-2
 sshConnectMaxRetries: <SSH_CONNECT_MAX_RETRIES> # defaults to 10
-```
-
-#### Buildkite Agent
-
-To use the Buildkite Agent provisioner, simply set your agent token in the provisioner config.
-
-``` yml
-source: oci://ghcr.io/cirruslabs/macos-runner:sequoia
-provisioner:
-  type: buildkite
-  config:
-    agentToken: <AGENT_TOKEN>
 ```
 
 #### Script
