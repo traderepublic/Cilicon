@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cilicon
+spec:
+  type: service
+  lifecycle: production
+  owner: atom-mobile-platform
