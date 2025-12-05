@@ -98,7 +98,7 @@ struct Config: Codable {
 }
 
 struct SSHCredentials: Codable {
-    static var `default` = Self(username: "admin", password: "admin")
+    static let `default` = Self(username: "admin", password: "admin")
     let username: String
     let password: String
 }
