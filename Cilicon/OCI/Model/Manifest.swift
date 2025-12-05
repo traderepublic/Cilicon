@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Manifest: Decodable {
+public struct Manifest: Decodable, Sendable {
     public let schemaVersion: Int
     public let mediaType: String
     public let artifactType: String?
@@ -9,7 +9,7 @@ public struct Manifest: Decodable {
     public let subject: Descriptor?
     public let annotations: [String: String]?
 
-    public struct Config: Decodable {
+    public struct Config: Decodable, Sendable {
         public let mediaType: String
     }
 }

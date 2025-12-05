@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Descriptor: Decodable {
+public struct Descriptor: Decodable, Sendable {
     public let mediaType: String
     public let digest: String
     public let size: Int64

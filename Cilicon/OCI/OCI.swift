@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OCI {
+public struct OCI: Sendable {
     let url: OCIURL
 
     var baseURL: URL {
