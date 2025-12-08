@@ -1,4 +1,4 @@
-import Citadel
+@preconcurrency import Citadel
 import Combine
 import Compression
 import Foundation

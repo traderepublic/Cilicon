@@ -1,4 +1,4 @@
-import Citadel
+@preconcurrency import Citadel
 import Foundation
 
 class GitLabRunnerProvisioner: Provisioner {

@@ -1,4 +1,4 @@
-import Citadel
+@preconcurrency import Citadel
 import Foundation
 
 /// The Buildkite Provisioner
