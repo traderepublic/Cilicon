@@ -1,10 +1,11 @@
-import Citadel
+@preconcurrency import Citadel
 import Combine
 import Compression
 import Foundation
 import Virtualization
 
-class VMManager: NSObject, ObservableObject {
+@MainActor
+final class VMManager: NSObject, ObservableObject {
     let config: Config
     let masterBundle: VMBundle
     let clonedBundle: VMBundle
@@ -37,7 +38,6 @@ class VMManager: NSObject, ObservableObject {
         self.clonedBundle = VMBundle(url: URL(filePath: config.vmClonePath))
     }
 
-    @MainActor
     func setupAndRunVM() async throws {
         do {
             vmState = .initializing
@@ -55,7 +55,9 @@ class VMManager: NSObject, ObservableObject {
                     try await withTaskCancellationHandler(operation: {
                         try await downloadFromOCI(url: ociURL)
                     }, onCancel: {
-                        try? fileManager.removeItem(atPath: resolvedPath)
+                        Task { @MainActor in
+                            try? fileManager.removeItem(atPath: resolvedPath)
+                        }
                     })
                 }
             }
@@ -67,13 +69,11 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
-    @MainActor
     func start(vm: VZVirtualMachine) async throws {
         runCounter += 1
         try await vm.start()
     }
 
-    @MainActor
     private func cloneBundle() async throws {
         vmState = .copying
         try await Task {
@@ -102,7 +102,6 @@ class VMManager: NSObject, ObservableObject {
         }
     }
 
-    @MainActor
     private func setupAndRunVirtualMachine() async throws {
         try await cloneBundle()
         let vmHelper = VMConfigHelper(vmBundle: activeBundle)
@@ -158,7 +157,6 @@ class VMManager: NSObject, ObservableObject {
     }
 
     /// Creates and connects an SSH client to the given IP address, retrying until successful or a timeout occurs.
-    @MainActor
     private func createAndConnectSSHClient(ip: String) async throws -> SSHClient {
         SSHLogger.shared.log(string: "Waiting for VM to boot and SSH to be available...\n")
         let maxRetries = config.sshConnectMaxRetries
@@ -224,7 +222,6 @@ class VMManager: NSObject, ObservableObject {
         return filesExist && notUnfinished
     }
 
-    @MainActor
     func handleStop() async throws {
         if let runsTilReboot = config.numberOfRunsUntilHostReboot, runCounter >= runsTilReboot {
             AppleEvent.restart.perform()

@@ -5,8 +5,11 @@ enum ANSIParser {
     typealias Font = NSFont
     static let fontName = "Andale Mono"
 
-    static let defaultFont = Font.monospacedSystemFont(ofSize: Font.systemFontSize, weight: .regular)
-    static let defaultAttributes: [NSAttributedString.Key: Any] = [
+    private nonisolated(unsafe) static let defaultFont = Font.monospacedSystemFont(
+        ofSize: Font.systemFontSize,
+        weight: .regular
+    )
+    private nonisolated(unsafe) static let defaultAttributes: [NSAttributedString.Key: Any] = [
         .font: defaultFont as Any
     ]
 
