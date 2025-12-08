@@ -28,7 +28,7 @@ struct ContentView: View {
             switch vmManager.vmState {
             case let .running(vm):
                 VirtualMachineView(virtualMachine: vm).onAppear {
-                    Task.detached {
+                    Task {
                         try await vmManager.start(vm: vm)
                     }
                 }
@@ -77,7 +77,7 @@ struct ContentView: View {
     }
 
     func start() {
-        Task.detached {
+        Task {
             try await vmManager.setupAndRunVM()
         }
     }
