@@ -20,6 +20,9 @@ struct GithubProvisionerConfig: Decodable {
 
     let workFolder: String?
 
+    /// Liveness probe configuration for health monitoring.
+    let livenessProbe: LivenessProbeConfig
+
     let url: URL
 
     enum CodingKeys: CodingKey {
@@ -33,6 +36,7 @@ struct GithubProvisionerConfig: Decodable {
         case downloadLatest
         case repository
         case workFolder
+        case livenessProbe
     }
 
     init(from decoder: Decoder) throws {
@@ -51,5 +55,9 @@ struct GithubProvisionerConfig: Decodable {
         self.url = try container.decodeIfPresent(URL.self, forKey: .url) ?? fallbackURL
         self.downloadLatest = try container.decodeIfPresent(Bool.self, forKey: .downloadLatest) ?? true
         self.workFolder = try container.decodeIfPresent(String.self, forKey: .workFolder)
+        self.livenessProbe = try container
+            .decodeIfPresent(LivenessProbeConfig.self, forKey: .livenessProbe) ?? LivenessProbeConfig(
+                command: "pgrep -fl /Users/admin/actions-runner/run.sh"
+            )
     }
 }
