@@ -1,0 +1,31 @@
+name: Test
+description: Run unit tests on macOS
+
+on:
+  pull_request:
+    types: [ready_for_review, opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Select Xcode version
+        run: sudo xcodes select 26.1.1
+
+      - name: Build and Test
+        env:
+          NSUnbufferedIO: YES
+        run: |
+          cmd="xcodebuild test -scheme Cilicon -project Cilicon.xcodeproj -destination 'platform=macOS'"
+          if xcbeautify --version > /dev/null 2>&1; then
+            cmd="$cmd | xcbeautify"
+          fi
+          eval "$cmd"
