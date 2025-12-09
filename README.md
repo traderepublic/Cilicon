@@ -155,6 +155,34 @@ Example:
 sshConnectMaxRetries: 20
 ```
 
+#### Liveness Probe
+
+The liveness probe monitors the health of your VM during job execution. It periodically executes a shell command via SSH, and if the command fails (exits with non-zero status), Cilicon will automatically restart the VM. This helps ensure reliability by detecting and recovering from stuck or failed jobs.
+
+Configuration options:
+- `command`: Shell command to execute for health check (required)
+- `interval`: Time in seconds between health checks (default: 30)
+- `delay`: Initial delay in seconds before starting probes (default: 60)
+
+The probe will restart the VM if the command exits with a non-zero code. Temporary SSH connection errors are logged but won't trigger a restart.
+
+Example for GitHub Actions (with default values):
+
+```yml
+provisioner:
+  type: github
+  config:
+    appId: <APP_ID>
+    organization: <ORGANIZATION_SLUG>
+    privateKeyPath: ~/github.pem
+    livenessProbe:
+      command: "pgrep -fl /Users/admin/actions-runner/run.sh"
+      interval: 30
+      delay: 60
+```
+
+**Note:** The liveness probe is currently only supported for the GitHub Actions provisioner. By default, it checks if the GitHub Actions runner process is running. You can customize the probe command to check for other conditions specific to your setup.
+
 ### 🔨 Setting Up the Host OS
 It is recommended to use Cilicon on a macOS device fully dedicated to the task, ideally one that is [freshly restored](https://support.apple.com/en-gb/guide/apple-configurator-mac/apdd5f3c75ad/mac).
 

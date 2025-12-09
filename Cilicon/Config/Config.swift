@@ -1,6 +1,6 @@
 import Foundation
 
-struct Config: Codable {
+struct Config: Decodable {
     init(
         provisioner: ProvisionerConfig,
         hardware: HardwareConfig,

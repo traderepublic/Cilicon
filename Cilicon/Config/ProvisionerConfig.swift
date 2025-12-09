@@ -49,3 +49,17 @@ enum ProvisionerConfig: Codable {
         case script
     }
 }
+
+// MARK: - Liveness probe
+
+extension ProvisionerConfig {
+    /// Liveness probe configuration for health monitoring, if supported by the provisioner.
+    var livenessProbe: LivenessProbeConfig? {
+        switch self {
+        case let .github(githubConfig):
+            githubConfig.livenessProbe
+        case .gitlab, .buildkite, .script:
+            nil
+        }
+    }
+}

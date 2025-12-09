@@ -4,6 +4,14 @@ import Foundation
 final class SSHLogger: ObservableObject {
     static let shared = SSHLogger()
 
+    private static let maxLogChunks = 500
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
+        return formatter
+    }()
+
     private init() { }
 
     @Published
@@ -16,47 +24,28 @@ final class SSHLogger: ObservableObject {
     var combinedLog: String {
         var outString = String()
         for item in log {
-            outString.append(item.text)
-            outString.append("\n")
+            outString.append("[\(Self.dateFormatter.string(from: item.timestamp))] \(item.text)\n")
         }
         return outString
     }
 
     func log(string: String) {
-        /// Skip empty logs
-        guard string.isNotBlank else { return }
-        if log.isEmpty {
-            log = [LogChunk(text: string)]
-            return
+        let trimmedString = string.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmedString.isEmpty else { return }
+
+        let lines = trimmedString.split(separator: "\n", omittingEmptySubsequences: false)
+        for line in lines {
+            log.append(LogChunk(text: String(line)))
         }
-        let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
-        for (index, line) in lines.enumerated() {
-            if index == 0 {
-                log[log.count - 1].text.append(contentsOf: line)
-            } else {
-                if log.count >= 500 {
-                    log.remove(at: 0)
-                }
-                log.append(LogChunk(text: String(line)))
-            }
+        if log.count > Self.maxLogChunks {
+            log.removeLast(log.count - Self.maxLogChunks)
         }
     }
 
     struct LogChunk: Identifiable, Hashable {
         let id = UUID()
+        let timestamp = Date()
         var text: String
-        var attributedText: AttributedString {
-            return ANSIParser.parse(text)
-        }
-    }
-}
-
-extension String {
-    var isBlank: Bool {
-        allSatisfy(\.isWhitespace)
-    }
-
-    var isNotBlank: Bool {
-        isBlank == false
     }
 }
