@@ -49,11 +49,11 @@ jobs:
           version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
           build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
           if [ "${{ github.event_name }}" = "release" ]; then
-            echo "name=Cilicon_${version}_(${build})_unsigned.zip" >> $GITHUB_OUTPUT
+            echo "name=Cilicon_${version}_${build}_unsigned.zip" >> $GITHUB_OUTPUT
           else
             sha_short="${{ github.sha }}"
             sha_short="${sha_short:0:7}"
-            echo "name=Cilicon_${version}_(${build})_${sha_short}_unsigned.zip" >> $GITHUB_OUTPUT
+            echo "name=Cilicon_${version}_${build}_${sha_short}_unsigned.zip" >> $GITHUB_OUTPUT
           fi
 
       - name: Create ZIP Archive
