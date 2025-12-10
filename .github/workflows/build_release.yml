@@ -29,10 +29,7 @@ jobs:
               -configuration Release \
               -archivePath Cilicon.xcarchive \
               -destination 'generic/platform=macOS' \
-              CODE_SIGN_IDENTITY='' \
-              CODE_SIGN_STYLE='Manual' \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGN_IDENTITY='-' \
               CURRENT_PROJECT_VERSION=${{ github.run_number }} \
               ARCHS=arm64 \
               ONLY_ACTIVE_ARCH=NO \
@@ -49,11 +46,11 @@ jobs:
           version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
           build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
           if [ "${{ github.event_name }}" = "release" ]; then
-            echo "name=Cilicon_${version}_${build}_unsigned.zip" >> $GITHUB_OUTPUT
+            echo "name=Cilicon_${version}_${build}_adhoc.zip" >> $GITHUB_OUTPUT
           else
             sha_short="${{ github.sha }}"
             sha_short="${sha_short:0:7}"
-            echo "name=Cilicon_${version}_${build}_${sha_short}_unsigned.zip" >> $GITHUB_OUTPUT
+            echo "name=Cilicon_${version}_${build}_${sha_short}_adhoc.zip" >> $GITHUB_OUTPUT
           fi
 
       - name: Create ZIP Archive
