@@ -1,0 +1,72 @@
+name: Build Release
+description: Build release bundle and upload to GitHub release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    name: Build Release
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Select Xcode version
+        run: sudo xcodes select 26.1.1
+
+      - name: Build Release Archive
+        env:
+          NSUnbufferedIO: YES
+        run: |
+          cmd="\
+            xcodebuild archive \
+              -project Cilicon.xcodeproj \
+              -scheme Cilicon \
+              -configuration Release \
+              -archivePath Cilicon.xcarchive \
+              -destination 'generic/platform=macOS' \
+              CODE_SIGN_IDENTITY='' \
+              CODE_SIGN_STYLE='Manual' \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO \
+              CURRENT_PROJECT_VERSION=${{ github.run_number }} \
+              ARCHS=arm64 \
+              ONLY_ACTIVE_ARCH=NO \
+              VALID_ARCHS=arm64 \
+          "
+          if xcbeautify --version > /dev/null 2>&1; then
+            cmd="$cmd | xcbeautify"
+          fi
+          eval "$cmd"
+
+      - name: Create ZIP name
+        id: zipname
+        run: |
+          version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
+          build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Cilicon.xcarchive/Products/Applications/Cilicon.app/Contents/Info.plist)
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "name=Cilicon_${version}_(${build})_unsigned.zip" >> $GITHUB_OUTPUT
+          else
+            sha_short="${{ github.sha }}"
+            sha_short="${sha_short:0:7}"
+            echo "name=Cilicon_${version}_(${build})_${sha_short}_unsigned.zip" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create ZIP Archive
+        run: ditto -c -k --keepParent Cilicon.xcarchive/Products/Applications/Cilicon.app "${{ steps.zipname.outputs.name }}"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: "${{ steps.zipname.outputs.name }}"
+          path: "${{ steps.zipname.outputs.name }}"
+
+      - name: Upload Release Asset
+        if: ${{ github.event_name == 'release' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ github.event.release.tag_name }}" "${{ steps.zipname.outputs.name }}"
