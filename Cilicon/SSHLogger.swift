@@ -4,7 +4,7 @@ import Foundation
 final class SSHLogger: ObservableObject {
     static let shared = SSHLogger()
 
-    private static let maxLogChunks = 500
+    static let maxLogChunks = 500
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -12,7 +12,7 @@ final class SSHLogger: ObservableObject {
         return formatter
     }()
 
-    private init() { }
+    init() { }
 
     @Published
     var log: [LogChunk] = []
@@ -39,7 +39,8 @@ final class SSHLogger: ObservableObject {
             log.append(LogChunk(text: String(line)))
         }
         if log.count > Self.maxLogChunks {
-            log.removeLast(log.count - Self.maxLogChunks)
+            // Drop the oldest log entries to keep only the most recent ones
+            log.removeFirst(log.count - Self.maxLogChunks)
         }
     }
 
