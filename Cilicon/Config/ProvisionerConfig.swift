@@ -4,6 +4,7 @@ enum ProvisionerConfig: Codable {
     case github(GithubProvisionerConfig)
     case gitlab(GitLabProvisionerConfig)
     case buildkite(BuildkiteAgentProvisionerConfig)
+    case azurePipelines(AzurePipelinesProvisionerConfig)
     case script(ScriptProvisionerConfig)
 
     enum CodingKeys: CodingKey {
@@ -24,6 +25,9 @@ enum ProvisionerConfig: Codable {
         case .buildkite:
             let config = try container.decode(BuildkiteAgentProvisionerConfig.self, forKey: .config)
             self = .buildkite(config)
+        case .azurePipelines:
+            let config = try container.decode(AzurePipelinesProvisionerConfig.self, forKey: .config)
+            self = .azurePipelines(config)
         case .script:
             let config = try container.decode(ScriptProvisionerConfig.self, forKey: .config)
             self = .script(config)
@@ -46,6 +50,7 @@ enum ProvisionerConfig: Codable {
         case github
         case gitlab
         case buildkite
+        case azurePipelines
         case script
     }
 }
@@ -58,7 +63,7 @@ extension ProvisionerConfig {
         switch self {
         case let .github(githubConfig):
             githubConfig.livenessProbe
-        case .gitlab, .buildkite, .script:
+        case .gitlab, .buildkite, .azurePipelines, .script:
             nil
         }
     }

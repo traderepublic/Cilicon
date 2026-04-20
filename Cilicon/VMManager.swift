@@ -31,6 +31,8 @@ final class VMManager: NSObject, ObservableObject {
             self.provisioner = GitLabRunnerProvisioner(config: gitLabConfig)
         case let .buildkite(buildkiteConfig):
             self.provisioner = BuildkiteAgentProvisioner(config: buildkiteConfig)
+        case let .azurePipelines(azurePipelinesConfig):
+            self.provisioner = AzurePipelinesProvisioner(config: config, azurePipelinesConfig: azurePipelinesConfig)
         case let .script(scriptConfig):
             self.provisioner = ScriptProvisioner(runBlock: scriptConfig.run)
         }
