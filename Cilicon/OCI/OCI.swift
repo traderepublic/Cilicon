@@ -30,8 +30,49 @@ public struct OCI: Sendable {
 
     public func pullBlobData(digest: String, authentication: AuthenticationType = .none) async throws -> Data {
         let blobUrl = baseURL.appending(path: "blobs/\(digest)")
-        let (data, _) = try await download(authentication: authentication, url: blobUrl)
-        return data
+        let resumeDataURL = Self.resumeDataFileURL(forDigest: digest)
+        var resumeData = try? Data(contentsOf: resumeDataURL)
+        var lastError: Error = OCIError.generic
+
+        for attempt in 0..<Self.maxDownloadAttempts {
+            do {
+                let (data, _) = try await download(authentication: authentication, url: blobUrl, resumeData: resumeData)
+                try? FileManager.default.removeItem(at: resumeDataURL)
+                return data
+            } catch let error as ResumableDownloadError {
+                resumeData = error.resumeData
+                if let resumeData {
+                    try? FileManager.default.createDirectory(
+                        at: resumeDataURL.deletingLastPathComponent(),
+                        withIntermediateDirectories: true
+                    )
+                    try? resumeData.write(to: resumeDataURL)
+                } else {
+                    try? FileManager.default.removeItem(at: resumeDataURL)
+                }
+                lastError = error.underlying
+            } catch {
+                if error is CancellationError { throw error }
+                resumeData = nil
+                try? FileManager.default.removeItem(at: resumeDataURL)
+                lastError = error
+            }
+
+            if attempt < Self.maxDownloadAttempts - 1 {
+                let backoffSeconds = Int(min(pow(2.0, Double(attempt + 1)), 30))
+                try await Task.sleep(for: .seconds(backoffSeconds))
+            }
+        }
+        throw lastError
+    }
+
+    private static let maxDownloadAttempts = 8
+
+    private static func resumeDataFileURL(forDigest digest: String) -> URL {
+        let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            .appending(path: "Cilicon/ResumeData")
+        let safeName = digest.replacingOccurrences(of: ":", with: "_").replacingOccurrences(of: "/", with: "_")
+        return cacheDir.appending(path: "\(safeName).resumedata")
     }
 
     func authenticate(data: WWWAuthenticate) async throws -> String {
@@ -62,7 +103,7 @@ public struct OCI: Sendable {
             break
         }
 
-        let (data, response) = try await urlSession.data(for: request)
+        let (data, response) = try await dataWithRetry(for: request)
         guard let httpResp = response as? HTTPURLResponse else {
             throw OCIError.generic
         }
@@ -80,16 +121,32 @@ public struct OCI: Sendable {
     func download(
         authentication: AuthenticationType,
         url: URL,
-        headers: [String: String] = [:]
+        headers: [String: String] = [:],
+        resumeData: Data? = nil
     ) async throws -> (Data, HTTPURLResponse) {
-        var request = URLRequest(url: url)
-        for (headerName, headerValue) in headers {
-            request.setValue(headerValue, forHTTPHeaderField: headerName)
+        let fileURL: URL
+        let response: URLResponse
+        do {
+            if let resumeData {
+                // resumeData is self-contained (original request, headers and validators),
+                // so it's reissued as-is rather than rebuilding the request.
+                (fileURL, response) = try await urlSession.download(resumeFrom: resumeData)
+            } else {
+                var request = URLRequest(url: url)
+                for (headerName, headerValue) in headers {
+                    request.setValue(headerValue, forHTTPHeaderField: headerName)
+                }
+                if case let .bearer(token) = authentication {
+                    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                }
+                (fileURL, response) = try await urlSession.download(for: request)
+            }
+        } catch {
+            if error is CancellationError { throw error }
+            let recoveredResumeData = (error as NSError).userInfo[NSURLSessionDownloadTaskResumeData] as? Data
+            throw ResumableDownloadError(underlying: error, resumeData: recoveredResumeData)
         }
-        if case let .bearer(token) = authentication {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-        let (fileURL, response) = try await urlSession.download(for: request)
+
         let data = try Data(contentsOf: fileURL, options: .alwaysMapped)
         try FileManager.default.removeItem(at: fileURL)
 
@@ -107,6 +164,25 @@ public struct OCI: Sendable {
         return (data, httpResp)
     }
 
+    /// Retries small, non-resumable requests (e.g. manifest fetches) from scratch on transient
+    /// network errors, since there's no meaningful partial state to preserve for these.
+    private func dataWithRetry(for request: URLRequest, maxAttempts: Int = 4) async throws -> (Data, URLResponse) {
+        var lastError: Error = OCIError.generic
+        for attempt in 0..<maxAttempts {
+            do {
+                return try await urlSession.data(for: request)
+            } catch {
+                if error is CancellationError { throw error }
+                lastError = error
+                if attempt < maxAttempts - 1 {
+                    let backoffSeconds = Int(min(pow(2.0, Double(attempt + 1)), 30))
+                    try await Task.sleep(for: .seconds(backoffSeconds))
+                }
+            }
+        }
+        throw lastError
+    }
+
     public enum AuthenticationType {
         case none
         case basic(username: String, password: String)
@@ -120,4 +196,9 @@ struct AuthResponse: Decodable {
 
 enum OCIError: Error {
     case generic
+}
+
+struct ResumableDownloadError: Error {
+    let underlying: Error
+    let resumeData: Data?
 }

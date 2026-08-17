@@ -15,6 +15,8 @@ final class VMManager: NSObject, ObservableObject {
     var sshOutput: [String] = []
     var ip: String = ""
     var livenessProbeTask: Task<Void, Never>?
+    private var consecutiveSetupFailures: Int = 0
+    private static let maxRetryDelaySeconds = 300
 
     var activeBundle: VMBundle {
         clonedBundle
@@ -49,10 +51,9 @@ final class VMManager: NSObject, ObservableObject {
 
             if case let .OCI(ociURL) = config.source {
                 let resolvedPath = masterBundle.url.resolvingSymlinksInPath().path
-                if try fileManager.fileExists(atPath: resolvedPath) && !isBundleComplete() {
-                    try fileManager.removeItem(atPath: resolvedPath)
-                }
-                if !fileManager.fileExists(atPath: resolvedPath) {
+                // An incomplete bundle from a previously interrupted download is left in place
+                // (rather than deleted) so downloadFromOCI can resume it instead of starting over.
+                if try !fileManager.fileExists(atPath: resolvedPath) || !isBundleComplete() {
                     try await withTaskCancellationHandler(operation: {
                         try await downloadFromOCI(url: ociURL)
                     }, onCancel: {
@@ -63,9 +64,13 @@ final class VMManager: NSObject, ObservableObject {
                 }
             }
             try await setupAndRunVirtualMachine()
+            consecutiveSetupFailures = 0
         } catch {
             vmState = .failed(error.localizedDescription)
-            try await Task.sleep(for: .seconds(config.retryDelay))
+            consecutiveSetupFailures += 1
+            let backoffMultiplier = 1 << min(consecutiveSetupFailures - 1, 10)
+            let delaySeconds = min(config.retryDelay * backoffMultiplier, Self.maxRetryDelaySeconds)
+            try await Task.sleep(for: .seconds(delaySeconds))
             try await setupAndRunVM()
         }
     }
@@ -298,13 +303,15 @@ final class VMManager: NSObject, ObservableObject {
         prog.completedUnitCount = 0
 
         let fm = FileManager.default
-        if fm.fileExists(atPath: diskURL.path) {
-            try fm.removeItem(at: diskURL)
-        }
-        if !fm.createFile(atPath: diskURL.path, contents: nil) {
-            throw VMManagerError.failedToCreateDiskFile
+        // The disk image is left in place across retries (instead of being deleted and
+        // recreated) so already-downloaded layers can be skipped when resuming.
+        if !fm.fileExists(atPath: diskURL.path) {
+            if !fm.createFile(atPath: diskURL.path, contents: nil) {
+                throw VMManagerError.failedToCreateDiskFile
+            }
         }
 
+        let progressStore = LayerProgressStore(fileURL: bundleForPaths.url.appending(component: "layers-progress.json"))
         let isV2Disk = imgLayers.allSatisfy({ $0.mediaType == "application/vnd.cirruslabs.tart.disk.v2" })
 
         if isV2Disk {
@@ -313,16 +320,19 @@ final class VMManager: NSObject, ObservableObject {
                 diskLayers: imgLayers,
                 diskURL: diskURL,
                 progress: prog,
-                maxConcurrency: 4
+                maxConcurrency: 4,
+                progressStore: progressStore
             )
         } else {
             try await LayerV1Downloader.pull(
                 registry: client,
                 diskLayers: imgLayers,
                 diskURL: diskURL,
-                progress: prog
+                progress: prog,
+                progressStore: progressStore
             )
         }
+        progressStore.reset()
 
         progCanc.cancel()
 

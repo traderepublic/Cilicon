@@ -6,8 +6,11 @@ class Decompressor {
     let disk: FileHandle
     let filter: OutputFilter
 
-    init(fileURL: URL) throws {
+    init(fileURL: URL, initialOffset: UInt64 = 0) throws {
         let disk = try FileHandle(forWritingTo: fileURL)
+        if initialOffset > 0 {
+            try disk.seek(toOffset: initialOffset)
+        }
         self.disk = disk
         self.filter = try OutputFilter(
             .decompress,
