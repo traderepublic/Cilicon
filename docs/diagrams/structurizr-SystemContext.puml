@@ -1,0 +1,78 @@
+@startuml
+title <size:24>System Context View: Cilicon</size>
+
+set separator none
+top to bottom direction
+skinparam ranksep 60
+skinparam nodesep 30
+hide stereotype
+
+<style>
+  root {
+    BackgroundColor: #ffffff;
+    FontColor: #444444;
+  }
+  // Element,Person
+  .Element-RWxlbWVudCxQZXJzb24= {
+    BackgroundColor: #08427b;
+    LineColor: #052e56;
+    LineStyle: 0;
+    LineThickness: 2;
+    FontColor: #ffffff;
+    FontSize: 24;
+    HorizontalAlignment: center;
+    Shadowing: 0;
+    MaximumWidth: 450;
+  }
+  // Element,Software System
+  .Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0= {
+    BackgroundColor: #1168bd;
+    LineColor: #0b4884;
+    LineStyle: 0;
+    LineThickness: 2;
+    FontColor: #ffffff;
+    FontSize: 24;
+    HorizontalAlignment: center;
+    Shadowing: 0;
+    MaximumWidth: 450;
+  }
+  // Element,Software System,External
+  .Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw= {
+    BackgroundColor: #999999;
+    LineColor: #6b6b6b;
+    LineStyle: 0;
+    LineThickness: 2;
+    FontColor: #ffffff;
+    FontSize: 24;
+    HorizontalAlignment: center;
+    Shadowing: 0;
+    MaximumWidth: 450;
+  }
+  // Relationship
+  .Relationship-UmVsYXRpb25zaGlw {
+    LineThickness: 2;
+    LineStyle: 10-10;
+    LineColor: #444444;
+    FontColor: #444444;
+    FontSize: 24;
+  }
+</style>
+
+person "==CI Platform Operator\n<size:16>[Person]</size>\n\nConfigures cilicon.yml on the host Mac and watches the app window" <<Element-RWxlbWVudCxQZXJzb24=>> as CIPlatformOperator
+rectangle "==OCI Registry\n<size:16>[Software System]</size>\n\nHosts tart-format macOS images (e.g. ghcr.io/cirruslabs)" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as OCIRegistry
+rectangle "==GitHub API\n<size:16>[Software System]</size>\n\nGitHub App auth and Actions runner registration tokens" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as GitHubAPI
+rectangle "==GitLab Instance\n<size:16>[Software System]</size>\n\nRegisters and dispatches jobs to gitlab-runner" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as GitLabInstance
+rectangle "==Buildkite\n<size:16>[Software System]</size>\n\nAgent registration and job dispatch" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as Buildkite
+rectangle "==Runner Binary Downloads\n<size:16>[Software System]</size>\n\nGitHub runner release assets, GitLab S3 bucket, Buildkite install script" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as RunnerBinaryDownloads
+rectangle "==macOS Host Services\n<size:16>[Software System]</size>\n\nDHCP lease database and Apple Events restart" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0sRXh0ZXJuYWw=>> as macOSHostServices
+rectangle "==Cilicon\n<size:16>[Software System]</size>\n\nmacOS app that clones, boots and provisions an ephemeral macOS VM per CI job" <<Element-RWxlbWVudCxTb2Z0d2FyZSBTeXN0ZW0=>> as Cilicon
+
+CIPlatformOperator --> Cilicon <<Relationship-UmVsYXRpb25zaGlw>> : "Writes configuration"
+Cilicon --> OCIRegistry <<Relationship-UmVsYXRpb25zaGlw>> : "Fetches manifest and blobs\n<size:16>[HTTPS]</size>"
+Cilicon --> macOSHostServices <<Relationship-UmVsYXRpb25zaGlw>> : "Reads /var/db/dhcpd_leases for guest IP; sends restart Apple Event"
+Cilicon --> GitHubAPI <<Relationship-UmVsYXRpb25zaGlw>> : "JWT app auth, runner registration token, runner download URLs\n<size:16>[HTTPS REST]</size>"
+Cilicon --> GitLabInstance <<Relationship-UmVsYXRpb25zaGlw>> : "Runs single build via gitlab-runner\n<size:16>[HTTPS]</size>"
+Cilicon --> Buildkite <<Relationship-UmVsYXRpb25zaGlw>> : "Starts agent with --disconnect-after-job\n<size:16>[HTTPS]</size>"
+Cilicon --> RunnerBinaryDownloads <<Relationship-UmVsYXRpb25zaGlw>> : "Downloads runner/agent binaries\n<size:16>[HTTPS]</size>"
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+!theme cerulean-outline
+skinparam backgroundColor #FEFEFE
+
+title Deployment - dedicated Apple Silicon host Mac
+
+node "Apple Silicon Mac\nmacOS 13.0 or later, auto-login, Cilicon.app as launch item" as Host {
+
+  artifact "Cilicon.app\nad-hoc signed, hardened runtime,\ncom.apple.security.virtualization +\ncom.apple.security.network.client" as App
+
+  file "$HOME/cilicon.yml or $HOME/.cilicon.yml\nor -config-path launch argument" as Conf
+  folder "$HOME/.tart/cache/OCIs/<registry><repo>/<tag>\nmaster bundle: config.json, disk.img, nvram.bin" as Cache
+  folder "$HOME/vmclone (default)\nper-run clone, deleted each cycle" as Clone
+  file "/var/db/dhcpd_leases\nguest IP lookup" as Leases
+  folder "directoryMounts host paths\nshared into /Volumes/My Shared Files" as Mounts
+
+  node "Ephemeral macOS Guest VM\nVirtualization.framework, arm64,\nNAT network, virtio disk/net/fs/console" as Guest {
+    artifact "CI agent\nactions-runner / gitlab-runner /\nbuildkite-agent / custom script" as Agent
+  }
+}
+
+cloud "OCI Registry\nghcr.io or other" as Registry
+cloud "GitHub API\napi.github.com or GHES" as GitHubAPI
+cloud "GitLab instance" as GitLab
+cloud "Buildkite" as Buildkite
+cloud "Runner binary downloads\nGitHub assets, GitLab S3, Buildkite install.sh" as Downloads
+
+App --> Conf : reads at startup
+App --> Cache : pulls and reads master bundle
+App --> Clone : copies bundle per run
+App --> Leases : reads lease for guest MAC
+App --> Guest : boots and controls
+App --> Guest : SSH on port 22, password auth
+Guest --> Mounts : virtio-fs automount
+App --> Registry : HTTPS manifest and blob pulls
+App --> GitHubAPI : HTTPS app auth and runner token
+Agent --> GitHubAPI : HTTPS job polling
+Agent --> GitLab : HTTPS single build
+Agent --> Buildkite : HTTPS agent session
+Agent --> Downloads : HTTPS binary download
+@enduml

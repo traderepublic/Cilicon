@@ -1,0 +1,91 @@
+@startuml
+!theme cerulean-outline
+skinparam backgroundColor #FEFEFE
+
+title Cilicon run cycle - GitHub Actions provisioner
+
+actor "CI Platform Operator" as Op
+participant "Cilicon App" as App
+participant "VMManager" as VMM
+participant "VMConfigHelper" as Helper
+participant "LeaseParser" as Lease
+participant "SSH Client" as SSH
+participant "GithubActionsProvisioner" as Prov
+participant "GitHub API" as GH
+participant "Ephemeral Guest VM" as VM
+
+Op -> App: Launch Cilicon.app
+activate App
+App -> App: ConfigManager decodes cilicon.yml
+App -> VMM: setupAndRunVM
+activate VMM
+
+VMM -> VMM: cloneBundle - delete previous clone, copy master bundle
+VMM -> Helper: computeRunConfiguration with hardware, mounts, console devices
+Helper --> VMM: VZVirtualMachineConfiguration
+VMM -> VM: start
+activate VM
+VMM -> App: vmState = running, framebuffer view appears
+App -> VMM: start(vm) from VirtualMachineView onAppear
+note right of VMM: runCounter is incremented here,\nnot inside the run cycle
+VMM -> Lease: leaseForMacAddress, up to 5 attempts 5s apart
+Lease --> VMM: guest IP address
+
+VMM -> SSH: connect with configured credentials, retry up to sshConnectMaxRetries
+activate SSH
+SSH -> VM: echo ssh-connected
+VM --> SSH: ssh-connected
+SSH --> VMM: connected client
+
+opt preRun configured
+  VMM -> SSH: executeCommandStream preRun
+  SSH -> VM: run shell command
+  VM --> SSH: stdout / stderr
+  SSH --> VMM: streamed output to SSHLogger
+end
+
+opt livenessProbe configured
+  VMM -> VMM: start liveness probe task after delay
+end
+
+VMM -> Prov: provision with bundle and SSH client
+activate Prov
+Prov -> GH: JWT-signed request for installation
+GH --> Prov: installation id
+Prov -> GH: POST installation access_tokens
+GH --> Prov: installation token
+Prov -> GH: POST actions/runners/registration-token
+GH --> Prov: runner registration token
+opt downloadLatest is true
+  Prov -> GH: GET actions/runners/downloads
+  GH --> Prov: osx / arm64 download URL
+end
+Prov -> SSH: curl runner, config.sh --ephemeral, run.sh
+SSH -> VM: run shell command
+VM -> GH: register ephemeral runner and execute job
+GH --> VM: workflow job
+VM --> SSH: job log on stdout
+SSH --> Prov: streamed output to SSHLogger
+Prov --> VMM: returns when run.sh exits
+note right of VMM: provisioner errors are caught and logged,\nthe cycle continues to postRun
+deactivate Prov
+
+opt postRun configured
+  VMM -> SSH: executeCommandStream postRun
+  SSH -> VM: run shell command
+end
+
+VMM -> SSH: close
+deactivate SSH
+VMM -> VMM: cancel liveness probe task
+VMM -> VM: stop
+deactivate VM
+VMM -> VMM: handleStop
+alt runCounter reached numberOfRunsUntilHostReboot
+  VMM -> App: restart Apple Event, then terminate
+else otherwise
+  VMM -> VMM: setupAndRunVirtualMachine - next cycle
+end
+deactivate VMM
+deactivate App
+@enduml

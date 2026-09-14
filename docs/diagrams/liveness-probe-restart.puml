@@ -1,0 +1,39 @@
+@startuml
+!theme cerulean-outline
+skinparam backgroundColor #FEFEFE
+
+title Liveness probe detects a stuck job and restarts the VM
+
+participant "VMManager\nliveness probe task" as Probe
+participant "SSH Client" as SSH
+participant "Ephemeral Guest VM" as VM
+participant "SSHLogger" as Log
+participant "VMManager\nrun cycle" as VMM
+
+Probe -> Log: liveness probe starting in <delay> seconds
+Probe -> Probe: sleep delay seconds
+Probe -> Log: liveness probe active with interval
+
+loop every interval seconds until cancelled
+  Probe -> SSH: connect with 5s timeout, accept any host key
+  activate SSH
+  Probe -> SSH: run "<command>; echo EXIT_CODE:$?"
+  SSH -> VM: execute in shell
+  VM --> SSH: stdout including EXIT_CODE marker
+  SSH --> Probe: buffered output
+  Probe -> SSH: close
+  deactivate SSH
+
+  alt exit code is 0
+    Probe -> Probe: sleep interval seconds
+  else exit code is non-zero
+    Probe -> Log: liveness probe failed, restarting VM
+    Probe -> Probe: cancel own task
+    Probe -> VM: stop
+    Probe -> VMM: handleStop starts the next cycle
+  else SSH or command error
+    Probe -> Log: liveness probe error, will retry
+    Probe -> Probe: sleep interval seconds
+  end
+end
+@enduml

@@ -1,0 +1,66 @@
+@startuml
+!theme cerulean-outline
+skinparam backgroundColor #FEFEFE
+
+title OCI image pull into the local tart cache
+
+participant "VMManager" as VMM
+participant "OCI Client" as OCI
+participant "OCI Registry" as Reg
+participant "LayerV2Downloader" as V2
+participant "LayerV1Downloader" as V1
+participant "Decompressor" as Dec
+database "Image Cache\n$HOME/.tart/cache/OCIs" as Cache
+
+VMM -> VMM: source is oci:// and bundle missing or incomplete
+VMM -> OCI: fetchManifest for tag
+activate OCI
+OCI -> Reg: GET /v2/<repo>/manifests/<tag>
+Reg --> OCI: 401 with WWW-Authenticate
+OCI -> Reg: GET token from realm with service and scope
+Reg --> OCI: bearer token
+OCI -> Reg: GET manifest with bearer token
+Reg --> OCI: OCI image manifest
+OCI --> VMM: docker-content-digest and manifest
+deactivate OCI
+
+VMM -> Cache: create digest directory and symlink, write UNFINISHED marker
+VMM -> OCI: pullBlobData for tart.config.v1 layer
+OCI -> Reg: GET /v2/<repo>/blobs/<digest>
+Reg --> OCI: config blob
+OCI --> VMM: config data
+VMM -> Cache: write config.json
+
+VMM -> Cache: create empty disk.img
+
+alt all disk layers are tart.disk.v2
+  VMM -> V2: pull with maxConcurrency 4
+  activate V2
+  V2 -> Cache: truncate disk.img to total decompressed size
+  loop per disk layer, up to 4 in flight
+    V2 -> OCI: pullBlobData
+    OCI -> Reg: GET blob
+    Reg --> OCI: lz4 layer
+    OCI --> V2: layer data
+    V2 -> Dec: decompress at layer offset
+    Dec -> Cache: write decompressed bytes
+    V2 -> VMM: progress update drives downloading state
+  end
+  deactivate V2
+else any layer is tart.disk.v1
+  VMM -> V1: pull sequentially
+  activate V1
+  loop per disk layer
+    V1 -> OCI: pullBlobData
+    OCI --> V1: layer data
+    V1 -> Dec: decompress appended
+    Dec -> Cache: write decompressed bytes
+  end
+  deactivate V1
+end
+
+VMM -> OCI: pullBlobData for tart.nvram.v1 layer
+OCI --> VMM: nvram data
+VMM -> Cache: write nvram.bin
+VMM -> Cache: remove UNFINISHED marker
+@enduml
